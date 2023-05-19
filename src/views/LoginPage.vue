@@ -3,11 +3,11 @@
     <div class="login">
         <h4>用户登录</h4>
         <el-form :model="loginForm" label-width="80px">
-            <el-form-item label="邮箱" class="email_input_box">
+            <el-form-item label="邮箱" class="email_input_box" prop="email">
                 <el-input v-model="loginForm.email" placeholder="请输入邮箱地址"></el-input>
             </el-form-item>
 
-            <el-form-item label="密码" class="pass_input_box">
+            <el-form-item label="密码" class="pass_input_box" prop="pass">
                 <el-input show-password v-model="loginForm.pass" type="password" placeholder="请输入密码"></el-input>
             </el-form-item>
 
@@ -38,16 +38,23 @@ export default {
             pass: '',
         });
 
-        //验证
+        // let accountAll = [{
+        //     //获取数据库数据
+        // }]
+
+        //登录验证
         let submit_btn = () => {
             if (!loginForm.email || !loginForm.pass) {
-                window.alert("账号或密码不能为空！")
+                alert("账号或密码不能为空！");
                 return;
             }
 
-            // if (/*登录信息匹配并成功登录*/) {
 
+            // if (/*登录信息匹配并成功登录*/) {
+            //     alert("登录成功！");
             //     router.push('/'); //回到主页面
+            // }else {
+            //     alert(账号或密码不正确！);
             // }
         };
 
@@ -62,8 +69,12 @@ export default {
 
 <style>
 .login {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 450px;
-    margin: 180px auto;
+    margin: 10px auto;
     border: 1px solid black;
     padding: 20px;
     border-radius: 5px;
@@ -73,8 +84,8 @@ h4 {
     text-align: center;
 }
 
-.submit_btn {
-    width: 100%;
+.submit {
+   text-align: center;
 }
 
 .pass_input_box {
