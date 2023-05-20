@@ -1,6 +1,6 @@
 <template>
     <!-- 打招呼显示 （早午晚） -->
-    <div>
+    <div class="greeting">
         <h1 v-if="time == 1">Good Morning</h1>
         <h1 v-else-if="time == 2">Good Afternoon</h1>
         <h1 v-else>Good Evening</h1>
@@ -30,4 +30,10 @@ export default {
 
 </script>
 
-<style></style>
+<style>
+.greeting{
+    margin: 10px;
+    position: absolute;
+    top: 30px;
+}
+</style>

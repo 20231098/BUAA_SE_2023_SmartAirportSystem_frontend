@@ -11,15 +11,11 @@
                 <el-input show-password v-model="loginForm.pass" type="password" placeholder="请输入密码"></el-input>
             </el-form-item>
 
-
-
-            <el-form-item>
+            <div class="button">
                 <el-button @click="submit_btn" class="submit" type="primary">登录</el-button>
-            </el-form-item>
+                <el-button @click="register_btn" class="register" type="plain">注册</el-button>
+            </div>
         </el-form>
-    </div>
-    <div>
-
     </div>
 </template>
 
@@ -27,7 +23,7 @@
 
 <script>
 import { reactive } from 'vue'
-// import router from "@/routes/router"
+import router from "@/routes/router"
 
 export default {
     name: "LoginPage",
@@ -58,9 +54,13 @@ export default {
             // }
         };
 
+        let register_btn = () => {
+            router.push('/register');
+        }
         return {
             loginForm,
             submit_btn,
+            register_btn,
         }
     },
 
@@ -74,7 +74,6 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 450px;
-    margin: 10px auto;
     border: 1px solid black;
     padding: 20px;
     border-radius: 5px;
@@ -84,8 +83,20 @@ h4 {
     text-align: center;
 }
 
+.button {
+    width: 100%;
+    display: inline-flex;
+    margin: auto;
+}
+
 .submit {
-   text-align: center;
+    width: 40%;
+    margin: auto;
+}
+
+.register {
+    width: 40%;
+    margin: auto;
 }
 
 .pass_input_box {

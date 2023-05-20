@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from "vue-router"
 // 页面导入
 import LoginPage from "@/views/LoginPage.vue"
 import HomePage from "@/views/HomePage.vue"
+import RegisterPage from "@/views/RegisterPage.vue"
 
 const routes =[
     {
@@ -15,6 +16,12 @@ const routes =[
         name: "LoginPage",
         path:'/login',
         component: LoginPage
+    },
+
+    {
+        name: "RegisterPage",
+        path:'/register',
+        component: RegisterPage
     },
 
 ]
