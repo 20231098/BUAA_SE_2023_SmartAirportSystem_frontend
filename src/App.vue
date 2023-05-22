@@ -5,7 +5,6 @@
     <router-link to="/login" class="router2">登录/注册</router-link>
   </div>
 </template>
-
 <script>
 
 

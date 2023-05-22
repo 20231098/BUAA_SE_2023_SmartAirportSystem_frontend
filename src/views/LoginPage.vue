@@ -2,7 +2,7 @@
     <title>登录</title>
     <div class="login">
         <h4>用户登录</h4>
-        <el-form :model="loginForm" label-width="80px">
+        <el-form :model="loginForm" label-width="70px">
             <el-form-item label="邮箱" class="email_input_box" prop="email">
                 <el-input v-model="loginForm.email" placeholder="请输入邮箱地址"></el-input>
             </el-form-item>
@@ -12,8 +12,8 @@
             </el-form-item>
 
             <div class="button">
-                <el-button @click="submit_btn" class="submit" type="primary">登录</el-button>
-                <el-button @click="register_btn" class="register" type="plain">注册</el-button>
+                <el-button @click="submit_btn" class="submit_btn" type="primary">登录</el-button>
+                <el-button @click="register_btn" class="register_btn" type="plain">注册</el-button>
             </div>
         </el-form>
     </div>
@@ -22,29 +22,30 @@
 
 
 <script>
-import { reactive } from 'vue'
 import router from "@/routes/router"
+import { ElMessage } from "element-plus";
 
 export default {
     name: "LoginPage",
-
-    setup() {
-        let loginForm = reactive({
-            email: '',
-            pass: '',
-        });
-
-        // let accountAll = [{
-        //     //获取数据库数据
-        // }]
-
-        //登录验证
-        let submit_btn = () => {
-            if (!loginForm.email || !loginForm.pass) {
-                alert("账号或密码不能为空！");
-                return;
+    data() {
+        return {
+            loginForm: {
+                email: '',
+                pass: '',
             }
+        }
+    },
 
+    methods: {
+        submit_btn() {
+            if (!this.loginForm.email || !this.loginForm.pass) {
+                ElMessage({
+                    showClose: true,
+                    type: 'error',
+                    message: "账号或密码不能为空！",
+                    duration: 2000,
+                })
+            }
 
             // if (/*登录信息匹配并成功登录*/) {
             //     alert("登录成功！");
@@ -52,20 +53,16 @@ export default {
             // }else {
             //     alert(账号或密码不正确！);
             // }
-        };
+        },
 
-        let register_btn = () => {
+        register_btn() {
             router.push('/register');
         }
-        return {
-            loginForm,
-            submit_btn,
-            register_btn,
-        }
-    },
 
+    }
 }
 </script>
+
 
 <style>
 .login {
@@ -85,26 +82,28 @@ h4 {
 
 .button {
     width: 100%;
-    display: inline-flex;
+    display: flex;
     margin: auto;
 }
 
-.submit {
+.submit_btn {
     width: 40%;
     margin: auto;
 }
 
-.register {
+.register_btn {
     width: 40%;
     margin: auto;
 }
 
 .pass_input_box {
-    margin: 20px;
+    margin: 10px;
+    width: 89%;
 }
 
 .email_input_box {
-    margin: 20px;
+    margin: 10px;
+    width: 89%;
 }
 </style>
 
