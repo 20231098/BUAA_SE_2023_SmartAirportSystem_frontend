@@ -4,29 +4,43 @@
         <h4>注册新账号</h4>
         <el-form :model="registerForm" :rules="rules" ref="registerForm" label-width="80px" class="registerFormStyle"
             status-icon="true">
-            <el-form-item label="邮箱" prop="email">
-                <el-input v-model="registerForm.email" placeholder="请输入邮箱地址"></el-input>
-            </el-form-item>
 
-            <el-form-item label="用户类型" prop="uType">
+            <el-form-item label="用户类型" prop="uType" class="register_input_box">
                 <el-select v-model="registerForm.uType" placeholder="请选择用户类型">
+                    <el-option label="普通用户" value="user" />
                     <el-option label="航空公司" value="airline" />
                     <el-option label="管理员" value="admin" />
-                    <el-option label="普通用户" value="user" />
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="密码" prop="pass">
+            <el-form-item label="用户名称" prop="name" v-if="registerForm.uType == 'user'" class="register_input_box">
+                <el-input v-model="registerForm.name" placeholder="请输入名称"></el-input>
+            </el-form-item>
+
+            <el-form-item label="公司名称" prop="airlineName" v-if="registerForm.uType == 'airline'" class="register_input_box">
+                <el-input v-model="registerForm.airlineName" placeholder="请输入名称"></el-input>
+            </el-form-item>
+
+            <el-form-item label="员工名称" prop="adminName" v-if="registerForm.uType == 'admin'" class="register_input_box">
+                <el-input v-model="registerForm.adminName" placeholder="请输入名称"></el-input>
+            </el-form-item>
+
+            <el-form-item label="员工号" prop="adminID" v-if="registerForm.uType == 'admin'" class="register_input_box">
+                <el-input v-model="registerForm.adminID" placeholder="请输入员工号"></el-input>
+            </el-form-item>
+
+            <el-form-item label="邮箱" prop="email" class="register_input_box">
+                <el-input v-model="registerForm.email" placeholder="请输入邮箱地址"></el-input>
+            </el-form-item>
+
+            <el-form-item label="密码" prop="pass" class="register_input_box">
                 <el-input v-model="registerForm.pass" placeholder="请输入密码" type="password" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item label="确认密码" prop="checkPass">
+            <el-form-item label="确认密码" prop="checkPass" class="register_input_box">
                 <el-input v-model="registerForm.checkPass" placeholder="请确认密码" type="password"></el-input>
             </el-form-item>
 
-            <el-form-item label="员工号" prop="adminID" v-if="admin">
-                <el-input v-model="registerForm.adminID" placeholder="请输入员工号"></el-input>
-            </el-form-item>
 
             <div class="button">
                 <el-button @click="register_btn()" class="register_btn" type="primary">注册</el-button>
@@ -68,21 +82,74 @@ export default {
             callback(new Error('两次密码不一致'));
         };
 
-        return {
-            admin: false,
+        var validateAdminID = (rule, value, callback) => {
+            const regID = /^\d{5}$/;
+            if (regID.test(value)) {
+                callback();
+            }
+            callback(new Error('员工号为5位数字'));
+        };
 
+        var validateName = (rule, value, callback) => {
+            const regName = /^[\u4e00-\u9fa5a-zA-Z0-9_]{1,12}$/;
+            if (regName.test(value)) {
+                callback();
+            }
+            callback(new Error('名称只能由中英文、数字和下划线组成，不超过12位'));
+        };
+
+        var validateAdminName = (rule, value, callback) => {
+            const regAdminName = /^[\u4e00-\u9fa5a-zA-Z0-9_]{1,12}$/;
+            if (regAdminName.test(value)) {
+                callback();
+            }
+            callback(new Error('名称只能由中英文、数字和下划线组成，不超过30位'));
+        };
+
+        var validateAirlineName = (rule, value, callback) => {
+            const regAirlineName = /^[\u4e00-\u9fa5a-zA-Z0-9_]{1,30}$/;
+            if (regAirlineName.test(value)) {
+                callback();
+            }
+            callback(new Error('名称只能由中英文、数字和下划线组成，不超过30位'));
+        };
+
+        return {
             registerForm: {
                 email: '',
+                name: '',
+                airlineName: '',
                 pass: '',
                 checkPass: '',
-                uType: '',
-                adminID: ''
+                uType: 'user',
+                adminID: '',
+                adminName: '',
             },
 
             rules: {
+                name: [
+                    { required: true, message: '用户名称不能为空', trigger: 'blur' },
+                    { validator: validateName, trigger: 'blur' }
+                ],
+
+                airlineName: [
+                    { required: true, message: '公司名称不能为空', trigger: 'blur' },
+                    { validator: validateAirlineName, trigger: 'blur' }
+                ],
+
+                adminName: [
+                    { required: true, message: '员工名称不能为空', trigger: 'blur' },
+                    { validator: validateAdminName, trigger: 'blur' }
+                ],
+
+                adminID: [
+                    { required: true, message: '员工号不能为空', trigger: 'blur' },
+                    { validator: validateAdminID, trigger: 'blur' }
+                ],
+
                 email: [
                     { required: true, message: '邮箱地址不能为空', trigger: 'blur' },
-                    { validator: validateEmail, trigger: 'blur' },
+                    { validator: validateEmail, trigger: 'blur' }
                 ],
 
                 pass: [
@@ -107,6 +174,9 @@ export default {
         register_btn() {
             this.$refs.registerForm.validate((valid) => {
                 if (valid) {
+                    /*把数据写入数据库
+                        ？？
+                    */
                     router.push('/');
                 } else {
                     ElMessage({
@@ -133,5 +203,16 @@ export default {
     border: 1px solid black;
     padding: 20px;
     border-radius: 5px;
+    background-color: white;
+}
+
+h4 {
+    text-align: center;
+    padding: 5px;
+}
+
+.register_input_box{
+    margin: 10px;
+    width: 89%;
 }
 </style>

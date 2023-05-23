@@ -13,15 +13,15 @@ export default {
         var ret = 1;
         var today = new Date();
         var nowHour = today.getHours();
-        if(nowHour >= 0 && nowHour < 12){
-                ret = 1;
-            }else if(nowHour == 12){
-                ret = 2;
-            }else{
-                ret = 3;
-            }
+        if (nowHour >= 0 && nowHour < 12) {
+            ret = 1;
+        } else if (nowHour == 12) {
+            ret = 2;
+        } else {
+            ret = 3;
+        }
         return {
-            time : ret
+            time: ret
         }
     }
 
@@ -31,7 +31,20 @@ export default {
 </script>
 
 <style>
-.greeting{
+#app {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color:rgb(225, 239, 255);
+    z-index: -99999;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.greeting {
     margin: 10px;
     position: absolute;
     top: 30px;

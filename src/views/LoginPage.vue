@@ -2,12 +2,12 @@
     <title>登录</title>
     <div class="login">
         <h4>用户登录</h4>
-        <el-form :model="loginForm" label-width="70px">
-            <el-form-item label="邮箱" class="email_input_box" prop="email">
+        <el-form :model="loginForm" label-width="70px" :rules="loginRules">
+            <el-form-item label="邮箱" class="login_input_box" prop="email">
                 <el-input v-model="loginForm.email" placeholder="请输入邮箱地址"></el-input>
             </el-form-item>
 
-            <el-form-item label="密码" class="pass_input_box" prop="pass">
+            <el-form-item label="密码" class="login_input_box" prop="pass">
                 <el-input show-password v-model="loginForm.pass" type="password" placeholder="请输入密码"></el-input>
             </el-form-item>
 
@@ -29,6 +29,12 @@ export default {
     name: "LoginPage",
     data() {
         return {
+            loginRules: {
+                email: [
+                    { message: '邮箱地址不能为空', trigger: 'blur' }
+                ]
+            },
+
             loginForm: {
                 email: '',
                 pass: '',
@@ -65,6 +71,7 @@ export default {
 
 
 <style>
+
 .login {
     position: absolute;
     top: 50%;
@@ -74,10 +81,12 @@ export default {
     border: 1px solid black;
     padding: 20px;
     border-radius: 5px;
+    background-color: white;
 }
 
 h4 {
     text-align: center;
+    padding: 5px;
 }
 
 .button {
@@ -96,14 +105,10 @@ h4 {
     margin: auto;
 }
 
-.pass_input_box {
+.login_input_box{
     margin: 10px;
     width: 89%;
 }
 
-.email_input_box {
-    margin: 10px;
-    width: 89%;
-}
 </style>
 
