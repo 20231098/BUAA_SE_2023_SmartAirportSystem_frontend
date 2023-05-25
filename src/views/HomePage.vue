@@ -6,18 +6,14 @@
         <h1 v-else>Good Evening</h1>
     </div>
 
-    <div class="box">
-        <a class="items" v-for="(item, index) in list1" :key="index" onmouseover="this.style.color = 'blue'"
-            onmouseout="this.style.color = 'black'" @click="changePage(item)">
-            {{ item.name }}
-        </a>
-    </div>
+    <pageChange></pageChange>
+
 </template>
 
 <script>
-import router from '@/routes/router';
-
+import pageChange from '@/components/pageChange.vue';
 export default {
+    components: { pageChange },
     data() {
         var ret = 1;
         var today = new Date();
@@ -31,27 +27,9 @@ export default {
         }
 
         return {
-            list1: [
-                {name:"首页", index:1},
-                {name:"查询", index:2},
-                {name:"登录/注册", index:3},
-            ],
-
-            boxStyle: {
-
-            },
-
             time: ret
         }
     },
-
-    methods: {
-        changePage(item){
-            if(item.index == 3){
-                router.push('/login');
-            }
-        }
-    }
 
 }
 
@@ -79,20 +57,4 @@ export default {
     top: 30px;
 }
 
-.items {
-    display: inline-block;
-    height: 41px;
-    text-decoration: none;
-    color: #4c4c4c;
-    padding: 0 20px;
-}
-
-.box {
-    height: 45px;
-    border-top: 3px solid blue;
-    border-bottom: 1px solid grey;
-    background-color: white;
-    font-size: 15px;
-    line-height: 41px;
-}
 </style>
