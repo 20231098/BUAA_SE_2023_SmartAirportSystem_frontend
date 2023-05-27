@@ -1,6 +1,6 @@
 <template>
     <title>登录</title>
-    <div class="login">
+    <div class="login"  @keyup.enter="keyPressed">
         <h4>用户登录</h4>
         <el-form :model="loginForm" label-width="70px" :rules="loginRules">
             <el-form-item label="邮箱" class="login_input_box" prop="email">
@@ -8,12 +8,13 @@
             </el-form-item>
 
             <el-form-item label="密码" class="login_input_box" prop="pass">
-                <el-input show-password v-model="loginForm.pass" type="password" placeholder="请输入密码"></el-input>
+                <el-input show-password v-model="loginForm.pass" type="password"
+                    placeholder="请输入密码"></el-input>
             </el-form-item>
 
             <div class="button">
                 <el-button @click="submit_btn" class="submit_btn" type="primary">登录</el-button>
-                <el-button @click="register_btn" class="register_btn" type="plain">注册</el-button>
+                <el-button @click="goRegister_btn" class="goRegister_btn" type="plain">注册</el-button>
             </div>
         </el-form>
     </div>
@@ -42,36 +43,49 @@ export default {
         }
     },
 
+    mounted(){
+
+    },
+    
     methods: {
         submit_btn() {
             if (!this.loginForm.email || !this.loginForm.pass) {
                 ElMessage({
-                    showClose: true,
                     type: 'error',
                     message: "账号或密码不能为空！",
                     duration: 2000,
                 })
             }
-
-            // if (/*登录信息匹配并成功登录*/) {
-            //     alert("登录成功！");
+            // else if (/*登录信息匹配并成功登录*/) {
+            //     ElMessage({
+            //         type: 'success',
+            //         message: "登录成功！",
+            //         duration: 2000,
+            //     })
             //     router.push('/'); //回到主页面
-            // }else {
-            //     alert(账号或密码不正确！);
             // }
+            else {
+                ElMessage({
+                    type: 'error',
+                    message: "账号或密码不正确！",
+                    duration: 2000,
+                })
+            }
         },
 
-        register_btn() {
+        goRegister_btn() {
             router.push('/register');
-        }
+        },
 
+        keyPressed() {
+            this.submit_btn();
+        }
     }
 }
 </script>
 
 
 <style>
-
 .login {
     position: absolute;
     top: 50%;
@@ -100,15 +114,14 @@ h4 {
     margin: auto;
 }
 
-.register_btn {
+.goRegister_btn {
     width: 40%;
     margin: auto;
 }
 
-.login_input_box{
+.login_input_box {
     margin: 10px;
     width: 89%;
 }
-
 </style>
 

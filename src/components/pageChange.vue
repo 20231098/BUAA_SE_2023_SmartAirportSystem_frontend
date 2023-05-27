@@ -47,10 +47,7 @@ export default {
 
 .box {
     height: 45px;
-    border-top: 3px solid blue;
-    border-bottom: 1px solid grey;
-    background-color: white;
-    font-size: 15px;
+    font-size: 17px;
     line-height: 41px;
 }
 </style>

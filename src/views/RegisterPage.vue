@@ -1,6 +1,6 @@
 <template>
     <title>注册</title>
-    <div class="register">
+    <div class="register" @keyup.enter="keyPressed">
         <h4>注册新账号</h4>
         <el-form :model="registerForm" :rules="rules" ref="registerForm" label-width="80px" class="registerFormStyle"
             status-icon="true">
@@ -8,8 +8,9 @@
             <el-form-item label="用户类型" prop="uType" class="register_input_box">
                 <el-select v-model="registerForm.uType" placeholder="请选择用户类型">
                     <el-option label="普通用户" value="user" />
-                    <el-option label="航空公司" value="airline" />
+                    <el-option label="航空公司" value="company" />
                     <el-option label="管理员" value="admin" />
+                    <el-option label="商户入驻" value="merchant" />
                 </el-select>
             </el-form-item>
 
@@ -23,6 +24,11 @@
 
             <el-form-item label="员工名称" prop="adminName" v-if="registerForm.uType == 'admin'" class="register_input_box">
                 <el-input v-model="registerForm.adminName" placeholder="请输入名称"></el-input>
+            </el-form-item>
+
+            <el-form-item label="商户名称" prop="merchantName" v-if="registerForm.uType == 'merchant'"
+                class="register_input_box">
+                <el-input v-model="registerForm.merchantName" placeholder="请输入名称"></el-input>
             </el-form-item>
 
             <el-form-item label="员工号" prop="adminID" v-if="registerForm.uType == 'admin'" class="register_input_box">
@@ -43,7 +49,7 @@
 
 
             <div class="button">
-                <el-button @click="register_btn()" class="register_btn" type="primary">注册</el-button>
+                <el-button @click="register_btn" class="register_btn" type="primary">注册</el-button>
             </div>
         </el-form>
 
@@ -54,6 +60,8 @@
 <script>
 import router from '@/routes/router';
 import { ElMessage } from 'element-plus';
+
+
 
 export default {
     name: "RegisterPage",
@@ -98,15 +106,7 @@ export default {
             callback(new Error('名称只能由中英文、数字和下划线组成，不超过12位'));
         };
 
-        var validateAdminName = (rule, value, callback) => {
-            const regAdminName = /^[\u4e00-\u9fa5a-zA-Z0-9_]{1,12}$/;
-            if (regAdminName.test(value)) {
-                callback();
-            }
-            callback(new Error('名称只能由中英文、数字和下划线组成，不超过30位'));
-        };
-
-        var validateAirlineName = (rule, value, callback) => {
+        var validateName2 = (rule, value, callback) => {
             const regAirlineName = /^[\u4e00-\u9fa5a-zA-Z0-9_]{1,30}$/;
             if (regAirlineName.test(value)) {
                 callback();
@@ -134,12 +134,17 @@ export default {
 
                 airlineName: [
                     { required: true, message: '公司名称不能为空', trigger: 'blur' },
-                    { validator: validateAirlineName, trigger: 'blur' }
+                    { validator: validateName2, trigger: 'blur' }
                 ],
 
                 adminName: [
                     { required: true, message: '员工名称不能为空', trigger: 'blur' },
-                    { validator: validateAdminName, trigger: 'blur' }
+                    { validator: validateName, trigger: 'blur' }
+                ],
+
+                merchantName: [
+                    { required: true, message: '商户名称不能为空', trigger: 'blur' },
+                    { validator: validateName2, trigger: 'blur' }
                 ],
 
                 adminID: [
@@ -180,14 +185,18 @@ export default {
                     router.push('/');
                 } else {
                     ElMessage({
-                        showClose: true,
                         type: 'error',
                         message: "请完成填写",
                         duration: 2000,
                     })
                 }
             })
+        },
+
+        keyPressed() {
+            this.register_btn();
         }
+
     },
 
 }
@@ -211,8 +220,13 @@ h4 {
     padding: 5px;
 }
 
-.register_input_box{
+.register_input_box {
     margin: 10px;
     width: 89%;
+}
+
+.register_btn {
+    width: 40%;
+    margin: auto;
 }
 </style>

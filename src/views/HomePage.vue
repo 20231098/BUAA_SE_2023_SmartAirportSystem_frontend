@@ -1,13 +1,15 @@
 <template>
     <!-- 打招呼显示 （早午晚） -->
-    <div class="greeting">
-        <h1 v-if="time == 1">Good Morning</h1>
-        <h1 v-else-if="time == 2">Good Afternoon</h1>
-        <h1 v-else>Good Evening</h1>
+    <div class="headerContainer">
+        <img src="@/assets/logo.png" class="logo" />
+        <pageChange class="pageChange"></pageChange>
     </div>
 
-    <pageChange></pageChange>
-
+    <div class="greeting">
+        <h1 v-if="time == 1">Good Morning, 早上好！</h1>
+        <h1 v-else-if="time == 2">Good Afternoon, 中午好！</h1>
+        <h1 v-else>Good Evening, 下午好！</h1>
+    </div>
 </template>
 
 <script>
@@ -41,7 +43,6 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgb(225, 239, 255);
     z-index: -99999;
 }
 
@@ -54,7 +55,24 @@ export default {
     margin: 10px;
     padding: 10px;
     position: absolute;
-    top: 30px;
+    top: 130px;
 }
 
+.logo {
+    height: 100px;
+    width: 250px;
+}
+
+.pageChange {
+    position:fixed;
+    right: 0px;
+    top: 31px;
+}
+
+.headerContainer{
+    height: 100px;
+    border-top: blue solid 2px;
+    border-bottom: lightgrey solid 2px;
+    display: flex;
+}
 </style>
