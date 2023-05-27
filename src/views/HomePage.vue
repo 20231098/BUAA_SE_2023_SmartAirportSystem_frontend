@@ -59,12 +59,13 @@ export default {
 }
 
 .logo {
+    padding-left: 10px;
     height: 100px;
     width: 250px;
 }
 
 .pageChange {
-    position:fixed;
+    position:absolute;
     right: 0px;
     top: 31px;
 }
