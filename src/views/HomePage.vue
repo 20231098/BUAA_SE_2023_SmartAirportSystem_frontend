@@ -1,9 +1,9 @@
 <template>
     <!-- 打招呼显示 （早午晚） -->
-    <div class="headerContainer">
+    <!-- <div class="headerContainer">
         <img src="@/assets/logo.png" class="logo" />
         <pageChange class="pageChange"></pageChange>
-    </div>
+    </div> -->
 
     <div class="greeting">
         <h1 v-if="time == 1">Good Morning, 早上好！</h1>
@@ -13,9 +13,7 @@
 </template>
 
 <script>
-import pageChange from '@/components/pageChange.vue';
 export default {
-    components: { pageChange },
     data() {
         var ret = 1;
         var today = new Date();
@@ -58,22 +56,5 @@ export default {
     top: 130px;
 }
 
-.logo {
-    padding-left: 10px;
-    height: 100px;
-    width: 250px;
-}
 
-.pageChange {
-    position:absolute;
-    right: 0px;
-    top: 31px;
-}
-
-.headerContainer{
-    height: 100px;
-    border-top: blue solid 2px;
-    border-bottom: lightgrey solid 2px;
-    display: flex;
-}
 </style>
