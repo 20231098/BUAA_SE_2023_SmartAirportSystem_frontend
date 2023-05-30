@@ -5,6 +5,8 @@ import LoginPage from "@/views/LoginPage.vue"
 import HomePage from "@/views/HomePage.vue"
 import RegisterPage from "@/views/RegisterPage.vue"
 import UserPage from "@/views/UserPage.vue"
+import FlightPage from "@/views/FlightPage.vue"
+import TicketListPage from "@/views/TicketListPage.vue"
 
 const routes =[
     {
@@ -29,6 +31,18 @@ const routes =[
         name: "UserPage",
         path:'/user',
         component: UserPage
+    },
+
+    {
+        name: "FlightPage",
+        path:'/flight',
+        component: FlightPage
+    },
+
+    {
+        name: "TicketListPage",
+        path:'/ticketList',
+        component: TicketListPage
     },
 
 ]

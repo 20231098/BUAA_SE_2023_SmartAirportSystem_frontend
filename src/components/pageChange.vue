@@ -16,7 +16,7 @@ export default {
         return {
             list1: [
                 { name: "首页", index: 1 },
-                { name: "查询", index: 2 },
+                { name: "机票", index: 2 },
                 { name: "登录/注册", index: 3 },
             ],
         }
@@ -26,6 +26,10 @@ export default {
         changePage(item) {
             if (item.index == 1) {
                 router.push('/');
+            }
+
+            if (item.index == 2) {
+                router.push('/flight');
             }
 
             if (item.index == 3) {

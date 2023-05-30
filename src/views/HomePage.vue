@@ -1,10 +1,4 @@
 <template>
-    <!-- 打招呼显示 （早午晚） -->
-    <!-- <div class="headerContainer">
-        <img src="@/assets/logo.png" class="logo" />
-        <pageChange class="pageChange"></pageChange>
-    </div> -->
-
     <div class="greeting">
         <h1 v-if="time == 1">Good Morning, 早上好！</h1>
         <h1 v-else-if="time == 2">Good Afternoon, 中午好！</h1>

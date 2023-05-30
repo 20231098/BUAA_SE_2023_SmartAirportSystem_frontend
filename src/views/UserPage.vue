@@ -91,7 +91,7 @@ export default {
     margin: auto;
     border: solid 1px lightgrey;
     background-color: white;
-    box-shadow: 5px 5px 5px 5px grey;
+    box-shadow: 5px 5px 5px 5px rgb(186, 186, 186);
 }
 
 .title {
