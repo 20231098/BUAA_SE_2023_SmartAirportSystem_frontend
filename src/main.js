@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import axios from 'axios'
 import router from './routes/router'
+import store from './store'
 import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/index.css'
 
@@ -9,6 +10,7 @@ import 'element-plus/theme-chalk/index.css'
 
 const app = createApp(App)
 app.use(router)
+app.use(store)
 /* 将 axios 挂载到全局，今后，每个组件中，
 都可以直接通过this.$http 代替 axios 发起 Ajax 请求 */
 app.config.globalProperties.$http = axios

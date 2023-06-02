@@ -3,18 +3,11 @@
     <router-view></router-view>
   </div>
 
-  <div class="headerContainer">
-    <img src="@/assets/logo.png" class="logo" />
-    <pageChange class="pageChange"></pageChange>
-  </div>
 
 </template>
 
 <script>
-import pageChange from './components/pageChange.vue';
-export default{
-  components: { pageChange },
-}
+
 </script>
 
 <style>
