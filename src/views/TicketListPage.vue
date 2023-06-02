@@ -1,14 +1,20 @@
 <template>
-    <div class="test">this is ticketlist page</div>
+    <div>
+        <checkFlight />
+    </div>
+
+    <div id="ticket_list">
+        <!-- ticket list -->
+    </div>
 </template>
 
 <script>
-
+import checkFlight from '@/components/checkFlight.vue';
+export default {
+    components: {
+        checkFlight
+    }
+}
 </script>
 
-<style>
-.test {
-    position: absolute;
-    top: 150px;
-}
-</style>
+<style></style>
