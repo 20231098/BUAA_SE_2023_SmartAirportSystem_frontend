@@ -6,7 +6,7 @@ import HomePage from "@/views/HomePage.vue"
 import RegisterPage from "@/views/RegisterPage.vue"
 import UserPage from "@/views/UserPage.vue"
 import FlightPage from "@/views/FlightPage.vue"
-import TicketListPage from "@/views/TicketListPage.vue"
+import BuyTicketPage from "@/views/BuyTicketPage.vue"
 
 const routes =[
     {
@@ -40,11 +40,10 @@ const routes =[
     },
 
     {
-        name: "TicketListPage",
-        path:'/ticketList',
-        component: TicketListPage
+        name: "BuyTicketPage",
+        path:'/buyTicket',
+        component: BuyTicketPage
     },
-
 ]
 
 const router = createRouter({

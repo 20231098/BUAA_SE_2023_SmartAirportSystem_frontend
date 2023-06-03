@@ -1,4 +1,5 @@
 <template>
+    <pageChange />
     <div class="window">
         <div class="container">
             <!-- <div class="title">个人中心</div> -->
@@ -11,7 +12,8 @@
                                 <p class="item">邮箱:</p>
                                 <div class="item2">
                                     <p>{{ email }}</p>
-                                    <el-button text class="edit" style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
+                                    <el-button text class="edit"
+                                        style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
                                         <p>编辑</p>
                                         <el-icon size="20px">
                                             <Edit />
@@ -24,7 +26,8 @@
                                 <p class="item">手机:</p>
                                 <div class="item2">
                                     <p>{{ phone }}</p>
-                                    <el-button text class="edit" style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
+                                    <el-button text class="edit"
+                                        style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
                                         <p>编辑</p>
                                         <el-icon size="20px">
                                             <Edit />
@@ -37,7 +40,8 @@
                                 <p class="item">用户名:</p>
                                 <div class="item2">
                                     <p>{{ userName }}</p>
-                                    <el-button text class="edit" style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
+                                    <el-button text class="edit"
+                                        style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
                                         <p class="hoverEdit">编辑</p>
                                         <el-icon size="20px">
                                             <Edit />
@@ -62,7 +66,7 @@
 import { Edit } from '@element-plus/icons';
 export default {
     components: {
-        Edit
+        Edit,
     },
 
     data() {
@@ -170,9 +174,8 @@ export default {
     display: flex;
 }
 
-.edit :hover{
+.edit :hover {
     color: rgb(67, 67, 255);
     background: white !important;
 }
-
 </style>
