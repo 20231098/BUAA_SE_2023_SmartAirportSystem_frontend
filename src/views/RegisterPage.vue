@@ -1,71 +1,84 @@
 <template>
-    <title>注册</title>
-    <div class="register" @keyup.enter="keyPressed">
-        <h4>注册新账号</h4>
-        <el-form :model="registerForm" :rules="rules" ref="registerForm" label-width="80px" class="registerFormStyle"
-            status-icon="true">
-
-            <el-form-item label="用户类型" prop="uType" class="register_input_box">
-                <el-select v-model="registerForm.uType" placeholder="请选择用户类型">
-                    <el-option label="普通用户" value="user" />
-                    <el-option label="航空公司" value="company" />
-                    <el-option label="管理员" value="admin" />
-                    <el-option label="商户入驻" value="merchant" />
-                </el-select>
-            </el-form-item>
-
-            <el-form-item label="用户名称" prop="name" v-if="registerForm.uType == 'user'" class="register_input_box">
-                <el-input v-model="registerForm.name" placeholder="请输入名称"></el-input>
-            </el-form-item>
-
-            <el-form-item label="公司名称" prop="airlineName" v-if="registerForm.uType == 'airline'" class="register_input_box">
-                <el-input v-model="registerForm.airlineName" placeholder="请输入名称"></el-input>
-            </el-form-item>
-
-            <el-form-item label="员工名称" prop="adminName" v-if="registerForm.uType == 'admin'" class="register_input_box">
-                <el-input v-model="registerForm.adminName" placeholder="请输入名称"></el-input>
-            </el-form-item>
-
-            <el-form-item label="商户名称" prop="merchantName" v-if="registerForm.uType == 'merchant'"
-                class="register_input_box">
-                <el-input v-model="registerForm.merchantName" placeholder="请输入名称"></el-input>
-            </el-form-item>
-
-            <el-form-item label="员工号" prop="adminID" v-if="registerForm.uType == 'admin'" class="register_input_box">
-                <el-input v-model="registerForm.adminID" placeholder="请输入员工号"></el-input>
-            </el-form-item>
-
-            <el-form-item label="邮箱" prop="email" class="register_input_box">
-                <el-input v-model="registerForm.email" placeholder="请输入邮箱地址"></el-input>
-            </el-form-item>
-
-            <el-form-item label="密码" prop="pass" class="register_input_box">
-                <el-input v-model="registerForm.pass" placeholder="请输入密码" type="password" autocomplete="off"></el-input>
-            </el-form-item>
-
-            <el-form-item label="确认密码" prop="checkPass" class="register_input_box">
-                <el-input v-model="registerForm.checkPass" placeholder="请确认密码" type="password"></el-input>
-            </el-form-item>
-
-
-            <div class="button">
-                <el-button @click="register_btn" class="register_btn" type="primary">注册</el-button>
-                <el-button @click="goback_btn" class="goback_btn" type="plain">返回</el-button>
+    <el-container>
+        <el-header>
+            <div class="headerContainer">
+                <img src="@/assets/logo.png" class="logo" />
+                <pageChange class="pageChange"></pageChange>
             </div>
-        </el-form>
+        </el-header>
+        <el-main>
+            <title>注册</title>
+            <div class="register" @keyup.enter="keyPressed">
+                <h4>注册新账号</h4>
+                <el-form :model="registerForm" :rules="rules" ref="registerForm" label-width="80px" class="registerFormStyle"
+                    status-icon="true">
+
+                    <el-form-item label="用户类型" prop="uType" class="register_input_box">
+                        <el-select v-model="registerForm.uType" placeholder="请选择用户类型">
+                            <el-option label="普通用户" value="user" />
+                            <el-option label="航空公司" value="company" />
+                            <el-option label="管理员" value="admin" />
+                            <el-option label="商户入驻" value="merchant" />
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item label="用户名称" prop="name" v-if="registerForm.uType == 'user'" class="register_input_box">
+                        <el-input v-model="registerForm.name" placeholder="请输入名称"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="公司名称" prop="airlineName" v-if="registerForm.uType == 'airline'" class="register_input_box">
+                        <el-input v-model="registerForm.airlineName" placeholder="请输入名称"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="员工名称" prop="adminName" v-if="registerForm.uType == 'admin'" class="register_input_box">
+                        <el-input v-model="registerForm.adminName" placeholder="请输入名称"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="商户名称" prop="merchantName" v-if="registerForm.uType == 'merchant'"
+                        class="register_input_box">
+                        <el-input v-model="registerForm.merchantName" placeholder="请输入名称"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="员工号" prop="adminID" v-if="registerForm.uType == 'admin'" class="register_input_box">
+                        <el-input v-model="registerForm.adminID" placeholder="请输入员工号"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="邮箱" prop="email" class="register_input_box">
+                        <el-input v-model="registerForm.email" placeholder="请输入邮箱地址"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="密码" prop="pass" class="register_input_box">
+                        <el-input v-model="registerForm.pass" placeholder="请输入密码" type="password" autocomplete="off"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="确认密码" prop="checkPass" class="register_input_box">
+                        <el-input v-model="registerForm.checkPass" placeholder="请确认密码" type="password"></el-input>
+                    </el-form-item>
 
 
-    </div>
+                    <div class="button">
+                        <el-button @click="register_btn" class="register_btn" type="primary">注册</el-button>
+                        <el-button @click="goback_btn" class="goback_btn" type="plain">返回</el-button>
+                    </div>
+                </el-form>
+
+
+            </div>
+        </el-main>
+    </el-container>
 </template>
 
 <script>
 import router from '@/routes/router';
 import qs from 'qs';
 import { ElMessage } from 'element-plus';
-
+import pageChange from '@/components/pageChange.vue';
 
 
 export default {
+    components: {
+        pageChange
+    },
     name: "RegisterPage",
 
     data() {
@@ -193,12 +206,13 @@ export default {
                         case "admin":
                             this.adminRegister();
                             break;
-                        case "airline":
-                            this.airlineRegister();
+                        case "company":
+                            this.companyRegister();
                             break;
                         case "merchant":
-                            //router.push('/login');
+                            //this.$router.push('/login');
                             this.merchantRegister();
+                            //this.$message.success("申请成功");
                             break;
                     }
                     //router.push('/');
@@ -225,11 +239,13 @@ export default {
             
             this.$http({
               method: "post" /* 指明请求方式，可以是 get 或 post */,
-              url: "/user/register" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
-              data: qs.stringify(
+              url: "/tourist/logup" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+              data: qs.stringify({
               /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-              this.registerForm
-            ),
+                email:this.registerForm.email,
+                passwords: this.registerForm.pass,
+                repasswords: this.registerForm.checkPass,
+              }),
           })
             .then((res) => {
               /* res 是 response 的缩写 */
@@ -272,15 +288,18 @@ export default {
             });
         },
 
-        airlineRegister()
+        companyRegister()
         {
             this.$http({
               method: "post" /* 指明请求方式，可以是 get 或 post */,
-              url: "/airline/register" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
-              data: qs.stringify(
-              /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-              this.registerForm
-            ),
+              url: "/company/logup" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+              data: qs.stringify({              
+                /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                email: this.registerForm.email,
+                name: this.registerForm.airlineName,
+                passwords: this.registerForm.pass,
+                repasswords: this.registerForm.checkPass,
+            }),
           })
             .then((res) => {
               /* res 是 response 的缩写 */
@@ -357,5 +376,17 @@ h4 {
 .goback_btn {
     width: 40%;
     margin: auto;
+}
+
+.headerContainer{
+  position: fixed;
+  top: 0px;
+  height: 100px;
+  width: 100%;
+  border-top: blue solid 2px;
+  border-bottom: lightgrey solid 2px;
+  background-color: white;
+  display: flex;
+  z-index: 99999999;
 }
 </style>
