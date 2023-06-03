@@ -50,6 +50,7 @@
 
             <div class="button">
                 <el-button @click="register_btn" class="register_btn" type="primary">注册</el-button>
+                <el-button @click="goback_btn" class="goback_btn" type="plain">返回</el-button>
             </div>
         </el-form>
 
@@ -59,6 +60,7 @@
 
 <script>
 import router from '@/routes/router';
+import qs from 'qs';
 import { ElMessage } from 'element-plus';
 
 
@@ -124,6 +126,7 @@ export default {
                 uType: 'user',
                 adminID: '',
                 adminName: '',
+                merchantName: '',
             },
 
             rules: {
@@ -182,7 +185,23 @@ export default {
                     /*把数据写入数据库
                         ？？
                     */
-                    router.push('/');
+                    switch(this.registerForm.uType)
+                    {
+                        case "user":
+                            this.userRegister();
+                            break;
+                        case "admin":
+                            this.adminRegister();
+                            break;
+                        case "airline":
+                            this.airlineRegister();
+                            break;
+                        case "merchant":
+                            //router.push('/login');
+                            this.merchantRegister();
+                            break;
+                    }
+                    //router.push('/');
                 } else {
                     ElMessage({
                         type: 'error',
@@ -195,8 +214,113 @@ export default {
 
         keyPressed() {
             this.register_btn();
-        }
+        },
 
+        goback_btn() {
+            router.push('/login');
+        },
+
+        userRegister()
+        {
+            
+            this.$http({
+              method: "post" /* 指明请求方式，可以是 get 或 post */,
+              url: "/user/register" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+              data: qs.stringify(
+              /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+              this.registerForm
+            ),
+          })
+            .then((res) => {
+              /* res 是 response 的缩写 */
+              //console.log(res.data);
+              if (res.data.success) {
+                this.$message.success("注册成功！");
+                setTimeout(() => {this.$router.push("/login")}, 1000);
+              } else {
+                this.$message.error("注册失败！");
+              }
+            })
+            .catch((err) => {
+              console.log(err); /* 若出现异常则在终端输出相关信息 */
+            });
+            
+        },
+
+        adminRegister()
+        {
+            this.$http({
+              method: "post" /* 指明请求方式，可以是 get 或 post */,
+              url: "/admin/register" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+              data: qs.stringify(
+              /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+              this.registerForm
+            ),
+          })
+            .then((res) => {
+              /* res 是 response 的缩写 */
+              //console.log(res.data);
+              if (res.data.success) {
+                this.$message.success("注册成功！");
+                setTimeout(() => {this.$router.push("/login")}, 1000);
+              } else {
+                this.$message.error("注册失败！");
+              }
+            })
+            .catch((err) => {
+              console.log(err); /* 若出现异常则在终端输出相关信息 */
+            });
+        },
+
+        airlineRegister()
+        {
+            this.$http({
+              method: "post" /* 指明请求方式，可以是 get 或 post */,
+              url: "/airline/register" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+              data: qs.stringify(
+              /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+              this.registerForm
+            ),
+          })
+            .then((res) => {
+              /* res 是 response 的缩写 */
+              //console.log(res.data);
+              if (res.data.success) {
+                this.$message.success("注册成功！");
+                setTimeout(() => {this.$router.push("/login")}, 1000);
+              } else {
+                this.$message.error("注册失败！");
+              }
+            })
+            .catch((err) => {
+              console.log(err); /* 若出现异常则在终端输出相关信息 */
+            });
+        },
+
+        merchantRegister()
+        {
+            this.$http({
+              method: "post" /* 指明请求方式，可以是 get 或 post */,
+              url: "/merchant/register" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+              data: qs.stringify(
+              /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+              this.registerForm
+            ),
+          })
+            .then((res) => {
+              /* res 是 response 的缩写 */
+              //console.log(res.data);
+              if (res.data.success) {
+                this.$message.success("申请成功！请耐心等待。");
+                setTimeout(() => {this.$router.push("/login")}, 1000);
+              } else {
+                this.$message.error("申请失败！");
+              }
+            })
+            .catch((err) => {
+              console.log(err); /* 若出现异常则在终端输出相关信息 */
+            });
+        }
     },
 
 }
@@ -226,6 +350,11 @@ h4 {
 }
 
 .register_btn {
+    width: 40%;
+    margin: auto;
+}
+
+.goback_btn {
     width: 40%;
     margin: auto;
 }
