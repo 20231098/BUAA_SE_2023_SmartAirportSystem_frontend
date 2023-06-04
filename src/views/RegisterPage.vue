@@ -211,7 +211,7 @@ export default {
                         case "merchant":
                             //this.$router.push('/login');
                             this.merchantRegister();
-                            //this.$message.success("申请成功");
+                            //this.$message.success(this.registerForm.merchantName);
                             break;
                     }
                     //router.push('/');

@@ -79,10 +79,10 @@ export default {
 }
 
 .greeting {
-    margin: 10px;
+    margin-top: 300px;
     padding: 10px;
-    position: absolute;
-    top: 400px;
+    position: relative;
+    top: 200px;
 }
 
 .headerContainer {

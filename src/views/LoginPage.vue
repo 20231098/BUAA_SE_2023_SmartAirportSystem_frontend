@@ -28,7 +28,7 @@
                     <el-form-item label="密码" class="login_input_box" prop="pass">
                         <el-input show-password v-model="loginForm.pass" type="password" placeholder="请输入密码"></el-input>
                     </el-form-item>
-
+                    
                     <div class="button">
                         <el-button @click="submit_btn" class="submit_btn" type="primary">登录</el-button>
                         <el-button @click="goRegister_btn" class="goRegister_btn" type="plain">注册</el-button>
@@ -135,9 +135,9 @@ export default {
                 method: "post" /* 指明请求方式，可以是 get 或 post */,
                 url: "/tourist/login" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                 data: qs.stringify({
-                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                    email: this.email,
-                    passwords: this.pass,
+                  /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                  email: this.loginForm.email,
+                  passwords: this.loginForm.pass,
                 }),
             })
                 .then((res) => {
@@ -166,9 +166,9 @@ export default {
                 method: "post" /* 指明请求方式，可以是 get 或 post */,
                 url: "/admin/login" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                 data: qs.stringify({
-                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                    email: this.email,
-                    passwords: this.pass,
+                  /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                  email: this.loginForm.email,
+                  passwords: this.loginForm.pass,
                 }),
             })
                 .then((res) => {
@@ -197,9 +197,9 @@ export default {
                 method: "post" /* 指明请求方式，可以是 get 或 post */,
                 url: "/company/login" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                 data: qs.stringify({
-                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                    email: this.email,
-                    passwords: this.pass,
+                  /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                  email: this.loginForm.email,
+                  passwords: this.loginForm.pass,
                 }),
             })
                 .then((res) => {
@@ -228,9 +228,9 @@ export default {
                 method: "post" /* 指明请求方式，可以是 get 或 post */,
                 url: "/merchant/login" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                 data: qs.stringify({
-                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                    email: this.email,
-                    passwords: this.pass,
+                  /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                  email: this.loginForm.email,
+                  passwords: this.loginForm.pass,
                 }),
             })
                 .then((res) => {
@@ -262,11 +262,11 @@ export default {
 .login {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    left: 45%;
+    transform: translate(-50%, -45%);
     width: 450px;
     border: 1px solid black;
-    padding: 20px;
+    padding: 10px;
     border-radius: 5px;
     background-color: white;
 }
@@ -297,16 +297,17 @@ h4 {
     width: 89%;
 }
 
-.headerContainer {
-    position: fixed;
-    top: 0px;
-    height: 100px;
-    width: 100%;
-    border-top: blue solid 2px;
-    border-bottom: lightgrey solid 2px;
-    background-color: white;
-    display: flex;
-    z-index: 99999999;
+.headerContainer{
+  position: absolute;
+  top: 0px;
+  margin-left: -20px;
+  height: 100px;
+  width: 100%;
+  border-top: blue solid 2px;
+  border-bottom: lightgrey solid 2px;
+  background-color: white;
+  display: flex;
+  z-index: 99999999;
 }
 </style>
 

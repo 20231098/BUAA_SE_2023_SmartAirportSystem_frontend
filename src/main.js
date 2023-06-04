@@ -4,6 +4,7 @@ import axios from 'axios'
 import router from './routes/router'
 import store from './store'
 import ElementPlus from 'element-plus'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/theme-chalk/index.css'
 
 const app = createApp(App)
@@ -16,6 +17,10 @@ app.config.globalProperties.$http = axios
 axios.defaults.baseURL = 'http://10.192.70.72:8080'
 
 app.mount('#app')
+
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+  }
 app.use(ElementPlus)
 
 app.config.globalProperties.$isLogin = false; //判断是否已经登陆
