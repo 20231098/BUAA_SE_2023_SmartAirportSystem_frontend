@@ -7,8 +7,9 @@ import RegisterPage from "@/views/RegisterPage.vue"
 import UserPage from "@/views/UserPage.vue"
 import FlightPage from "@/views/FlightPage.vue"
 import BuyTicketPage from "@/views/BuyTicketPage.vue"
+import AddFlightPage from "@/views/AddFlightPage.vue"
 
-const routes =[
+const routes = [
     {
         name: "HomePage",
         path: '/',
@@ -17,32 +18,38 @@ const routes =[
 
     {
         name: "LoginPage",
-        path:'/login',
+        path: '/login',
         component: LoginPage
     },
 
     {
         name: "RegisterPage",
-        path:'/register',
+        path: '/register',
         component: RegisterPage
     },
 
     {
         name: "UserPage",
-        path:'/user',
+        path: '/user',
         component: UserPage
     },
 
     {
         name: "FlightPage",
-        path:'/flight',
+        path: '/flight',
         component: FlightPage
     },
 
     {
         name: "BuyTicketPage",
-        path:'/buyTicket',
+        path: '/buyTicket',
         component: BuyTicketPage
+    },
+
+    {
+        name: 'AddFlightPage',
+        path: '/addFlight',
+        component: AddFlightPage
     },
 ]
 

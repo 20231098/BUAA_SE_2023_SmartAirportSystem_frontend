@@ -38,7 +38,9 @@ export default {
                 router.push('/login');
             }
 
-
+            if (item.index == 5) {
+                router.push('/user');
+            }
         }
     }
 

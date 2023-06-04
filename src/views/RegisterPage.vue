@@ -91,11 +91,11 @@ export default {
         };
 
         var validatePass = (rule, value, callback) => {
-            const regPass = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
+            const regPass = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
             if (regPass.test(value)) {
                 callback();
             }
-            callback(new Error('密码必须由字母、数字组成，且长度不低于8位'));
+            callback(new Error('密码必须包含字母、数字和特殊字符，且长度不低于8位'));
         };
 
         var validatePass2 = (rule, value, callback) => {
@@ -175,9 +175,8 @@ export default {
 
                 pass: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },
-                    { vaildator: validatePass, trigger: 'blur' }
+                    { validator: validatePass, trigger: 'blur' }
                 ],
-
                 checkPass: [
                     { required: true, message: '请再次输入密码', trigger: 'blur' },
                     { validator: validatePass2, trigger: 'blur' }

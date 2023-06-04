@@ -1,140 +1,330 @@
 <template>
-    <pageChange />
-    <div class="window">
-        <div class="container">
-            <!-- <div class="title">个人中心</div> -->
-            <el-tabs tab-position="left" class="tabs">
-                <el-tab-pane label="个人中心">
-                    <div class="box1">
-                        <p class="boxHeader">个人信息设置</p>
-                        <div class="boxItem">
-                            <div class="subItem">
-                                <p class="item">邮箱:</p>
-                                <div class="item2">
-                                    <p>{{ email }}</p>
-                                    <el-button text class="edit"
-                                        style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
-                                        <p>编辑</p>
-                                        <el-icon size="20px">
-                                            <Edit />
-                                        </el-icon>
-                                    </el-button>
-                                </div>
-                            </div>
+    <el-header>
+        <div class="headerContainer">
+            <img src="@/assets/logo.png" class="logo" />
+            <pageChange class="pageChange"></pageChange>
+        </div>
+    </el-header>
 
-                            <div class="subItem">
-                                <p class="item">手机:</p>
-                                <div class="item2">
-                                    <p>{{ phone }}</p>
-                                    <el-button text class="edit"
-                                        style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
-                                        <p>编辑</p>
-                                        <el-icon size="20px">
-                                            <Edit />
-                                        </el-icon>
-                                    </el-button>
-                                </div>
-                            </div>
-
-                            <div class="subItem">
-                                <p class="item">用户名:</p>
-                                <div class="item2">
-                                    <p>{{ userName }}</p>
-                                    <el-button text class="edit"
-                                        style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
-                                        <p class="hoverEdit">编辑</p>
-                                        <el-icon size="20px">
-                                            <Edit />
-                                        </el-icon>
-                                    </el-button>
-                                </div>
-                            </div>
+    <el-main>
+        <el-tabs tab-position="left" class="tab" type="border-card">
+            <el-tab-pane label="个人中心">
+                <p class="boxHeader">个人信息设置</p>
+                <div class="boxItem">
+                    <div class="subItem">
+                        <p class="item">邮箱:</p>
+                        <div class="item2">
+                            <p>{{ email }}</p>
+                            <el-button @click="changeEmail" text class="edit"
+                                style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
+                                <p>编辑</p>
+                                <el-icon size="20px">
+                                    <Edit />
+                                </el-icon>
+                            </el-button>
                         </div>
                     </div>
-                </el-tab-pane>
-                <el-tab-pane label="我的消息">这是消息</el-tab-pane>
-                <el-tab-pane label="订单">这是订单</el-tab-pane>
-            </el-tabs>
+
+                    <div class="subItem">
+                        <p class="item">手机号:</p>
+                        <div class="item2">
+                            <p>{{ phone }}</p>
+                            <el-button @click="changePhone" text class="edit"
+                                style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
+                                <p>编辑</p>
+                                <el-icon size="20px">
+                                    <Edit />
+                                </el-icon>
+                            </el-button>
+                        </div>
+                    </div>
+
+                    <div class="subItem">
+                        <p class="item">用户名:</p>
+                        <div class="item2">
+                            <p>{{ userName }}</p>
+                            <el-button @click="changeUsername" text class="edit"
+                                style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
+                                <p class="hoverEdit">编辑</p>
+                                <el-icon size="20px">
+                                    <Edit />
+                                </el-icon>
+                            </el-button>
+                        </div>
+                    </div>
+
+                    <div class="subItem">
+                        <p class="item">密码:</p>
+                        <div class="item2">
+                            <p>{{ password }}</p>
+                            <el-button @click="changePass" text class="edit"
+                                style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
+                                <p class="hoverEdit">编辑</p>
+                                <el-icon size="20px">
+                                    <Edit />
+                                </el-icon>
+                            </el-button>
+                        </div>
+                    </div>
 
 
-        </div>
-    </div>
+                    <el-dialog v-model="changePassword" title="修改密码" width="450px"
+                        style="border-radius: 5px; position: relative; top: 150px;">
+
+                        <el-form :model="editPassForm" :rules="editRules" ref="editPassForm" label-width="80px"
+                            class="editPassFormStyle">
+
+                            <el-form-item label="密码" prop="editPass">
+                                <el-input v-model="editPassForm.editPass" placeholder="请输入新密码" type="password"
+                                    autocomplete="off"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="确认密码" prop="checkEditPass">
+                                <el-input v-model="editPassForm.checkEditPass" placeholder="请确认新密码"
+                                    type="password"></el-input>
+                            </el-form-item>
+                        </el-form>
+
+                        <template #footer>
+                            <span class="dialog-footer">
+                                <el-button @click="closePass">取消</el-button>
+                                <el-button type="primary" @click="confirmChangePass">
+                                    确认
+                                </el-button>
+                            </span>
+                        </template>
+                    </el-dialog>
+
+
+
+                    <div class="subItem">
+                        <p class="item">用户类型:</p>
+                        <div class="item2">
+                            <p>{{ type }}</p>
+                        </div>
+                    </div>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="我的消息">
+                <div class="messageTab">
+                    <div v-for="info in infoList" :key="info" class="infoList">
+                        <p class="content">{{ info.content }}</p>
+                        <p class="sendTime">{{ info.sendTime }}</p>
+                    </div>
+                </div>
+
+            </el-tab-pane>
+            <el-tab-pane label="订单">这是订单</el-tab-pane>
+        </el-tabs>
+    </el-main>
 </template>
 
 
 <script>
 import { Edit } from '@element-plus/icons';
+import pageChange from '@/components/pageChange.vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+
 export default {
     components: {
         Edit,
+        pageChange,
     },
 
     data() {
+        var validateEditPass = (rule, value, callback) => {
+            const regEditPass = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+            if (regEditPass.test(value)) {
+                callback();
+            }
+            callback(new Error('密码必须由字母、数字组成，且长度不低于8位'));
+        };
+
+        var validateEditPass2 = (rule, value, callback) => {
+            if (value == this.editPassForm.pass) {
+                callback();
+            }
+            callback(new Error('两次密码不一致'));
+        };
+
+        var getMessage = () => {
+            var msgList = []
+            //请求该用户消息列表，并加入列表
+            // while(还有数据){
+            //     msgList.push({ content: , sendTime:  });
+            // }
+
+            //测试用
+            msgList.push({ content: "航班MF870即将起飞", sendTime: "13:20" }, { content: "航班MF870即将起飞", sendTime: "13:20" }, { content: "航班MF870即将起飞", sendTime: "13:20" }, { content: "航班MF870即将起飞", sendTime: "13:20" });
+            msgList.push({ content: "航班MF779即将起飞", sendTime: "12:00" }, { content: "航班MF779即将起飞", sendTime: "12:00" }, { content: "航班MF779即将起飞", sendTime: "12:00" }, { content: "航班MF779即将起飞", sendTime: "12:00" }, { content: "航班MF779即将起飞", sendTime: "12:00" }, { content: "航班MF779即将起飞", sendTime: "12:00" });
+            return msgList;
+        };
+
         return { //从数据库获取用户数据
-            email: "email@gmail.com",
-            phone: "12345678",
-            userName: "User123",
+            email: "无",
+            phone: this.getPhoneNumber(),
+            userName: "无",
+            type: "",
+            infoList: getMessage(),
+            password: '********',
+            changePassword: false,
+
+            editPassForm: {
+                editPass: '',
+                checkEditPass: '',
+            },
+
+            editRules: {
+                editPass: [
+                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                    { validator: validateEditPass, trigger: 'blur' }
+                ],
+
+                checkEditPass: [
+                    { required: true, message: '请再次输入密码', trigger: 'blur' },
+                    { validator: validateEditPass2, trigger: 'blur' }
+                ],
+            }
+
+
+
+        };
+    },
+
+    methods: {
+        changeEmail() {
+            ElMessageBox.prompt('请输入新邮箱地址', '修改邮箱', {
+                confirmButtonText: '确认',
+                cancelButtonText: '取消',
+                inputPattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/,
+                inputErrorMessage: '邮箱不合法',
+            })
+                .then(() => {
+                    //请求写入数据库
+                    ElMessage({
+                        type: 'success',
+                        message: '邮箱修改成功！',
+                    })
+                })
+                .catch(() => {
+                    ElMessage({
+                        type: 'info',
+                        message: '取消修改'
+                    })
+                })
+        },
+
+        changePhone() {
+            ElMessageBox.prompt('请输入新手机号码', '修改手机号', {
+                confirmButtonText: '确认',
+                cancelButtonText: '取消',
+                inputPattern: /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+                inputErrorMessage: '手机号不合法',
+            })
+                .then(() => {
+                    //请求写入数据库
+                    ElMessage({
+                        type: 'success',
+                        message: '手机号修改成功！',
+                    })
+                })
+                .catch(() => {
+                    ElMessage({
+                        type: 'info',
+                        message: '取消修改'
+                    })
+                })
+        },
+
+        changeUsername() {
+            ElMessageBox.prompt('请输入新用户名', '修改用户名', {
+                confirmButtonText: '确认',
+                cancelButtonText: '取消',
+                inputPattern: /^[\u4e00-\u9fa5a-zA-Z0-9_]{1,12}$/,
+                inputErrorMessage: '名称只能由中英文、数字和下划线组成，不超过12位',
+            })
+                .then(() => {
+                    //请求写入数据库
+                    ElMessage({
+                        type: 'success',
+                        message: '用户名修改成功！',
+                    })
+                })
+                .catch(() => {
+                    ElMessage({
+                        type: 'info',
+                        message: '取消修改'
+                    })
+                })
+        },
+
+        changePass() {
+            this.changePassword = true;
+        },
+
+        mobileStr(str) {
+            if (str.length > 7) {
+                return str.substring(0, 3) + '****' + str.substring(7, str.length);
+            } else {
+                return str.substring(0, str.length - 1) + '****';
+            }
+
+        },
+
+        getPhoneNumber() {
+            //从数据库获取手机号并转换后返回
+
+            //测试用
+            var phoneNum = '12345678910';
+            phoneNum = this.mobileStr(phoneNum);
+            return phoneNum;
+        },
+
+        closePass() {
+            this.changePassword = false;
+            ElMessage({
+                type: 'info',
+                message: '取消修改'
+            })
+        },
+
+        confirmChangePass() {
+            this.$refs.editPassForm.validate((valid) => {
+                if (valid) {
+                    this.changePassword = false;
+                    //请求写入数据库
+                    ElMessage({
+                        type: 'success',
+                        message: '密码修改成功！',
+                    })
+                } else {
+                    this.changePassword = false;
+                    ElMessage({
+                        type: 'error',
+                        message: '密码修改失败！',
+                    })
+                }
+            })
         }
     }
 }
 </script>
 
-
 <style>
-.window {
-    height: 800px;
-    width: 100%;
-}
-
-.container {
-    position: relative;
-    top: 135px;
-    bottom: 30px;
-    height: 635px;
-    width: 850px;
-    margin: auto;
-    border: solid 1px lightgrey;
-    background-color: white;
-    box-shadow: 5px 5px 5px 5px rgb(186, 186, 186);
-}
-
 .title {
     position: relative;
     left: 0px;
     top: 0px;
 }
 
-.tabs {
-    position: relative;
-    top: 0px;
-    height: 100%;
-}
-
-.tabs>.el-tabs__content {
-    color: black;
-}
-
-.tabs .el-tabs__item.is-active {
-    color: blue;
-}
-
-.tabs .el-tabs__active-bar {
-    background-color: blue;
-}
-
-.tabs .el-tabs__header {
-    background-color: rgb(243, 245, 255);
-}
-
-.tabs .el-tabs__item:hover {
-    color: blue;
-}
-
-.box1 {
-    width: 715px;
-    margin-top: 20px;
-    margin-right: 10px;
-    margin-left: 10px;
+.tab {
+    margin: auto;
+    margin-bottom: 30px;
+    border-radius: 20px;
+    margin-top: 50px;
+    height: 700px;
+    width: 70%;
+    border-color: black;
 }
 
 .boxHeader {
@@ -150,6 +340,7 @@ export default {
 
 .item {
     height: 30px;
+    width: 100px;
     padding: 15px;
     padding-bottom: 10px;
     margin: 10px;
@@ -162,7 +353,7 @@ export default {
 
 .item2 {
     position: absolute;
-    left: 200px;
+    left: 250px;
     display: flex;
     align-items: center;
     height: 35px;
@@ -171,11 +362,43 @@ export default {
 }
 
 .edit {
+    margin-top: 3px;
     display: flex;
+    justify-content: center;
 }
 
 .edit :hover {
     color: rgb(67, 67, 255);
     background: white !important;
+}
+
+.infoList {
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    width: 90%;
+    height: 50px;
+    background-color: rgb(243, 245, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.sendTime {
+    font-size: 10px;
+    margin-top: 5px;
+    color: grey;
+}
+
+.content {
+    font-size: 15px;
+}
+
+.messageTab {
+    margin-top: 10px;
+    height: 650px;
+    overflow: auto;
 }
 </style>

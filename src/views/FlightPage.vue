@@ -467,16 +467,12 @@ export default {
     width: 88%;
     margin: auto;
     margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 .el-tabs__header {
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
-}
-
-.el-tabs__item {
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
 }
 
 .ticket {
@@ -555,6 +551,7 @@ export default {
 
 .confirm_btn {
     margin: auto;
+    margin-right: 30px;
 }
 
 .priceBox {

@@ -12,7 +12,7 @@
 
 <style>
 html {
-  overflow: auto;
+  overflow: auto ;
 }
 
 .logo {
@@ -31,6 +31,7 @@ html {
 .headerContainer{
   position: fixed;
   top: 0px;
+  left: 0px;
   height: 100px;
   width: 100%;
   border-top: blue solid 2px;

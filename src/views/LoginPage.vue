@@ -4,11 +4,12 @@
             <div class="headerContainer">
                 <img src="@/assets/logo.png" class="logo" />
                 <pageChange class="pageChange"></pageChange>
+
             </div>
         </el-header>
         <el-main>
             <title>登录</title>
-            <div class="login"  @keyup.enter="keyPressed">
+            <div class="login" @keyup.enter="keyPressed">
                 <h4>用户登录</h4>
                 <el-form :model="loginForm" label-width="70px" :rules="loginRules">
                     <el-form-item label="登陆选项" class="login_input_box" prop="uType">
@@ -25,8 +26,7 @@
                     </el-form-item>
 
                     <el-form-item label="密码" class="login_input_box" prop="pass">
-                        <el-input show-password v-model="loginForm.pass" type="password"
-                            placeholder="请输入密码"></el-input>
+                        <el-input show-password v-model="loginForm.pass" type="password" placeholder="请输入密码"></el-input>
                     </el-form-item>
 
                     <div class="button">
@@ -46,14 +46,19 @@ import router from "@/routes/router"
 import qs from "qs"
 import { ElMessage } from "element-plus";
 import pageChange from '@/components/pageChange.vue';
+import { getCurrentInstance } from 'vue';
+
+var isLogin = getCurrentInstance()?.appContext.config.globalProperties.$isLogin;
 
 export default {
     components: {
-        pageChange
+        pageChange,
     },
     name: "LoginPage",
     data() {
         return {
+            isLogin,
+
             loginRules: {
                 email: [
                     { message: '邮箱地址不能为空', trigger: 'blur' }
@@ -68,10 +73,10 @@ export default {
         }
     },
 
-    mounted(){
+    mounted() {
 
     },
-    
+
     methods: {
         submit_btn() {
             if (!this.loginForm.email || !this.loginForm.pass) {
@@ -81,10 +86,8 @@ export default {
                     duration: 2000,
                 })
             }
-            else
-            {
-                switch(this.loginForm.uType)
-                {
+            else {
+                switch (this.loginForm.uType) {
                     case "user":
                         this.userLogin();
                         break;
@@ -127,128 +130,128 @@ export default {
             this.submit_btn();
         },
 
-        userLogin(){
+        userLogin() {
             this.$http({
                 method: "post" /* 指明请求方式，可以是 get 或 post */,
                 url: "/tourist/login" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                 data: qs.stringify({
-                  /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                  email: this.email,
-                  passwords: this.pass,
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    email: this.email,
+                    passwords: this.pass,
                 }),
             })
-            .then((res) => {
-                /* res 是 response 的缩写 */
-                console.log(res.data);
-                if(!res.data.success){
-                  this.$message.error(res.data.message);
-                }
-                else{
-                  this.$message.success(res.data.message);
-                  /* 将后端返回的 user 信息使用 vuex 存储起来 */
-                  this.$store.dispatch('saveUserInfo', {
-                    user: {
-                        'usertoken': res.data.token,
-                        'username' : this.loginForm.email,
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    console.log(res.data);
+                    if (!res.data.success) {
+                        this.$message.error(res.data.message);
                     }
-                  });
-                  //登录成功后跳转到about页面
-                  setTimeout(() => {this.$router.push("/tourist")}, 1000);
-                }
-            });
+                    else {
+                        this.$message.success(res.data.message);
+                        /* 将后端返回的 user 信息使用 vuex 存储起来 */
+                        this.$store.dispatch('saveUserInfo', {
+                            user: {
+                                'usertoken': res.data.token,
+                                'username': this.loginForm.email,
+                            }
+                        });
+                        //登录成功后跳转到about页面
+                        setTimeout(() => { this.$router.push("/tourist") }, 1000);
+                    }
+                });
         },
 
-        adminLogin(){
+        adminLogin() {
             this.$http({
                 method: "post" /* 指明请求方式，可以是 get 或 post */,
                 url: "/admin/login" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                 data: qs.stringify({
-                  /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                  email: this.email,
-                  passwords: this.pass,
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    email: this.email,
+                    passwords: this.pass,
                 }),
             })
-            .then((res) => {
-                /* res 是 response 的缩写 */
-                console.log(res.data);
-                if(!res.data.success){
-                  this.$message.error(res.data.message);
-                }
-                else{
-                  this.$message.success(res.data.message);
-                  /* 将后端返回的 user 信息使用 vuex 存储起来 */
-                  this.$store.dispatch('saveadminInfo', {
-                    admin: {
-                        'admintoken':res.data.token,
-                        'adminname': this.loginForm.email,
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    console.log(res.data);
+                    if (!res.data.success) {
+                        this.$message.error(res.data.message);
                     }
-                  });
-                  //登录成功后跳转到about页面
-                  setTimeout(() => {this.$router.push("/admin")}, 1000);
-                }
-            });
+                    else {
+                        this.$message.success(res.data.message);
+                        /* 将后端返回的 user 信息使用 vuex 存储起来 */
+                        this.$store.dispatch('saveadminInfo', {
+                            admin: {
+                                'admintoken': res.data.token,
+                                'adminname': this.loginForm.email,
+                            }
+                        });
+                        //登录成功后跳转到about页面
+                        setTimeout(() => { this.$router.push("/admin") }, 1000);
+                    }
+                });
         },
 
-        companyLogin(){
+        companyLogin() {
             this.$http({
                 method: "post" /* 指明请求方式，可以是 get 或 post */,
                 url: "/company/login" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                 data: qs.stringify({
-                  /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                  email: this.email,
-                  passwords: this.pass,
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    email: this.email,
+                    passwords: this.pass,
                 }),
             })
-            .then((res) => {
-                /* res 是 response 的缩写 */
-                console.log(res.data);
-                if(!res.data.success){
-                  this.$message.error(res.data.message);
-                }
-                else{
-                  this.$message.success(res.data.message);
-                  /* 将后端返回的 user 信息使用 vuex 存储起来 */
-                  this.$store.dispatch('savecompanyInfo', {
-                    company: {
-                        'companytoken': res.data.token,
-                        'companyName': this.loginForm.email,
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    console.log(res.data);
+                    if (!res.data.success) {
+                        this.$message.error(res.data.message);
                     }
-                  });
-                  //登录成功后跳转到about页面
-                  setTimeout(() => {this.$router.push("/company")}, 1000);
-                }
-            });
+                    else {
+                        this.$message.success(res.data.message);
+                        /* 将后端返回的 user 信息使用 vuex 存储起来 */
+                        this.$store.dispatch('savecompanyInfo', {
+                            company: {
+                                'companytoken': res.data.token,
+                                'companyName': this.loginForm.email,
+                            }
+                        });
+                        //登录成功后跳转到about页面
+                        setTimeout(() => { this.$router.push("/company") }, 1000);
+                    }
+                });
         },
 
-        merchantLogin(){
+        merchantLogin() {
             this.$http({
                 method: "post" /* 指明请求方式，可以是 get 或 post */,
                 url: "/merchant/login" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                 data: qs.stringify({
-                  /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                  email: this.email,
-                  passwords: this.pass,
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    email: this.email,
+                    passwords: this.pass,
                 }),
             })
-            .then((res) => {
-                /* res 是 response 的缩写 */
-                console.log(res.data);
-                if(!res.data.success){
-                  this.$message.error(res.data.message);
-                }
-                else{
-                  this.$message.success(res.data.message);
-                  /* 将后端返回的 user 信息使用 vuex 存储起来 */
-                  this.$store.dispatch('savemerchantInfo', {
-                    merchant: {
-                      'merchanttoken':res.data.token,
-                      'merchantName': this.loginForm.email,
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    console.log(res.data);
+                    if (!res.data.success) {
+                        this.$message.error(res.data.message);
                     }
-                  });
-                  //登录成功后跳转到about页面
-                  setTimeout(() => {this.$router.push("/merchant")}, 1000);
-                }
-            });
+                    else {
+                        this.$message.success(res.data.message);
+                        /* 将后端返回的 user 信息使用 vuex 存储起来 */
+                        this.$store.dispatch('savemerchantInfo', {
+                            merchant: {
+                                'merchanttoken': res.data.token,
+                                'merchantName': this.loginForm.email,
+                            }
+                        });
+                        //登录成功后跳转到about页面
+                        setTimeout(() => { this.$router.push("/merchant") }, 1000);
+                    }
+                });
         }
     }
 }
@@ -294,16 +297,16 @@ h4 {
     width: 89%;
 }
 
-.headerContainer{
-  position: fixed;
-  top: 0px;
-  height: 100px;
-  width: 100%;
-  border-top: blue solid 2px;
-  border-bottom: lightgrey solid 2px;
-  background-color: white;
-  display: flex;
-  z-index: 99999999;
+.headerContainer {
+    position: fixed;
+    top: 0px;
+    height: 100px;
+    width: 100%;
+    border-top: blue solid 2px;
+    border-bottom: lightgrey solid 2px;
+    background-color: white;
+    display: flex;
+    z-index: 99999999;
 }
 </style>
 
