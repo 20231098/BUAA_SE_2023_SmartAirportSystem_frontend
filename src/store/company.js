@@ -3,7 +3,9 @@ const company = {
     /* 定义 company 数据对象和它的初始值 */
     state() {
         return {
-            company: null
+            company: {
+                companytoken :"2"
+            }
         }
     },
     /* 定义读取方法 getcompany，从 localStorage 中读取 company 数据并转换成 JSON 格式 */

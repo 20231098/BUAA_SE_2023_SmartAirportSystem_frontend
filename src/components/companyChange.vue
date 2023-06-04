@@ -16,10 +16,8 @@ export default {
         return {
             list1: [
                 { name: "首页", index: 1 },
-                { name: "已购机票", index: 2 },
-                { name: "行李信息", index: 3 },
-                { name: "停车订单" , index: 4},
-                { name: "个人中心", index: 5},
+                { name: "航班管理", index: 2 },
+                { name: "机票管理", index: 3 },
             ],
         }
     },
@@ -27,15 +25,15 @@ export default {
     methods: {
         changePage(item) {
             if (item.index == 1) {
-                router.push('/');
+                router.push('/company');
             }
 
             if (item.index == 2) {
-                router.push('/flight');
+                router.push('/company/check');
             }
 
             if (item.index == 3) {
-                router.push('/login');
+                router.push('/company');
             }
 
 
