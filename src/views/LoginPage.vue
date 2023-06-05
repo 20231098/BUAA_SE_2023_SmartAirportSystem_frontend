@@ -147,6 +147,8 @@ export default {
                     }
                     else {
                         this.$message.success(res.data.message);
+                        this.$loginType = 'user';
+                        this.$isLogin = true;
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
                         this.$store.dispatch('saveUserInfo', {
                             user: {
@@ -178,6 +180,8 @@ export default {
                     }
                     else {
                         this.$message.success(res.data.message);
+                        this.$loginType = 'admin';
+                        this.$isLogin = true;
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
                         this.$store.dispatch('saveadminInfo', {
                             admin: {
@@ -209,6 +213,8 @@ export default {
                     }
                     else {
                         this.$message.success(res.data.message);
+                        this.$loginType = 'company';
+                        this.$isLogin = true;
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
                         this.$store.dispatch('savecompanyInfo', {
                             company: {
@@ -240,6 +246,8 @@ export default {
                     }
                     else {
                         this.$message.success(res.data.message);
+                        this.$loginType = 'merchant';
+                        this.$isLogin = true;
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
                         this.$store.dispatch('savemerchantInfo', {
                             merchant: {

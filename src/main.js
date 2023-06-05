@@ -24,3 +24,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(ElementPlus)
 
 app.config.globalProperties.$isLogin = false; //判断是否已经登陆
+app.config.globalProperties.$loginType = ''; //登录类型

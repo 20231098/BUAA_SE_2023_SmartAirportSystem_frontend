@@ -40,6 +40,11 @@
                         <el-form :model="editPassForm" :rules="editRules" ref="editPassForm" label-width="80px"
                             class="editPassFormStyle">
 
+                            <el-form-item label="旧密码" prop="oldPass">
+                                <el-input v-model="editPassForm.oldPass" placeholder="请输入旧密码" type="password"
+                                    autocomplete="off"></el-input>
+                            </el-form-item>
+
                             <el-form-item label="密码" prop="editPass">
                                 <el-input v-model="editPassForm.editPass" placeholder="请输入新密码" type="password"
                                     autocomplete="off"></el-input>
@@ -54,9 +59,7 @@
                         <template #footer>
                             <span class="dialog-footer">
                                 <el-button @click="closePass">取消</el-button>
-                                <el-button type="primary" @click="confirmChangePass">
-                                    确认
-                                </el-button>
+                                <el-button type="primary" @click="confirmChangePass">确认</el-button>
                             </span>
                         </template>
                     </el-dialog>
@@ -72,7 +75,6 @@
                 </div>
 
             </el-tab-pane>
-            <el-tab-pane label="订单">这是订单</el-tab-pane>
         </el-tabs>
     </el-main>
 </template>
@@ -82,6 +84,7 @@
 import { Edit } from '@element-plus/icons';
 import pageChange from '@/components/pageChange.vue';
 import { ElMessage } from 'element-plus';
+import qs from 'qs';
 
 export default {
     components: {
@@ -99,7 +102,7 @@ export default {
         };
 
         var validateEditPass2 = (rule, value, callback) => {
-            if (value == this.editPassForm.pass) {
+            if (value == this.editPassForm.editPass) {
                 callback();
             }
             callback(new Error('两次密码不一致'));
@@ -131,13 +134,16 @@ export default {
             },
 
             editRules: {
+                oldPass: [
+                    { required: true, message: '旧密码不能为空', trigger: 'blur' },
+                ],
                 editPass: [
-                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                    { required: true, message: '新密码不能为空', trigger: 'blur' },
                     { validator: validateEditPass, trigger: 'blur' }
                 ],
 
                 checkEditPass: [
-                    { required: true, message: '请再次输入密码', trigger: 'blur' },
+                    { required: true, message: '请再次输入新密码', trigger: 'blur' },
                     { validator: validateEditPass2, trigger: 'blur' }
                 ],
             }
@@ -153,24 +159,6 @@ export default {
             this.changePassword = true;
         },
 
-        mobileStr(str) {
-            if (str.length > 7) {
-                return str.substring(0, 3) + '****' + str.substring(7, str.length);
-            } else {
-                return str.substring(0, str.length - 1) + '****';
-            }
-
-        },
-
-        getPhoneNumber() {
-            //从数据库获取手机号并转换后返回
-
-            //测试用
-            var phoneNum = '12345678910';
-            phoneNum = this.mobileStr(phoneNum);
-            return phoneNum;
-        },
-
         closePass() {
             this.changePassword = false;
             ElMessage({
@@ -184,19 +172,160 @@ export default {
                 if (valid) {
                     this.changePassword = false;
                     //请求写入数据库
-                    ElMessage({
-                        type: 'success',
-                        message: '密码修改成功！',
-                    })
+                    switch (this.$loginType) {
+                        case 'user':
+                            this.userChangePass();
+                            break;
+                        case 'company':
+                            this.companyChangePass();
+                            break;
+                        case 'merchant':
+                            this.merchantChangePass();
+                            break;
+                        case 'admin':
+                            this.adminChangePass();
+                            break;
+                    }
                 } else {
-                    this.changePassword = false;
                     ElMessage({
                         type: 'error',
                         message: '密码修改失败！',
                     })
                 }
             })
-        }
+        },
+
+        userChangePass() {
+            const usertoken = this.$store.getters.getUser.user.usertoken;
+            this.$http({
+                method: "post" /* 指明请求方式，可以是 get 或 post */,
+                url: "/tourist/updatepassword" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                data: qs.stringify({
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    token: usertoken,
+                    passwords: this.editPassForm.oldPass,
+                    newpasswords: this.editPassForm.editPass,
+                    renewpasswords: this.editPassForm.checkEditPass,
+                }),
+            })
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    //console.log(res.data);
+                    if (res.data.success) {
+                        ElMessage({
+                            type: 'success',
+                            message: '密码修改成功！',
+                        })
+                    } else {
+                        ElMessage({
+                            type: 'error',
+                            message: '密码修改失败！',
+                        })
+                    }
+                })
+                .catch((err) => {
+                    console.log(err); /* 若出现异常则在终端输出相关信息 */
+                });
+        },
+
+        companyChangePass() {
+            const companytoken = this.$store.getters.getcompany.company.companytoken;
+            this.$http({
+                method: "post" /* 指明请求方式，可以是 get 或 post */,
+                url: "/company/updatepassword" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                data: qs.stringify({
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    token: companytoken,
+                    passwords: this.editPassForm.oldPass,
+                    newpasswords: this.editPassForm.editPass,
+                    renewpasswords: this.editPassForm.checkEditPass,
+                }),
+            })
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    //console.log(res.data);
+                    if (res.data.success) {
+                        ElMessage({
+                            type: 'success',
+                            message: '密码修改成功！',
+                        })
+                    } else {
+                        ElMessage({
+                            type: 'error',
+                            message: '密码修改失败！',
+                        })
+                    }
+                })
+                .catch((err) => {
+                    console.log(err); /* 若出现异常则在终端输出相关信息 */
+                });
+        },
+
+        adminChangePass() {
+            const admintoken = this.$store.getters.getadmin.admin.admintoken;
+            this.$http({
+                method: "post" /* 指明请求方式，可以是 get 或 post */,
+                url: "/admin/updatepassword" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                data: qs.stringify({
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    token: admintoken,
+                    passwords: this.editPassForm.oldPass,
+                    newpasswords: this.editPassForm.editPass,
+                    renewpasswords: this.editPassForm.checkEditPass,
+                }),
+            })
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    //console.log(res.data);
+                    if (res.data.success) {
+                        ElMessage({
+                            type: 'success',
+                            message: '密码修改成功！',
+                        })
+                    } else {
+                        ElMessage({
+                            type: 'error',
+                            message: '密码修改失败！',
+                        })
+                    }
+                })
+                .catch((err) => {
+                    console.log(err); /* 若出现异常则在终端输出相关信息 */
+                });
+        },
+
+        merchantChangePass() {
+            const merchanttoken = this.$store.getters.getmerchant.merchant.merchanttoken;
+            this.$http({
+                method: "post" /* 指明请求方式，可以是 get 或 post */,
+                url: "/merchant/updatepassword" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                data: qs.stringify({
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    token: merchanttoken,
+                    passwords: this.editPassForm.oldPass,
+                    newpasswords: this.editPassForm.editPass,
+                    renewpasswords: this.editPassForm.checkEditPass,
+                }),
+            })
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    //console.log(res.data);
+                    if (res.data.success) {
+                        ElMessage({
+                            type: 'success',
+                            message: '密码修改成功！',
+                        })
+                    } else {
+                        ElMessage({
+                            type: 'error',
+                            message: '密码修改失败！',
+                        })
+                    }
+                })
+                .catch((err) => {
+                    console.log(err); /* 若出现异常则在终端输出相关信息 */
+                });
+        },
     }
 }
 </script>
@@ -213,7 +342,7 @@ export default {
     margin-bottom: 30px;
     border-radius: 20px;
     margin-top: 50px;
-    height: 700px;
+    height: 100%;
     width: 70%;
     border-color: black;
 }
