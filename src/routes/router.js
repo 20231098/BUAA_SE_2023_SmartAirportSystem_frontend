@@ -5,7 +5,8 @@ import LoginPage from "@/views/LoginPage.vue"
 import HomePage from "@/views/HomePage.vue"
 import RegisterPage from "@/views/RegisterPage.vue"
 import UserPage from "@/views/UserPage.vue"
-import FlightPage from "@/views/FlightPage.vue"
+
+// import FlightPage from "@/views/FlightPage.vue"
 import BuyTicketPage from "@/views/BuyTicketPage.vue"
 import CompanyPage from "@/views/company/CompanyPage.vue"
 import CompanyCheckFlight from "@/views/company/CompanyCheckFlight.vue"
@@ -16,6 +17,16 @@ import CompanyCheckTicket from "@/views/company/companyCheckTicket.vue"
 import CompanyAddTicket from "@/views/company/companyAddTicket.vue"
 import CompanyChangeTicket from "@/views/company/companyChangeTicket.vue"
 import CompanyDeleteTicket from "@/views/company/companyDeleteTicket.vue"
+
+import ParkPage from "@/views/ParkPage.vue"
+import PayPage from "@/views/PayPage.vue"
+import CustomerService from "@/views/CustomerService.vue"
+import FAQ from "@/views/FAQ.vue"
+import PriceAlert from '@/views/PriceAlert.vue';
+import TicketStandby from '@/views/TicketStandby.vue';
+import RepairPage from "@/views/RepairPage.vue"
+
+
 
 const routes = [
     {
@@ -41,12 +52,54 @@ const routes = [
         path: '/user',
         component: UserPage
     },
+    
+    {
+        name: "ParkPage",
+        path:'/park',
+        component: ParkPage
+    },
 
     {
-        name: "FlightPage",
-        path: '/flight',
-        component: FlightPage
+        name: "PayPage",
+        path:'/pay/:amount/:method',
+        component: PayPage
     },
+
+    {
+        name: "CustomerService",
+        path:'/customerService',
+        component: CustomerService
+    },
+
+    {
+        name: "FAQ",
+        path:'/faq',
+        component: FAQ
+    },
+
+    {
+        name: "PriceAlert",
+        path:'/priceAlert',
+        component: PriceAlert
+    },
+
+    {
+        name: "TicketStandby",
+        path:'/standby',
+        component: TicketStandby,
+    },
+
+    {
+        name: "RepairPage",
+        path:'/repair',
+        component: RepairPage
+    },
+
+    // {
+    //     name: "FlightPage",
+    //     path: '/flight',
+    //     component: FlightPage
+    // },
 
     {
         name: "BuyTicketPage",

@@ -72,8 +72,11 @@
 import router from '@/routes/router';
 import qs from 'qs';
 import { ElMessage } from 'element-plus';
+// import axios from 'axios';
+
 import pageChange from '@/components/pageChange.vue';
 
+// let apiPath = "http://localhost:8080/" + "register";
 
 export default {
     components: {
@@ -215,6 +218,32 @@ export default {
                             break;
                     }
                     //router.push('/');
+                    // 把数据写入数据库
+                    // axios.post(apiPath, this.$refs.registerForm)
+                    //     .then(function (response) {
+                    //         let response_data = response.data;
+                    //         if (response_data.success) {
+                    //             ElMessage({
+                    //                 type: 'success',
+                    //                 message: '注册成功',
+                    //                 duration: 2000,
+                    //             });
+                    //             router.push('/');
+                    //         } else {
+                    //             ElMessage({
+                    //                 type: 'error',
+                    //                 message: '注册失败：' + response_data.message,
+                    //                 duration: 2000,
+                    //             });
+                    //         }
+                    //     })
+                    //     .catch(function (error) {
+                    //         ElMessage({
+                    //             type: 'error',
+                    //             message: error,
+                    //             duration: 2000,
+                    //         });
+                    //     });
                 } else {
                     ElMessage({
                         type: 'error',

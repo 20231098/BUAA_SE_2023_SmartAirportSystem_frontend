@@ -45,8 +45,12 @@
 import router from "@/routes/router"
 import qs from "qs"
 import { ElMessage } from "element-plus";
+// import axios from 'axios';
+
 import pageChange from '@/components/pageChange.vue';
 import { getCurrentInstance } from 'vue';
+
+// let apiPath = "http://localhost:8080/" + "login";
 
 var isLogin = getCurrentInstance()?.appContext.config.globalProperties.$isLogin;
 
@@ -64,7 +68,6 @@ export default {
                     { message: '邮箱地址不能为空', trigger: 'blur' }
                 ]
             },
-
             loginForm: {
                 uType: 'user',
                 email: '',
@@ -85,8 +88,7 @@ export default {
                     message: "账号或密码不能为空！",
                     duration: 2000,
                 })
-            }
-            else {
+            }else {
                 switch (this.loginForm.uType) {
                     case "user":
                         this.userLogin();
@@ -102,23 +104,43 @@ export default {
                         break;
                 }
             }
-            /*
-            else if (登录信息匹配并成功登录) {
-                 ElMessage({
-                     type: 'success',
-                     message: "登录成功！",
-                     duration: 2000,
-                })
-                router.push('/'); //回到主页面
-            }
-            else {
-                ElMessage({
-                    type: 'error',
-                    message: "账号或密码不正确！",
-                    duration: 2000,
-                })
-            }
-            */
+            // else if (登录信息匹配并成功登录) {
+            //      ElMessage({
+            //          type: 'success',
+            //          message: "登录成功！",
+            //          duration: 2000,
+            //     })
+            //     router.push('/'); //回到主页面
+            // }
+            // else {
+            //     axios.post(apiPath, this.loginForm)
+            //         .then(function (response) {
+            //             // 获取后端返回的对象
+            //             let response_data = response.data;
+            //             if (response_data.success) {
+            //                 router.push('/');
+            //                 ElMessage({
+            //                     type: 'success',
+            //                     message: "登录成功！",
+            //                     duration: 2000,
+            //                 });
+            //             } else {
+            //                 ElMessage({
+            //                     type: 'error',
+            //                     message: "账号或密码不正确！",
+            //                     duration: 2000,
+            //                 });
+            //             }
+            //         })
+            //         .catch(function (error) {
+            //             // 请求错误，显示错误信息
+            //             ElMessage({
+            //             type: 'error',
+            //             message: error,
+            //             duration: 2000,
+            //             });
+            //         });
+            // }
 
         },
 
