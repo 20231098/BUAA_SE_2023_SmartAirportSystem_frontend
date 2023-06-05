@@ -4,12 +4,11 @@
             <div class="headerContainer">
                 <img src="@/assets/logo.png" class="logo" />
                 <pageChange class="pageChange"></pageChange>
-
             </div>
         </el-header>
         <el-main>
             <title>登录</title>
-            <div class="login" @keyup.enter="keyPressed">
+            <div class="login1" @keyup.enter="keyPressed">
                 <h4>用户登录</h4>
                 <el-form :model="loginForm" label-width="70px" :rules="loginRules">
                     <el-form-item label="登陆选项" class="login_input_box" prop="uType">
@@ -259,16 +258,17 @@ export default {
 
 
 <style>
-.login {
+.login1 {
     position: absolute;
     top: 50%;
-    left: 45%;
-    transform: translate(-50%, -45%);
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 450px;
     border: 1px solid black;
-    padding: 10px;
+    padding: 20px;
     border-radius: 5px;
     background-color: white;
+    margin-top: 50px;
 }
 
 h4 {

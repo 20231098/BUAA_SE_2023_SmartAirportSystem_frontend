@@ -355,6 +355,7 @@ export default {
     padding: 20px;
     border-radius: 5px;
     background-color: white;
+    margin-top: 50px;
 }
 
 h4 {
