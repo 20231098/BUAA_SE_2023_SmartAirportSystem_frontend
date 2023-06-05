@@ -44,6 +44,7 @@
 import router from "@/routes/router"
 import qs from "qs"
 import { ElMessage } from "element-plus";
+//import { useStore } from "vuex";
 import pageChange from '@/components/pageChange.vue';
 import { getCurrentInstance } from 'vue';
 
@@ -94,7 +95,7 @@ export default {
                         this.adminLogin();
                         break;
                     case "company":
-                        this.companyLogin2();
+                        this.companyLogin();
                         break;
                     case "merchant":
                         this.merchantLogin();
@@ -147,15 +148,8 @@ export default {
                     }
                     else {
                         this.$message.success(res.data.message);
-                        this.$loginType = 'user';
-                        this.$isLogin = true;
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
-                        this.$store.dispatch('saveUserInfo', {
-                            user: {
-                                'usertoken': res.data.token,
-                                'username': this.loginForm.email,
-                            }
-                        });
+                        window.localStorage.setItem("touristtoken", res.data.token);
                         //登录成功后跳转到about页面
                         setTimeout(() => { this.$router.push("/tourist") }, 1000);
                     }
@@ -180,31 +174,14 @@ export default {
                     }
                     else {
                         this.$message.success(res.data.message);
-                        this.$loginType = 'admin';
-                        this.$isLogin = true;
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
-                        this.$store.dispatch('saveadminInfo', {
-                            admin: {
-                                'admintoken': res.data.token,
-                                'adminname': this.loginForm.email,
-                            }
-                        });
+                        window.localStorage.setItem("admintoken", res.data.token);
                         //登录成功后跳转到about页面
                         setTimeout(() => { this.$router.push("/admin") }, 1000);
                     }
                 });
         },
 
-        companyLogin2() {
-            /*this.$store.dispatch('savecompanyInfo', {
-                            company: {
-                                'companytoken': "res.data.token",
-                                'companyName': this.loginForm.email,
-                            }
-                        });
-                        */
-            router.push("/company")
-        },
         
         companyLogin() {
             this.$http({
@@ -224,15 +201,8 @@ export default {
                     }
                     else {
                         this.$message.success(res.data.message);
-                        this.$loginType = 'company';
-                        this.$isLogin = true;
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
-                        this.$store.dispatch('savecompanyInfo', {
-                            company: {
-                                'companytoken': res.data.token,
-                                'companyName': this.loginForm.email,
-                            }
-                        });
+                        window.localStorage.setItem("companytoken", res.data.token)
                         //登录成功后跳转到about页面
                         setTimeout(() => { this.$router.push("/company") }, 1000);
                     }
@@ -257,15 +227,8 @@ export default {
                     }
                     else {
                         this.$message.success(res.data.message);
-                        this.$loginType = 'merchant';
-                        this.$isLogin = true;
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
-                        this.$store.dispatch('savemerchantInfo', {
-                            merchant: {
-                                'merchanttoken': res.data.token,
-                                'merchantName': this.loginForm.email,
-                            }
-                        });
+                        window.localStorage.setItem("merchanttoken", res.data.token);
                         //登录成功后跳转到about页面
                         setTimeout(() => { this.$router.push("/merchant") }, 1000);
                     }

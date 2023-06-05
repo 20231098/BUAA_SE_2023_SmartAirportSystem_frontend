@@ -13,6 +13,13 @@
               align="left" 
               unique-opened :collapse="isCollapse"
               router>
+              <el-sub-menu index="/company">
+                <template #title>
+                  <el-icon><House /></el-icon>
+                  <span>首页</span>
+                </template>
+                <el-menu-item index="/company">返回首页</el-menu-item>
+              </el-sub-menu>
               <el-sub-menu index="1">
                 <template #title>
                   <el-icon><location /></el-icon>
@@ -49,11 +56,10 @@
 
 <script>
 //import companyChange from '@/components/companyChange.vue';
+//import { useStore } from 'vuex';
 export default{
   //
     data() {
-        //const companytoken = this.$store.getters.gettercompany.company.companytoken;
-        //console.span(companytoken);
         var ret = 1;
         var today = new Date();
         var nowHour = today.getHours();

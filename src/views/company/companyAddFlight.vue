@@ -13,6 +13,13 @@
               align="left" 
               unique-opened :collapse="isCollapse"
               router>
+              <el-sub-menu index="/company">
+                <template #title>
+                  <el-icon><House /></el-icon>
+                  <span>首页</span>
+                </template>
+                <el-menu-item index="/company">返回首页</el-menu-item>
+              </el-sub-menu>
               <el-sub-menu index="1">
                 <template #title>
                   <el-icon><location /></el-icon>
@@ -87,7 +94,7 @@
 <script>
 //import companyChange from '@/components/companyChange.vue';
 import router from '@/routes/router';
-import { provinceAndCityData, CodeToText } from 'element-china-area-data';
+import { provinceAndCityData, codeToText } from 'element-china-area-data';
 import qs from 'qs';
 import { ElMessage } from 'element-plus';
 
@@ -149,7 +156,7 @@ export default{
           }
           else
           {
-            const companytoken = this.$store.getters.gettercompany.company.companytoken;
+            const companytoken = window.localStorage.getItem("companytoken");
             this.$http({
                 method: "post" /* 指明请求方式，可以是 get 或 post */,
                 url: "/company/addflight" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
@@ -188,7 +195,7 @@ export default{
         },
 
         handleChange2() {
-            dest = CodeToText[this.selectedOptions[0]] + '/' + CodeToText[this.selectedOptions[1]];
+            dest = codeToText[this.selectedOptions[0]] + '/' + codeToText[this.selectedOptions[1]];
             console.log(dest)//打印区域码所对应的属性值即中文地址
 
         },

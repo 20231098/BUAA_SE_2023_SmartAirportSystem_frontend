@@ -16,6 +16,10 @@ import CompanyCheckTicket from "@/views/company/companyCheckTicket.vue"
 import CompanyAddTicket from "@/views/company/companyAddTicket.vue"
 import CompanyChangeTicket from "@/views/company/companyChangeTicket.vue"
 import CompanyDeleteTicket from "@/views/company/companyDeleteTicket.vue"
+import TouristHome from "@/views/tourist/touristHome.vue"
+import TouristSelfInformation from "@/views/tourist/touristSelfInformation.vue"
+import TouristTicketManage from "@/views/tourist/touristTicketManagement.vue"
+
 
 const routes = [
     {
@@ -105,7 +109,26 @@ const routes = [
         name: "CompanyPage",
         path: '/company',
         component: CompanyPage,
-    }
+    },
+
+    {
+        name: "TouristHome",
+        path: '/tourist',
+        component: TouristHome,
+    },
+
+
+    {
+        name: "TouristSelfInformation",
+        path: '/tourist/touristSelfInformation',
+        component: TouristSelfInformation,
+    },
+
+    {
+        name: "TouristTicketManage",
+        path: '/tourist/ticketmanage',
+        component: TouristTicketManage,
+    },
 
 ]
 

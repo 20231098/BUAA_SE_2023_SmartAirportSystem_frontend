@@ -9,6 +9,13 @@
       <el-container>
         <el-aside width="200px" class="aside">
           <el-menu class="el-menu-vertical-demo" align="left" unique-opened :collapse="isCollapse" router>
+            <el-sub-menu index="/company">
+                <template #title>
+                  <el-icon><House /></el-icon>
+                  <span>首页</span>
+                </template>
+                <el-menu-item index="/company">返回首页</el-menu-item>
+              </el-sub-menu>
             <el-sub-menu index="1">
               <template #title>
                 <el-icon>
@@ -160,7 +167,7 @@ export default {
         }
       }
       else {
-        const companytoken = this.$store.getters.gettercompany.company.companytoken;
+        const companytoken = window.localStorage.getItem("companytoken");
         this.$http({
           method: "post" /* 指明请求方式，可以是 get 或 post */,
           url: "/company/updateflight" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,

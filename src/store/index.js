@@ -1,10 +1,6 @@
 //import Vue from 'vue'
 //import app from '../App'
-import Vuex from 'vuex'
-import user from './user.js'
-import merchant from './merchant.js'
-import company from './company.js'
-import admin from './admin.js'
+import { createStore } from 'vuex'
 
 
 /*
@@ -17,11 +13,24 @@ const data = {
     }
 }
 */
-export default new Vuex.Store({
-    modules: {
-        user,
-        merchant,
-        admin,
-        company,
-    }
-});
+export default createStore({
+    state: {
+        company:{
+            companytoken:"2",
+        }
+      },
+      mutations:{
+        updateCompany(state, newCompany){
+            state.company = newCompany 
+        }
+      },
+      actions:{
+
+      },
+      getters: {
+        // 定义一个getters
+        getCompany (state) {
+          return state.company
+        }
+      },
+})
