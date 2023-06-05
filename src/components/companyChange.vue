@@ -18,6 +18,7 @@ export default {
                 { name: "首页", index: 1 },
                 { name: "航班管理", index: 2 },
                 { name: "机票管理", index: 3 },
+                { name: "个人中心", index: 4 },
             ],
         }
     },
@@ -34,6 +35,10 @@ export default {
 
             if (item.index == 3) {
                 router.push('/company');
+            }
+
+            if (item.index == 4) {
+                router.push('/user');
             }
 
 
