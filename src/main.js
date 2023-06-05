@@ -8,6 +8,7 @@ import 'element-plus/theme-chalk/index.css'
 
 const app = createApp(App)
 app.use(router)
+app.use()
 /* 将 axios 挂载到全局，今后，每个组件中，
 都可以直接通过this.$http 代替 axios 发起 Ajax 请求 */
 app.config.globalProperties.$http = axios

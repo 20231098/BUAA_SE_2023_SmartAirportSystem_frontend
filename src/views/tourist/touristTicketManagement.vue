@@ -178,7 +178,7 @@
                             </div>
                         </el-form>
                     </div>
-                    <el-table :data="SeatList" stripe style="width: 100%" :row-class-name="tableRowClassName">
+                    <el-table :data="SeatList" style="width: 100%" :row-class-name="tableRowClassName">
                         <el-table-column prop="seatid" label="座位ID" width="120" />
                     </el-table> 
                 </el-tab-pane>
@@ -291,10 +291,11 @@
             },
 
             SeatList:[{
-                seatid: "1",
-                occupied: "1",
+                seatid: "",
+                occupied: "",
                 //0:未被占用,1:被占用,2:自己的
-            }],
+            }
+        ],
 
             SeatForm:{
                 orderid: "",
@@ -486,18 +487,20 @@
                         this.$message.error(res.data.message);
                     }
                     else{
+                        this.$message.success("绿色为座位空闲，米色为自己已买的座位");
                         this.SeatList = res.data.message;
                     }
                 }); 
             }
         },
 
-        tableRowClassName: function(SeatList) {
-            if(SeatList.occupied == "0")
+        tableRowClassName({row}) {
+            if(row.occupied == "0")
             {
-                return ".warning-row";
+                
+                return "warning-row";
             }
-            else if(SeatList.occupied == "1")
+            else if(row.occupied == "1")
             {
                 return "";
             }
@@ -597,9 +600,9 @@
 }
 
 .el-table .warning-row {
-  --el-table-tr-bg-color: var(--el-color-warning-light-9);
+  background-color: aquamarine;
 }
 .el-table .success-row {
-  --el-table-tr-bg-color: var(--el-color-success-light-9);
+  background-color: bisque;
 }
   </style>

@@ -149,6 +149,8 @@ export default {
                     else {
                         this.$message.success(res.data.message);
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
+                        this.$isLogin = true;
+                        this.$loginType = "user";
                         window.localStorage.setItem("touristtoken", res.data.token);
                         //登录成功后跳转到about页面
                         setTimeout(() => { this.$router.push("/tourist") }, 1000);
@@ -175,6 +177,8 @@ export default {
                     else {
                         this.$message.success(res.data.message);
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
+                        this.$isLogin = true;
+                        this.$loginType = "admin";
                         window.localStorage.setItem("admintoken", res.data.token);
                         //登录成功后跳转到about页面
                         setTimeout(() => { this.$router.push("/admin") }, 1000);
@@ -202,6 +206,8 @@ export default {
                     else {
                         this.$message.success(res.data.message);
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
+                        this.$isLogin = true;
+                        this.$loginType = "company";
                         window.localStorage.setItem("companytoken", res.data.token)
                         //登录成功后跳转到about页面
                         setTimeout(() => { this.$router.push("/company") }, 1000);
@@ -228,6 +234,8 @@ export default {
                     else {
                         this.$message.success(res.data.message);
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
+                        this.$isLogin = true;
+                        this.$loginType = "merchant";
                         window.localStorage.setItem("merchanttoken", res.data.token);
                         //登录成功后跳转到about页面
                         setTimeout(() => { this.$router.push("/merchant") }, 1000);
