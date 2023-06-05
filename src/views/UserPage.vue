@@ -15,43 +15,9 @@
                         <p class="item">邮箱:</p>
                         <div class="item2">
                             <p>{{ email }}</p>
-                            <el-button @click="changeEmail" text class="edit"
-                                style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
-                                <p>编辑</p>
-                                <el-icon size="20px">
-                                    <Edit />
-                                </el-icon>
-                            </el-button>
                         </div>
                     </div>
 
-                    <div class="subItem">
-                        <p class="item">手机号:</p>
-                        <div class="item2">
-                            <p>{{ phone }}</p>
-                            <el-button @click="changePhone" text class="edit"
-                                style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
-                                <p>编辑</p>
-                                <el-icon size="20px">
-                                    <Edit />
-                                </el-icon>
-                            </el-button>
-                        </div>
-                    </div>
-
-                    <div class="subItem">
-                        <p class="item">用户名:</p>
-                        <div class="item2">
-                            <p>{{ userName }}</p>
-                            <el-button @click="changeUsername" text class="edit"
-                                style="color: rgba(255, 255, 255, 0); background-color: rgba(255, 255, 255, 0);">
-                                <p class="hoverEdit">编辑</p>
-                                <el-icon size="20px">
-                                    <Edit />
-                                </el-icon>
-                            </el-button>
-                        </div>
-                    </div>
 
                     <div class="subItem">
                         <p class="item">密码:</p>
@@ -95,14 +61,6 @@
                         </template>
                     </el-dialog>
 
-
-
-                    <div class="subItem">
-                        <p class="item">用户类型:</p>
-                        <div class="item2">
-                            <p>{{ type }}</p>
-                        </div>
-                    </div>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="我的消息">
@@ -123,7 +81,7 @@
 <script>
 import { Edit } from '@element-plus/icons';
 import pageChange from '@/components/pageChange.vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 export default {
     components: {
@@ -162,8 +120,6 @@ export default {
 
         return { //从数据库获取用户数据
             email: "无",
-            phone: this.getPhoneNumber(),
-            userName: "无",
             type: "",
             infoList: getMessage(),
             password: '********',
@@ -192,71 +148,6 @@ export default {
     },
 
     methods: {
-        changeEmail() {
-            ElMessageBox.prompt('请输入新邮箱地址', '修改邮箱', {
-                confirmButtonText: '确认',
-                cancelButtonText: '取消',
-                inputPattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/,
-                inputErrorMessage: '邮箱不合法',
-            })
-                .then(() => {
-                    //请求写入数据库
-                    ElMessage({
-                        type: 'success',
-                        message: '邮箱修改成功！',
-                    })
-                })
-                .catch(() => {
-                    ElMessage({
-                        type: 'info',
-                        message: '取消修改'
-                    })
-                })
-        },
-
-        changePhone() {
-            ElMessageBox.prompt('请输入新手机号码', '修改手机号', {
-                confirmButtonText: '确认',
-                cancelButtonText: '取消',
-                inputPattern: /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
-                inputErrorMessage: '手机号不合法',
-            })
-                .then(() => {
-                    //请求写入数据库
-                    ElMessage({
-                        type: 'success',
-                        message: '手机号修改成功！',
-                    })
-                })
-                .catch(() => {
-                    ElMessage({
-                        type: 'info',
-                        message: '取消修改'
-                    })
-                })
-        },
-
-        changeUsername() {
-            ElMessageBox.prompt('请输入新用户名', '修改用户名', {
-                confirmButtonText: '确认',
-                cancelButtonText: '取消',
-                inputPattern: /^[\u4e00-\u9fa5a-zA-Z0-9_]{1,12}$/,
-                inputErrorMessage: '名称只能由中英文、数字和下划线组成，不超过12位',
-            })
-                .then(() => {
-                    //请求写入数据库
-                    ElMessage({
-                        type: 'success',
-                        message: '用户名修改成功！',
-                    })
-                })
-                .catch(() => {
-                    ElMessage({
-                        type: 'info',
-                        message: '取消修改'
-                    })
-                })
-        },
 
         changePass() {
             this.changePassword = true;
@@ -362,7 +253,6 @@ export default {
 }
 
 .edit {
-    margin-top: 3px;
     display: flex;
     justify-content: center;
 }
