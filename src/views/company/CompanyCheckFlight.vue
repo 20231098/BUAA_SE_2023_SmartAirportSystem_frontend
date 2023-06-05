@@ -35,7 +35,7 @@
               </el-sub-menu>
             </el-menu>
           </el-aside>  
-          <el-main class="greeting">
+          <el-main class="company">
             <el-table :data="FlightList" stripe style="width: 100%">
                 <el-table-column prop="FlightId" label="航班ID" width="120" />
                 <el-table-column prop="Name" label="航班名称" width="120" />
@@ -119,11 +119,11 @@ export default{
 }
 
 
-.greeting {
-  position: absolute;
-  top: 110px;
-  margin-left: 200px;
-  width: 100%;
+.company {
+    margin-left: 200px;
+    padding: 10px;
+    position: absolute;
+    top: 110px;
 }
 
 .headerContainer{

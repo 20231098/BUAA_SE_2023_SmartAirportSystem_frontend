@@ -94,7 +94,7 @@ export default {
                         this.adminLogin();
                         break;
                     case "company":
-                        this.companyLogin();
+                        this.companyLogin2();
                         break;
                     case "merchant":
                         this.merchantLogin();
@@ -191,6 +191,17 @@ export default {
                 });
         },
 
+        companyLogin2() {
+            /*this.$store.dispatch('savecompanyInfo', {
+                            company: {
+                                'companytoken': "res.data.token",
+                                'companyName': this.loginForm.email,
+                            }
+                        });
+                        */
+            router.push("/company")
+        },
+        
         companyLogin() {
             this.$http({
                 method: "post" /* 指明请求方式，可以是 get 或 post */,

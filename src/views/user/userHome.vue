@@ -16,7 +16,7 @@
               <el-sub-menu index="1">
                 <template #title>
                   <el-icon><location /></el-icon>
-                  <span>航班管理</span>
+                  <span>机票管理</span>
                 </template>
                 <el-menu-item index="/company/checkflight">查看航班信息</el-menu-item>
                 <el-menu-item index="/company/addflight">添加航班信息</el-menu-item>
@@ -36,7 +36,7 @@
             </el-menu>
           </el-aside>  
           <el-main>
-            <div class="company">
+            <div class="greeting">
               <h1 v-if="time == 1">Good Morning, 早上好！</h1>
               <h1 v-else-if="time == 2">Good Afternoon, 中午好！</h1>
               <h1 v-else>Good Evening, 下午好！</h1>
@@ -52,8 +52,6 @@
 export default{
   //
     data() {
-        //const companytoken = this.$store.getters.gettercompany.company.companytoken;
-        //console.span(companytoken);
         var ret = 1;
         var today = new Date();
         var nowHour = today.getHours();
@@ -87,11 +85,11 @@ export default{
 }
 
 
-.company {
-    margin-left: 200px;
-    padding: 10px;
-    position: absolute;
-    top: 110px;
+.greeting {
+  position: absolute;
+  top: 110px;
+  margin-left: 200px;
+  width: 100%;
 }
 
 .headerContainer{

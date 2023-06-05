@@ -35,15 +35,15 @@
               </el-sub-menu>
             </el-menu>
           </el-aside>  
-          <el-main class="greeting">
+          <el-main class="company">
             <el-form :inline="true" :model="TicketFrom" label-width="70px">
 
                 <el-form-item label="航班ID" prop="FlightID">
                     <el-input v-model="TicketFrom.FlightId" placeholder="请输入航班TD"></el-input>
                 </el-form-item>
 
-                <el-form-item class="submit_btn">
-                    <el-button @click="getTicketList" class="submit_btn" type="primary">查询机票信息</el-button>
+                <el-form-item>
+                    <el-button @click="getTicketList" class="button" type="primary">查询机票信息</el-button>
                 </el-form-item>
             </el-form>
             <el-table :data="TicketList" stripe style="width: 100%">
@@ -122,11 +122,11 @@ export default{
 }
 
 
-.greeting {
-  position: absolute;
-  top: 110px;
-  margin-left: 200px;
-  width: 100%;
+.company {
+    margin-left: 200px;
+    padding: 10px;
+    position: absolute;
+    top: 110px;
 }
 
 .headerContainer{
@@ -152,19 +152,9 @@ export default{
   min-height: 1000px;
 }
 
-.login {
-    position: absolute;
-    top: 400px;
-    margin-left: 100px;
-    width: 50%;
-    border: 1px solid black;
-    padding: 20px;
-    border-radius: 5px;
-    background-color: white;
-}
 
-.submit_btn {
-    width: 40%;
+.button {
+    width: 100%;
     margin: auto;
 }
 

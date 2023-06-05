@@ -36,7 +36,7 @@
           </el-menu>
         </el-aside>  
         <el-main>
-          <div class="login"  @keyup.enter="keyPressed">
+          <div class="companylogin"  @keyup.enter="keyPressed">
               <h4>修改航班信息</h4>
               <el-form :model="Flightform" label-width="70px">
 
@@ -225,13 +225,6 @@ export default{
 }
 
 
-.greeting {
-position: absolute;
-top: 110px;
-margin-left: 200px;
-width: 100%;
-}
-
 .headerContainer{
 position: fixed;
 top: 0px;
@@ -255,15 +248,15 @@ width: 200px;
 min-height: 1000px;
 }
 
-.login {
-  position: absolute;
-  top: 400px;
-  margin-left: 100px;
-  width: 50%;
-  border: 1px solid black;
-  padding: 20px;
-  border-radius: 5px;
-  background-color: white;
+.companylogin {
+    position: absolute;
+    top: 200px;
+    margin-left: 400px;
+    width: 50%;
+    border: 1px solid black;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: white;
 }
 
 .submit_btn {

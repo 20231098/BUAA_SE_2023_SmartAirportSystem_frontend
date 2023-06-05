@@ -39,6 +39,16 @@
                         <el-input v-model="registerForm.merchantName" placeholder="请输入名称"></el-input>
                     </el-form-item>
 
+                    <el-form-item label="商户姓名" prop="merchantRealName" v-if="registerForm.uType == 'merchant'"
+                        class="register_input_box">
+                        <el-input v-model="registerForm.merchantRealname" placeholder="请输入姓名"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="商户身份证号" prop="merchantRealID" v-if="registerForm.uType == 'merchant'"
+                        class="register_input_box">
+                        <el-input v-model="registerForm.merchantRealID" placeholder="请输入身份证号"></el-input>
+                    </el-form-item>
+
                     <el-form-item label="员工号" prop="adminID" v-if="registerForm.uType == 'admin'" class="register_input_box">
                         <el-input v-model="registerForm.adminID" placeholder="请输入员工号"></el-input>
                     </el-form-item>
@@ -129,6 +139,23 @@ export default {
             callback(new Error('名称只能由中英文、数字和下划线组成，不超过30位'));
         };
 
+        var validateRealName = (rule, value, callback) => {
+            const regMerchantRealName = /^[\u4e00-\u9fa5a-zA-Z]{1,30}$/;
+            if (regMerchantRealName.test(value)) {
+                callback();
+            }
+            callback(new Error('姓名只能由中英文组成，不超过30位'));
+        };
+
+        var validateRealID = (rule, value, callback) => {
+            const regMerchantRealID_18 = /^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+            const regMerchantRealID_15 = /^([1-6][1-9]|50)\d{4}\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}$/;
+            if (regMerchantRealID_15.test(value) || regMerchantRealID_18.test(value)) {
+                callback();
+            }
+            callback(new Error('身份证号不符合规范，请输入正确的身份证号'));
+        };
+
         return {
             registerForm: {
                 email: '',
@@ -140,6 +167,8 @@ export default {
                 adminID: '',
                 adminName: '',
                 merchantName: '',
+                merchantRealname: '',
+                merchantRealID: '',
             },
 
             rules: {
@@ -184,7 +213,17 @@ export default {
 
                 uType: [
                     { required: true, message: '用户类型不能为空', trigger: 'blur' }
-                ]
+                ],
+
+                merchantRealname: [
+                    { required: true, message: '商户真实姓名不能为空', trigger: 'blur'},
+                    { validator: validateRealName, trigger: 'blur'}
+                ],
+
+                merchantRealID: [
+                    {required: true, message: '商户真实身份证号不能为空', trigger: 'blur'},
+                    {validator: validateRealID, trigger: 'blur'}
+                ],
             },
 
         }
