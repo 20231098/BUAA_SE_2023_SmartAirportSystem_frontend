@@ -27,7 +27,7 @@ export default {
     methods: {
         changePage(item) {
             if (item.index == 1) {
-                router.push('/');
+                router.push('/user');
             }
 
             if (item.index == 2) {
