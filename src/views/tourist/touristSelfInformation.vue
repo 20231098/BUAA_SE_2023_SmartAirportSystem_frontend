@@ -68,11 +68,11 @@
             <el-tabs tab-position="left" class="card">
                 <el-tab-pane label="查看实名信息" name="first">
                     <el-table :data="InformationList" stripe style="width: 100%">
-                            <el-table-column prop="ttid" label="实名信息ID" width="120" />
+                            <el-table-column prop="personid" label="实名信息ID" width="120" />
                             <el-table-column prop="touristid" label="旅客ID" width="120"/>
                             <el-table-column prop="realname" label="真实姓名" width="120"/>
-                            <el-table-column prop="idnumber" label="身份证号" width="120"/>
-                            <el-table-column prop="email" label="联系方式" width="120"/>
+                            <el-table-column prop="idnumber" label="身份证号" width="300"/>
+                            <el-table-column prop="email" label="联系方式" width="200"/>
                     </el-table>
                     <div class="button">
                         <el-button @click="checkSelfInformation" class="submit_btn" type="primary">查询实名信息</el-button>
@@ -291,7 +291,7 @@
                         const touristtoken = window.localStorage.getItem("touristtoken");
                         this.$http({
                             method: "post" /* 指明请求方式，可以是 get 或 post */,
-                            url: "/tourist/addperson" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                            url: "/tourist/updateperson" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                             data: qs.stringify({
                             /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                                 token:touristtoken,
@@ -325,7 +325,7 @@
         },
 
         deleteSelfInformation(){
-            if(!this.InformationForm.TouristId)
+            if(!this.InformationForm.TTID)
                 {
                     ElMessage({
                         type: 'error',
@@ -338,7 +338,7 @@
                     const touristtoken = window.localStorage.getItem("touristtoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/tourist/addperson" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        url: "/tourist/removeperson" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:touristtoken,

@@ -34,6 +34,8 @@ import MerchantOrderManage from "@/views/merchant/merchantOrderManage.vue"
 import AdminHome from "@/views/admin/adminHome.vue"
 import AdminSelfManage from "@/views/admin/adminSelfManage.vue"
 import AdminLuggageManage from "@/views/admin/adminLuggageManage.vue"
+import AdminParkingManage from "@/views/admin/adminParkingManage.vue"
+import AdminApplyManage from "@/views/admin/adminApplyManage.vue"
 
 const routes = [
     {
@@ -208,6 +210,18 @@ const routes = [
         name: "AdminLuggageManage",
         path: '/admin/luggagemanage',
         component: AdminLuggageManage,
+    },
+
+    {
+        name: "AdminParkingManage",
+        path: '/admin/parkingmanage',
+        component: AdminParkingManage,
+    },
+
+    {
+        name: "AdminApplyManage",
+        path: '/admin/applymanage',
+        component: AdminApplyManage,
     },
 ]
 

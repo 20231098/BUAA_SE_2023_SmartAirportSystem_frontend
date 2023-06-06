@@ -39,7 +39,7 @@
                     <el-icon><Promotion /></el-icon>
                     <span>申请管理</span>
                   </template>
-                  <el-menu-item index="/admin/applymanage">申请管理</el-menu-item>
+                  <el-menu-item index="/admin/applymanage" v-if="positionpost=='0' || positionpost=='2'">申请管理</el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="5">
                   <template #title>
@@ -130,6 +130,7 @@
   <script>
   import { ElMessage } from 'element-plus';
   import qs from 'qs';
+  const position = window.localStorage.getItem("positionpost");
   //import companyChange from '@/components/companyChange.vue';
   //import { useStore } from 'vuex';
   export default{
@@ -137,6 +138,8 @@
     data() {
 
         return {
+          positionpost: position,
+
           LuggageList:[{
                 luggageid: "",
                 personid: "",
@@ -175,9 +178,16 @@
     },
     methods:{
         addLuggage(){
-          this.$refs.LuggageForm.validate((valid)=>{
-            if(valid)
-            {
+          if(!this.LuggageForm.orderid || !this.LuggageForm.state || !this.LuggageForm.location)
+          {
+              ElMessage({
+                        type: 'error',
+                        message: "请完成输入",
+                        duration: 2000,
+                    })
+          }
+          else
+          {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
@@ -201,20 +211,10 @@
                         }
                     });
             }
-            else
-            {
-              ElMessage({
-                        type: 'error',
-                        message: "请完成输入",
-                        duration: 2000,
-                    })
-            }
-          });
         },
 
         changeLuggage(){
-          this.$refs.LuggageForm.validate((valid)=>{
-            if(valid)
+            if(!(!this.LuggageForm.luggageid || !this.LuggageForm.state || !this.LuggageForm.state))
             {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
@@ -247,12 +247,10 @@
                         duration: 2000,
                     })
             }
-          });
         },
 
         deleteLuggage(){
-          this.$refs.LuggageForm.validate((valid)=>{
-            if(valid)
+            if(this.LuggageForm.luggageid)
             {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
@@ -283,7 +281,6 @@
                         duration: 2000,
                     })
             }
-          });
         }
     }
   }

@@ -39,7 +39,7 @@
                     <el-icon><Promotion /></el-icon>
                     <span>申请管理</span>
                   </template>
-                  <el-menu-item index="/admin/applymanage">申请管理</el-menu-item>
+                  <el-menu-item index="/admin/applymanage" v-if="positionpost=='0' || positionpost=='2'">申请管理</el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="5">
                   <template #title>
@@ -59,53 +59,137 @@
           </el-aside>  
           <el-main>
             <el-tabs tab-position="left" class="card">
-                <el-tab-pane label="修改密码" name="first">
-                    <div class="self"  @keyup.enter="keyPressed">
-                        <h4>修改密码</h4>
-                        <el-form :model="SelfForm" :rules="selfrules" ref="SelfForm" label-width="100px" status-icon="true">
-                            <el-form-item label="密码" class="login_input_box" prop="password">
-                                <el-input v-model="SelfForm.password" placeholder="请输入密码"></el-input>
-                            </el-form-item>
+                <el-tab-pane label="添加报修申请" name="first" >
+                    <div class="goods"  @keyup.enter="keyPressed">
+                            <h4>添加报修申请</h4>
+                            <el-form :model="recordForm" :rules="recordrules" label-width="100px" status-icon="true">
 
-                            <el-form-item label="新密码" class="login_input_box" prop="newpassword">
-                                <el-input v-model="SelfForm.newpassword" placeholder="请输入新密码"></el-input>
-                            </el-form-item>
+                                <el-form-item label="设备名称" class="login_input_box" prop="devicename">
+                                    <el-input v-model="recordForm.devicename" placeholder="请输入设备名称"></el-input>
+                                </el-form-item>
 
-                            <el-form-item label="再次输入" class="login_input_box" prop="renewpassword">
-                                <el-input v-model="SelfForm.renewpassword" placeholder="请输入再次输入新密码"></el-input>
-                            </el-form-item>
+                                <el-form-item label="设备信息" class="login_input_box" prop="deviceinfo">
+                                    <el-input v-model="recordForm.deviceinfo" placeholder="请输入设备信息"></el-input>
+                                </el-form-item>
 
-                            <div class="button">
-                                <el-button @click="changePassword" class="button" type="primary">修改密码</el-button>
-                            </div>
-                        </el-form>
+                                <el-form-item label="设备位置" class="login_input_box" prop="location">
+                                    <el-input v-model="recordForm.location" placeholder="请输入设备位置"></el-input>
+                                </el-form-item>
+
+                                
+                                <el-form-item label="设备图片"
+                                    :rules="[
+                                    {
+                                    required: true,
+                                    message: '请上传运行效果',
+                                    trigger: 'blur',
+                                    },
+                                    ]"
+                                >
+                                    <el-upload
+                                        :file-list="fileList"
+                                        list-type="picture-card"
+                                        :auto-upload="false"
+                                        :on-change="handleChange"
+                                        :on-remove="handleRemove"
+                                    >
+                                    <el-icon><Plus /></el-icon>
+                                    </el-upload>
+                                </el-form-item>
+
+                                <div class="button">
+                                    <el-button @click="addRecord" class="button" type="primary">添加报修申请</el-button>
+                                </div>
+                            </el-form>
+                        </div>
+                </el-tab-pane>
+                <el-tab-pane label="查看保修申请" name="second">
+                    <span>对于处理意见,0为同意,1为拒绝,2为未处理</span>
+                    <el-table :data="recordList" stripe style="width: 100%">
+                            <el-table-column prop="recordid" label="报修申请ID" width="120" />
+                            <el-table-column prop="devicename" label="设备名称" width="120"/>
+                            <el-table-column prop="deviceinfo" label="设备情况" width="120"/>
+                            <el-table-column prop="devicepicture" label="设备照片" width="120">
+                                <img :src="devicepicture" alt="" />
+                            </el-table-column>    
+                            <el-table-column prop="location" label="设备位置" width="120"/>
+                            <el-table-column prop="approved" label="处理意见" width="120" />
+                    </el-table>
+                    <div class="button">
+                        <el-button @click="checkRecord" class="button" type="primary">查看报修请求</el-button>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="修改个人信息" name="second">
-                    <div class="self"  @keyup.enter="keyPressed">
-                        <h4>修改个人信息</h4>
-                        <el-form :model="SelfForm" :rules="selfrules" ref="SelfForm" label-width="100px" status-icon="true">
-                            <el-form-item label="新邮箱" class="login_input_box" prop="newemail">
-                                <el-input v-model="SelfForm.newemail" placeholder="请输入新邮箱"></el-input>
-                            </el-form-item>
+                <el-tab-pane label="审核保修申请" name="third" v-if="positionpost=='0'">
+                    <div class="goods"  @keyup.enter="keyPressed">
+                            <h4>审核报修申请</h4>
+                            <el-form :model="recordForm" :rules="recordrules" label-width="100px" status-icon="true">
 
-                            <el-form-item label="真实姓名" class="login_input_box" prop="realname">
-                                <el-input v-model="SelfForm.realname" placeholder="请输入真实姓名"></el-input>
-                            </el-form-item>
+                                <el-form-item label="申请id" class="login_input_box" prop="recordid">
+                                    <el-input v-model="recordForm.recordid" placeholder="请输入申请ID"></el-input>
+                                </el-form-item>
 
-                            <el-form-item label="身份证号" class="login_input_box" prop="idnumber">
-                                <el-input v-model="SelfForm.idnumber" placeholder="请输入身份证号"></el-input>
-                            </el-form-item>
+                                <el-form-item label="审核意见" class="login_input_box" prop="deviceinfo">
+                                    <el-select v-model="recordForm.approved" class="m-2" placeholder="Select">
+                                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"/>
+                                    </el-select>
+                                </el-form-item>
 
-                            <el-form-item label="职位" class="login_input_box" prop="positionpost">
-                                <el-input v-model="SelfForm.positionpost" placeholder="请输入职位"></el-input>
-                            </el-form-item>
-
-                            <div class="button">
-                                <el-button @click="changeSelfInfo" class="button" type="primary">修改个人信息</el-button>
-                            </div>
-                        </el-form>
+                                <div class="button">
+                                    <el-button @click="solveRecord" class="button" type="primary">审核报修申请</el-button>
+                                </div>
+                            </el-form>
+                        </div>
+                </el-tab-pane>
+                <el-tab-pane label="查看入驻申请" name="fourth">
+                    <el-table :data="requestList" stripe style="width: 100%">
+                            <el-table-column prop="requestid" label="入驻申请ID" width="120" />
+                            <el-table-column prop="realname" label="商户真实姓名" width="120"/>
+                            <el-table-column prop="idnumber" label="商户身份证号" width="120"/>
+                            <el-table-column prop="shopname" label="商店名称" width="120"/>
+                            <el-table-column prop="email" label="商户邮箱" width="120"/>
+                    </el-table>
+                    <div class="button">
+                        <el-button @click="checkRequest" class="button" type="primary">查看入驻请求</el-button>
                     </div>
+                </el-tab-pane>
+                <el-tab-pane label="审核入驻申请" name="fifth" v-if="positionpost=='0'">
+                    <div class="goods"  @keyup.enter="keyPressed">
+                            <h4>审核入驻申请</h4>
+                            <el-form :model="requestForm" :rules="requestList" label-width="100px" status-icon="true">
+
+                                <el-form-item label="申请id" class="login_input_box" prop="requestid">
+                                    <el-input v-model="requestForm.requestid" placeholder="请输入申请ID"></el-input>
+                                </el-form-item>
+
+                                <el-form-item label="审核意见" class="login_input_box" prop="deviceinfo">
+                                    <el-select v-model="requestForm.approved" class="m-2" placeholder="Select">
+                                        <el-option v-for="item in newoptions" :key="item.value" :label="item.label" :value="item.value"/>
+                                    </el-select>
+                                </el-form-item>
+
+                                <div class="button">
+                                    <el-button @click="solveRequest" class="button" type="primary">审核报修申请</el-button>
+                                </div>
+                            </el-form>
+                        </div>
+                </el-tab-pane>
+                <el-tab-pane label="删除保修申请" name="sixth">
+                    <div class="goods"  @keyup.enter="keyPressed">
+                            <h4>删除报修申请</h4>
+                            <el-form :model="recordForm" :rules="recordrules" label-width="100px" status-icon="true">
+
+                                <el-form-item label="申请id" class="login_input_box" prop="recordid">
+                                    <el-input v-model="recordForm.recordid" placeholder="请输入申请ID"></el-input>
+                                </el-form-item>
+
+                                <div class="button">
+                                    <el-button @click="deleteRecord" class="button" type="primary">审核报修申请</el-button>
+                                </div>
+                            </el-form>
+                        </div>
+                </el-tab-pane>
+                <el-tab-pane label="查看财务报表" name="seventh">
+                    
                 </el-tab-pane>
             </el-tabs>
           </el-main>
@@ -115,155 +199,167 @@
   </template>
   
   <script>
-  import { ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus';
   import qs from 'qs';
+  const position = window.localStorage.getItem("positionpost");
   //import companyChange from '@/components/companyChange.vue';
   //import { useStore } from 'vuex';
   export default{
   //
     data() {
-        var validateRealName = (rule, value, callback) => {
-            const regMerchantRealName = /^[\u4e00-\u9fa5a-zA-Z]{1,30}$/;
-            if (regMerchantRealName.test(value)) {
-                callback();
-            }
-            callback(new Error('姓名只能由中英文组成，不超过30位'));
-        };
-
-        var validateRealID = (rule, value, callback) => {
-            const regMerchantRealID_18 = /^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-            const regMerchantRealID_15 = /^([1-6][1-9]|50)\d{4}\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}$/;
-            if (regMerchantRealID_15.test(value) || regMerchantRealID_18.test(value)) {
-                callback();
-            }
-            callback(new Error('身份证号不符合规范，请输入正确的身份证号'));
-        };
-
-        var validateEmail = (rule, value, callback) => {
-            const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
-            if (regEmail.test(value)) {
-                callback();
-            }
-            callback(new Error('请输入合法邮箱地址'));
-        };
-
-        var validatePass = (rule, value, callback) => {
-            const regPass = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
-            if (regPass.test(value)) {
-                callback();
-            }
-            callback(new Error('密码必须包含字母、数字和特殊字符，且长度不低于8位'));
-        };
-
-        var validatePass2 = (rule, value, callback) => {
-            if (value == this.registerForm.pass) {
-                callback();
-            }
-            callback(new Error('两次密码不一致'));
-        };
-
+    
         return {
-            SelfForm:{
-                email:"",
-                newemail: "",
-                password: "",
-                newpassword: "",
-                renewpassword: "",
+            positionpost: position,
+
+            options:[
+                {
+                    value: 0,
+                    label:  "ACCESS",
+                },
+                {
+                    value: 1,
+                    label: "DENY",
+                },
+                {
+                    value: 2,
+                    label: "UNSOLVED",
+                },
+            ],
+
+            newoptions:[
+                {
+                    value: 0,
+                    label:  "ACCESS",
+                },
+                {
+                    value: 1,
+                    label: "DENY",
+                },
+            ],
+
+            recordList:[{
+                recordid: "",
+                location: "",
+                devicename: "",
+                deviceinfo: "",
+                devicepicture: "",
+                approved: "",
+            }],
+            recordForm:{
+                recordid: "",
+                location: "",
+                devicename: "",
+                deviceinfo: "",
+                devicepicture: "",
+            },
+
+            requestList:[{
+                requestid:"",
                 realname: "",
                 idnumber: "",
-                positionpost: "",
+                shopname: "",
+                email: "",
+                passwords: "",
+            }],
+
+            requestForm:{
+                requestid: "",
+                approved: "",
             },
-            selfrules:{
-                newemail:[
-                    { required: true, message: '邮箱地址不能为空', trigger: 'blur' },
-                    { validator: validateEmail, trigger: 'blur' }
+
+            recordrules:{
+                recordid: [
+                    { required: true, message: '报修记录id不能为空', trigger: 'blur' },
                 ],
 
-                password:[
-                    { required: true, message: '密码不能为空', trigger: 'blur' },
-                    { validator: validatePass, trigger: 'blur' }
+                location: [
+                    { required: true, message: '设备位置不能为空', trigger: 'blur' },
                 ],
 
-                newpassword:[
-                    { required: true, message: '新密码不能为空', trigger: 'blur' },
-                    { validator: validatePass, trigger: 'blur' }
+                devicename: [
+                    { required: true, message: '设备名称不能为空', trigger: 'blur' },
                 ],
 
-                renewpassword:[
-                    { required: true, message: '请再次输入新密码', trigger: 'blur' },
-                    { validator: validatePass2, trigger: 'blur' }
+                deviceinfo: [
+                    { required: true, message: '设备状况不能为空', trigger: 'blur' },  
                 ],
 
-                idnumber:[
-                    { required: true, message: '身份证号不得为空', trigger: 'blur' },
-                    { validator: validateRealID, trigger: 'blur' }
+                devicepicture: [
+                    { required: true, message: '请上传图片', trigger: 'blur' },
+                ],
+            },
+
+            requestrules:{
+                requestid: [
+                { required: true, message: '入驻记录id不能为空', trigger: 'blur' },
                 ],
 
-                realname:[
-                    { required: true, message: '真实姓名不得为空', trigger: 'blur' },
-                    { validator: validateRealName, trigger: 'blur' }
+                approved: [
+                { required: true, message: '审批意见不能为空', trigger: 'blur' },
                 ],
-                
-                positionpost:[
-                    { required: true, message: '职位不得为空', trigger: 'blur' },
-                ]
             }
         }
     },
     methods:{
-        changePassword(){
-            this.$refs.SelfForm.validate((valid)=>{
-                if(valid)
-                {
-                    const admintoken = window.localStorage.getItem("admintoken");
-                    this.$http({
-                        method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/staff/updatepassword" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
-                        data: qs.stringify({
-                        /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                            token:admintoken,
-                            passwords: this.SelfForm.password,
-                            newpasswords: this.SelfForm.newpassword,
-                            renewpasswords: this.SelfForm.renewpassword,
-                        }),
-                    })
-                    .then((res) => {
-                        /* res 是 response 的缩写 */
-                        console.log(res.data);
-                        if(!res.data.success){
-                            this.$message.error(res.data.message);
-                        }
-                        else{
-                            this.$message.success(res.data.message);
-                        }
-                    });
+        checkRecord(){
+                const admintoken = window.localStorage.getItem("admintoken");
+                this.$http({
+                    method: "post" /* 指明请求方式，可以是 get 或 post */,
+                    url: "/staff/listrepairrecord" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                    data: qs.stringify({
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                        token:admintoken,
+                    }),
+                })
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    console.log(res.data);
+                    if(!res.data.success){
+                        this.$message.error(res.data.message);
+                    }
+                    else{
+                        this.recordList = res.data.message;
+                    }
+                });
+        },
+            
+
+        checkRequest(){
+            const admintoken = window.localStorage.getItem("admintoken");
+            this.$http({
+                method: "post" /* 指明请求方式，可以是 get 或 post */,
+                url: "/staff/listmerchantrequest" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                data: qs.stringify({
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                        token:admintoken,
+                    }),
+            })
+            .then((res) => {
+                /* res 是 response 的缩写 */
+                console.log(res.data);
+                if(!res.data.success){
+                    this.$message.error(res.data.message);
                 }
-                else
-                {
-                    ElMessage({
-                        type: 'error',
-                        message: "请完成输入",
-                        duration: 2000,
-                    })
+                else{
+                    this.requestList = res.data.message;
                 }
             });
         },
+            
 
-        changeSelfInfo(){
-            this.$refs.SelfForm.validate((valid)=>{
-                if(valid)
-                {
+        solveRecord(){
+            this.$refs.recordForm.validate((valid)=>{
+            if(valid)
+            {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/staff/updatestaff" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        url: "/staff/examinerepairrecord" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:admintoken,
-                            realname: this.SelfForm.realname,
-                            positionpost: this.SelfForm.positionpost,
-                            email: this.SelfForm.email,
-                            idnumber: this.SelfForm.idnumber,
+                            recordid: this.recordForm.recordid,
+                            approved: this.recordForm.approved,
                         }),
                     })
                     .then((res) => {
@@ -276,19 +372,136 @@
                             this.$message.success(res.data.message);
                         }
                     });
-                }
-                else
-                {
-                    ElMessage({
+            }
+            else
+            {
+              ElMessage({
                         type: 'error',
                         message: "请完成输入",
                         duration: 2000,
                     })
-                }
-            })
+            }
+          });
+        },
+
+        solveRequest(){
+            this.$refs.requestForm.validate((valid)=>{
+            if(valid)
+            {
+                    const admintoken = window.localStorage.getItem("admintoken");
+                    this.$http({
+                        method: "post" /* 指明请求方式，可以是 get 或 post */,
+                        url: "/staff/examinemerchantrequest" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        data: qs.stringify({
+                        /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                            token:admintoken,
+                            requestid: this.requestForm.requestid,
+                            approved: this.requestForm.approved,
+                        }),
+                    })
+                    .then((res) => {
+                        /* res 是 response 的缩写 */
+                        console.log(res.data);
+                        if(!res.data.success){
+                            this.$message.error(res.data.message);
+                        }
+                        else{
+                            this.$message.success(res.data.message);
+                        }
+                    });
+            }
+            else
+            {
+              ElMessage({
+                        type: 'error',
+                        message: "请完成输入",
+                        duration: 2000,
+                    })
+            }
+          });
+        },
+
+        deleteRecord(){
+            this.$refs.recordForm.validate((valid)=>{
+            if(valid)
+            {
+                    const admintoken = window.localStorage.getItem("admintoken");
+                    this.$http({
+                        method: "post" /* 指明请求方式，可以是 get 或 post */,
+                        url: "/staff/examinemerchantrequest" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        data: qs.stringify({
+                        /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                            token:admintoken,
+                            recordid: this.recordForm.recordid,
+                        }),
+                    })
+                    .then((res) => {
+                        /* res 是 response 的缩写 */
+                        console.log(res.data);
+                        if(!res.data.success){
+                            this.$message.error(res.data.message);
+                        }
+                        else{
+                            this.$message.success(res.data.message);
+                        }
+                    });
+            }
+            else
+            {
+              ElMessage({
+                        type: 'error',
+                        message: "请完成输入",
+                        duration: 2000,
+                    })
+            }
+          });
+        },
+
+        addRecord(){
+            this.$refs.recordForm.validate((valid)=>{
+            if(valid)
+            {
+                    const admintoken = window.localStorage.getItem("admintoken");
+                    this.$http({
+                        method: "post" /* 指明请求方式，可以是 get 或 post */,
+                        url: "/staff/examinemerchantrequest" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        data: qs.stringify({
+                        /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                            token:admintoken,
+                            devicename: this.recordForm.devicename,
+                            deviceinfo: this.recordForm.deviceinfo,
+                            devicepicture: this.recordForm.devicepicture,
+                            location: this.recordForm.location,
+                        }),
+                    })
+                    .then((res) => {
+                        /* res 是 response 的缩写 */
+                        console.log(res.data);
+                        if(!res.data.success){
+                            this.$message.error(res.data.message);
+                        }
+                        else{
+                            this.$message.success(res.data.message);
+                        }
+                    });
+            }
+            else
+            {
+              ElMessage({
+                        type: 'error',
+                        message: "请完成输入",
+                        duration: 2000,
+                    })
+            }
+          });
+        },
+
+        addPicture(){
+
+        }
         }
     }
-  }
+  
   
   </script>
   

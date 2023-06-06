@@ -131,7 +131,7 @@
                                 <el-input v-model="TicketFrom.TicketId" placeholder="请输入机票ID"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="实名信息ID" class="login_input_box" prop="TouristId">
+                            <el-form-item label="实名信息ID" class="login_input_box" prop="personid">
                                 <el-input v-model="TicketFrom.personid" placeholder="请输入实名信息ID"></el-input>
                             </el-form-item>
 
@@ -166,7 +166,7 @@
                         <h4>退票</h4>
                         <el-form :model="RecordForm" label-width="100px">
 
-                            <el-form-item label="订单ID" class="login_input_box" prop="TouristId">
+                            <el-form-item label="订单ID" class="login_input_box" prop="orderid">
                                 <el-input v-model="RecordForm.orderid" placeholder="请输入订单ID"></el-input>
                             </el-form-item>
 

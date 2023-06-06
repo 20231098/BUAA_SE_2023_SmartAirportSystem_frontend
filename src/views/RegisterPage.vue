@@ -58,7 +58,10 @@
                     </el-form-item>
 
                     <el-form-item label="员工职位" prop="positionpost" v-if="registerForm.uType == 'admin'" class="register_input_box">
-                        <el-input v-model="registerForm.positionpost" placeholder="请输入员工职位"></el-input>
+                        <!--el-input v-model="registerForm.positionpost" placeholder="请输入员工职位"></el-input-->
+                        <el-select v-model="registerForm.positionpost" class="m-2" placeholder="Select">
+                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"/>
+                        </el-select>
                     </el-form-item>
 
                     <el-form-item label="邮箱" prop="email" class="register_input_box">
@@ -99,7 +102,6 @@ export default {
         pageChange
     },
     name: "RegisterPage",
-
     data() {
         var validateEmail = (rule, value, callback) => {
             const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
@@ -166,6 +168,28 @@ export default {
         };
 
         return {
+            options:[
+                {
+                    value: 0,
+                    label: "ADMINISTRATOR",
+                },
+
+                {
+                    value: 1,
+                    label: "COMMONSTAFF",
+                },
+
+                {
+                    value: 2,
+                    label: "REPAIRSTAFF",
+                },
+
+                {
+                    value: 3,
+                    label: "CUSTOMERSERVICE",
+                },
+
+            ],
             registerForm: {
                 email: '',
                 name: '',

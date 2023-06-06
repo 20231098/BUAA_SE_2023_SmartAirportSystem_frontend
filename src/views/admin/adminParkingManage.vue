@@ -39,7 +39,7 @@
                     <el-icon><Promotion /></el-icon>
                     <span>申请管理</span>
                   </template>
-                  <el-menu-item index="/admin/applymanage">申请管理</el-menu-item>
+                  <el-menu-item index="/admin/applymanage" v-if="positionpost=='0' || positionpost=='2'">申请管理</el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="5">
                   <template #title>
@@ -88,7 +88,7 @@
                         <el-button @click="checkParkingspace" class="button" type="primary">查看停车位信息</el-button>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="修改停车位信息" name="second">
+                <el-tab-pane label="修改停车位信息" name="third">
                     <div class="Goods"  @keyup.enter="keyPressed">
                         <h4>修改停车位</h4>
                         <el-form :model="parkingForm" :rules="parkingRules" label-width="100px" status-icon="true">
@@ -111,7 +111,7 @@
                         </el-form>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="删除停车位信息" name="second">
+                <el-tab-pane label="删除停车位信息" name="fourth">
                     <div class="Goods"  @keyup.enter="keyPressed">
                         <h4>删除停车位</h4>
                         <el-form :model="parkingForm" :rules="parkingRules" label-width="100px" status-icon="true">
@@ -138,12 +138,15 @@
   import qs from 'qs';
   //import companyChange from '@/components/companyChange.vue';
   //import { useStore } from 'vuex';
+  const position = window.localStorage.getItem("positionpost");
   export default{
   //
     data() {
         
-
+        
         return {
+            positionpost: position,
+
             parkingList:[{
                 parkingspaceid:"",
                 location:"",
@@ -171,9 +174,6 @@
     },
     methods:{
         checkParkingspace(){
-            this.$refs.LuggageForm.validate((valid)=>{
-            if(valid)
-            {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
@@ -193,20 +193,10 @@
                             this.parkingList = res.data.message;
                         }
                     });
-            }
-            else
-            {
-              ElMessage({
-                        type: 'error',
-                        message: "请完成输入",
-                        duration: 2000,
-                    })
-            }
-          });
         },
 
         addParkingspace(){
-            this.$refs.LuggageForm.validate((valid)=>{
+            this.$refs.parkingForm.validate((valid)=>{
             if(valid)
             {
                     const admintoken = window.localStorage.getItem("admintoken");
@@ -243,7 +233,7 @@
         },
 
         changeParkingspace(){
-            this.$refs.LuggageForm.validate((valid)=>{
+            this.$refs.parkingForm.validate((valid)=>{
             if(valid)
             {
                     const admintoken = window.localStorage.getItem("admintoken");
@@ -281,7 +271,39 @@
         },
 
         deleteParkingspace(){
-
+            this.$refs.parkingForm.validate((valid)=>{
+            if(valid)
+            {
+                    const admintoken = window.localStorage.getItem("admintoken");
+                    this.$http({
+                        method: "post" /* 指明请求方式，可以是 get 或 post */,
+                        url: "/staff/addparkingspace" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        data: qs.stringify({
+                        /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                            token:admintoken,
+                            parkingspaceid: this.parkingForm.parkingspaceid,
+                        }),
+                    })
+                    .then((res) => {
+                        /* res 是 response 的缩写 */
+                        console.log(res.data);
+                        if(!res.data.success){
+                            this.$message.error(res.data.message);
+                        }
+                        else{
+                            this.$message.success(res.data.message);
+                        }
+                    });
+            }
+            else
+            {
+              ElMessage({
+                        type: 'error',
+                        message: "请完成输入",
+                        duration: 2000,
+                    })
+            }
+          });
         }
         }
     }
