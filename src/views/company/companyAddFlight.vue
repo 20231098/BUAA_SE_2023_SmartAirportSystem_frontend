@@ -80,11 +80,11 @@
                     </el-form-item>
 
                     <el-form-item label="起飞时间" class="login_input_box" prop="departuretime">
-                        <el-date-picker v-model="Flightform.departuretime" type="datetime" placeholder="Select date and time" :shortcuts="shortcuts"/>
+                        <el-date-picker v-model="Flightform.departuretime" type="datetime" placeholder="Select date and time" value-format="YYYY-MM-DD HH:mm:ss" :shortcuts="shortcuts"/>
                     </el-form-item>
 
                     <el-form-item label="降落时间" class="login_input_box" prop="landingtime">
-                        <el-date-picker v-model="Flightform.landingtime" type="datetime" placeholder="Select date and time" :shortcuts="shortcuts"/>
+                        <el-date-picker v-model="Flightform.landingtime" type="datetime" placeholder="Select date and time" value-format="YYYY-MM-DD HH:mm:ss" :shortcuts="shortcuts"/>
                     </el-form-item>
 
                     <el-form-item label="登机口" class="login_input_box" prop="landingtime">

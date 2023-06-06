@@ -7,6 +7,7 @@ import RegisterPage from "@/views/RegisterPage.vue"
 import UserPage from "@/views/UserPage.vue"
 import FlightPage from "@/views/FlightPage.vue"
 import BuyTicketPage from "@/views/BuyTicketPage.vue"
+
 import CompanyPage from "@/views/company/CompanyPage.vue"
 import CompanyCheckFlight from "@/views/company/CompanyCheckFlight.vue"
 import CompanyAddFlight from "@/views/company/companyAddFlight.vue"
@@ -29,8 +30,10 @@ import MerchantHome from "@/views/merchant/merchantHome.vue"
 import MerchantGoodsManage from "@/views/merchant/merchantGoodsManage.vue"
 import MerchantSelfManage from "@/views/merchant/merchantSelfManage.vue"
 import MerchantOrderManage from "@/views/merchant/merchantOrderManage.vue"
+
 import AdminHome from "@/views/admin/adminHome.vue"
 import AdminSelfManage from "@/views/admin/adminSelfManage.vue"
+import AdminLuggageManage from "@/views/admin/adminLuggageManage.vue"
 
 const routes = [
     {
@@ -199,6 +202,12 @@ const routes = [
         name: "AdminSelfManage",
         path: '/admin/selfmanage',
         component: AdminSelfManage,
+    },
+
+    {
+        name: "AdminLuggageManage",
+        path: '/admin/luggagemanage',
+        component: AdminLuggageManage,
     },
 ]
 

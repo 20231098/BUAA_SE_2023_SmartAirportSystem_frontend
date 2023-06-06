@@ -73,7 +73,7 @@
                             <el-table-column prop="email" label="联系方式" width="120"/>
                     </el-table>
                     <div class="button">
-                        <el-button @click="checkMerchant" class="submit_btn" type="primary">查询实名信息</el-button>
+                        <el-button @click="checkMerchant" class="submit_btn" type="primary">列出商户</el-button>
                     </div>                           
                 </el-tab-pane>
                 <el-tab-pane label="列出商户商品" name="second">
@@ -115,7 +115,7 @@
                                 </el-form-item>
 
                                 <el-form-item label="抵达时间" class="login_input_box" prop="arrivetime">
-                                    <el-date-picker v-model="goodsForm.arrivetime" type="datetime" placeholder="预定抵达时间"/>
+                                    <el-date-picker v-model="goodsForm.arrivetime" value-format="YYYY-MM-DD HH:mm:ss" type="datetime" placeholder="预定抵达时间"/>
                                 </el-form-item>
 
                                 <div class="button">

@@ -68,11 +68,11 @@
             <el-tabs tab-position="left" class="card">
                 <el-tab-pane label="查看实名信息" name="first">
                     <el-table :data="InformationList" stripe style="width: 100%">
-                            <el-table-column prop="TIID" label="实名信息ID" width="120" />
-                            <el-table-column prop="TouristID" label="旅客ID" width="120"/>
-                            <el-table-column prop="RealName" label="真实姓名" width="120"/>
-                            <el-table-column prop="IDNumber" label="身份证号" width="120"/>
-                            <el-table-column prop="Email" label="联系方式" width="120"/>
+                            <el-table-column prop="ttid" label="实名信息ID" width="120" />
+                            <el-table-column prop="touristid" label="旅客ID" width="120"/>
+                            <el-table-column prop="realname" label="真实姓名" width="120"/>
+                            <el-table-column prop="idnumber" label="身份证号" width="120"/>
+                            <el-table-column prop="email" label="联系方式" width="120"/>
                     </el-table>
                     <div class="button">
                         <el-button @click="checkSelfInformation" class="submit_btn" type="primary">查询实名信息</el-button>

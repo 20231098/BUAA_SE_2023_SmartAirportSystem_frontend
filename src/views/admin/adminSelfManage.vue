@@ -30,9 +30,9 @@
                 <el-sub-menu index="3">
                   <template #title>
                     <el-icon><document /></el-icon>
-                    <span>报修管理</span>
+                    <span>行李信息管理</span>
                   </template>
-                  <el-menu-item index="/admin/repairmanage">报修管理</el-menu-item>
+                  <el-menu-item index="/admin/luggagemanage">行李管理</el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="4">
                   <template #title>

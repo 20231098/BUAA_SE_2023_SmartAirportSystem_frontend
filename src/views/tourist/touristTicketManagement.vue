@@ -80,7 +80,7 @@
                             </el-form-item>
 
                             <el-form-item label="起飞日期" class="login_input_box" prop="date">
-                                <el-date-picker v-model="Flightform.date" type="date" placeholder="Pick a day" :size="size"/>
+                                <el-date-picker v-model="Flightform.date" value-format="YYYY-MM-DD" type="date" placeholder="Pick a day" :size="size"/>
                             </el-form-item>
 
                             <div class="button">
@@ -89,9 +89,9 @@
                         </el-form>
                     </div>
                     <el-table :data="FlightList" stripe style="width: 100%">
-                        <el-table-column prop="FlightId" label="航班ID" width="120" />
-                        <el-table-column prop="Name" label="航班名称" width="120" />
-                        <el-table-column prop="CompanyId" label="公司ID" width="120"/>
+                        <el-table-column prop="flightid" label="航班ID" width="120" />
+                        <el-table-column prop="name" label="航班名称" width="120" />
+                        <el-table-column prop="companyid" label="公司ID" width="120"/>
                         <el-table-column prop="takeofflocation" label="起飞位置" width="120"/>
                         <el-table-column prop="departuretime" label="起飞时间" width="120"/>
                         <el-table-column prop="landinglocation" label="降落位置" width="120"/>
@@ -115,10 +115,10 @@
                         </el-form>
                     </div>
                     <el-table :data="TicketList" stripe style="width: 100%">
-                        <el-table-column prop="FlightId" label="航班ID" width="120" />
-                        <el-table-column prop="TicketId" label="机票ID" width="120" />
+                        <el-table-column prop="flightid" label="航班ID" width="120" />
+                        <el-table-column prop="ticketid" label="机票ID" width="120" />
                         <el-table-column prop="price" label="机票价格" width="120"/>
-                        <el-table-column prop="type" label="机票类型" width="120"/>
+                        <el-table-column prop="tickettype" label="机票类型" width="120"/>
                         <el-table-column prop="amount" label="机票数量" width="120"/>
                     </el-table> 
                 </el-tab-pane>
@@ -213,6 +213,26 @@
                         </el-form>
                     </div>
                 </el-tab-pane>
+                <el-tab-pane label="查看行李信息" name="eighth">
+                    <div class="Ticket"  @keyup.enter="keyPressed">
+                        <h4>查看行李信息</h4>
+                        <el-form :model="RecordForm" label-width="100px">
+
+                            <el-form-item label="订单ID" class="login_input_box" prop="TouristId">
+                                <el-input v-model="RecordForm.orderid" placeholder="请输入订单ID"></el-input>
+                            </el-form-item>
+
+                            <div class="button">
+                                <el-button @click="touristCheckLuggage" class="submit_btn" type="primary">查看行李信息</el-button>
+                            </div>
+                        </el-form>
+                    </div>
+                    <el-table :data="LuggageList" style="width: 100%">
+                        <el-table-column prop="luggageid" label="行李id" width="120" />
+                        <el-table-column prop="state" label="行李状态" width="120" />
+                        <el-table-column prop="location" label="行李位置" width="120" />
+                    </el-table> 
+                </el-tab-pane>
             </el-tabs>
           </el-main>
         </el-container>  
@@ -273,18 +293,18 @@
             },
 
             RecordList:[{
-                orderid: "1",
-                companyname: "1",
-                flightname: "1",
-                takeofflocation: "1",
-                landinglocation: "1",
-                departuretime: "1",
-                landingtime: "1",
-                departuregate: "1",
-                terminal: "1",
-                realname: "1",
-                seatinfo: "1",
-                tickettype: "1",
+                orderid: "",
+                companyname: "",
+                flightname: "",
+                takeofflocation: "",
+                landinglocation: "",
+                departuretime: "",
+                landingtime: "",
+                departuregate: "",
+                terminal: "",
+                realname: "",
+                seatinfo: "",
+                tickettype: "",
             }],
 
             RecordForm:{
@@ -315,6 +335,14 @@
                 occupied: "",
                 //0:未被占用,1:被占用,2:自己的
             },
+
+            LuggageList:[{
+                luggageid: "",
+                personid: "",
+                ticketid: "",
+                state: "",
+                location: "",
+            }]
 
         }
 
@@ -557,6 +585,39 @@
             }
         },
 
+        touristCheckLuggage(){
+           if(!this.RecordForm.orderid)
+           {
+                ElMessage({
+                        type: 'error',
+                        message: "订单ID不能为空",
+                        duration: 2000,
+                    })
+           }
+           else
+           {
+                const touristtoken = window.localStorage.getItem("touristtoken");
+                this.$http({
+                    method: "post" /* 指明请求方式，可以是 get 或 post */,
+                    url: "/tourist/checkluggage" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                    data: qs.stringify({
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                        token:touristtoken,
+                        orderid: this.SeatForm.orderid,
+                    }),
+                })
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    console.log(res.data);
+                    if(!res.data.success){
+                        this.$message.error(res.data.message);
+                    }
+                    else{
+                        this.LuggageList = res.data.message;
+                    }
+                });
+           } 
+        }
 
     }
   }
