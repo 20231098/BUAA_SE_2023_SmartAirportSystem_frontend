@@ -39,7 +39,7 @@
                     <el-icon><Promotion /></el-icon>
                     <span>申请管理</span>
                   </template>
-                  <el-menu-item index="/admin/applymanage" v-if="positionpost=='0' || positionpost=='2'">申请管理</el-menu-item>
+                  <el-menu-item index="/admin/applymanage" v-if="positionpost== 0 || positionpost== 2 ">申请管理</el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="5">
                   <template #title>

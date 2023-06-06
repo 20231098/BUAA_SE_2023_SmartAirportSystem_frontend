@@ -39,7 +39,7 @@
                     <el-icon><Promotion /></el-icon>
                     <span>申请管理</span>
                   </template>
-                  <el-menu-item index="/admin/applymanage" v-if="positionpost=='0' || positionpost=='2'">申请管理</el-menu-item>
+                  <el-menu-item index="/admin/applymanage" v-if="positionpost== 0 || positionpost== 2">申请管理</el-menu-item>
                 </el-sub-menu>
                 <el-sub-menu index="5">
                   <template #title>
@@ -174,13 +174,13 @@
     },
     methods:{
         checkParkingspace(){
-                    const admintoken = window.localStorage.getItem("admintoken");
-                    this.$http({
-                        method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/staff/addparkingspace" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
-                        data: qs.stringify({
-                        /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                            token:admintoken,
+                const admintoken = window.localStorage.getItem("admintoken");
+                this.$http({
+                    method: "post" /* 指明请求方式，可以是 get 或 post */,
+                    url: "/staff/listparkingspce" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                    data: qs.stringify({
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                        token:admintoken,
                         }),
                     })
                     .then((res) => {
@@ -196,13 +196,12 @@
         },
 
         addParkingspace(){
-            this.$refs.parkingForm.validate((valid)=>{
-            if(valid)
+            if(!(!this.parkingForm.location || !this.parkingForm.price))
             {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/staff/addparkingspace" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        url: "/staff/addparkingspce" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:admintoken,
@@ -229,17 +228,15 @@
                         duration: 2000,
                     })
             }
-          });
         },
 
         changeParkingspace(){
-            this.$refs.parkingForm.validate((valid)=>{
-            if(valid)
+            if(!(!this.parkingForm.parkingspaceid || !this.parkingForm.location || !this.parkingForm.price))
             {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/staff/addparkingspace" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        url: "/staff/updateparkingspce" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:admintoken,
@@ -267,17 +264,15 @@
                         duration: 2000,
                     })
             }
-          });
         },
 
         deleteParkingspace(){
-            this.$refs.parkingForm.validate((valid)=>{
-            if(valid)
+            if(this.parkingForm.parkingspaceid)
             {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/staff/addparkingspace" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        url: "/staff/removeparkingspce" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:admintoken,
@@ -303,7 +298,6 @@
                         duration: 2000,
                     })
             }
-          });
         }
         }
     }
