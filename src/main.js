@@ -13,7 +13,7 @@ app.use()
 都可以直接通过this.$http 代替 axios 发起 Ajax 请求 */
 app.config.globalProperties.$http = axios
 /* 配置请求的根路径 */
-axios.defaults.baseURL = 'http://10.192.70.72:8080'
+axios.defaults.baseURL = "http://101.200.143.220:8080"
 
 app.mount('#app')
 

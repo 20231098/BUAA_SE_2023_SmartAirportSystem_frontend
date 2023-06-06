@@ -26,7 +26,7 @@
                         <el-input v-model="registerForm.name" placeholder="请输入名称"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="公司名称" prop="airlineName" v-if="registerForm.uType == 'airline'" class="register_input_box">
+                    <el-form-item label="公司名称" prop="airlineName" v-if="registerForm.uType == 'company'" class="register_input_box">
                         <el-input v-model="registerForm.airlineName" placeholder="请输入名称"></el-input>
                     </el-form-item>
 
@@ -51,6 +51,14 @@
 
                     <el-form-item label="员工号" prop="adminID" v-if="registerForm.uType == 'admin'" class="register_input_box">
                         <el-input v-model="registerForm.adminID" placeholder="请输入员工号"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="员工身份证号" prop="adminRealID" v-if="registerForm.uType == 'admin'" class="register_input_box">
+                        <el-input v-model="registerForm.adminRealID" placeholder="请输入员工身份证号"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="员工职位" prop="positionpost" v-if="registerForm.uType == 'admin'" class="register_input_box">
+                        <el-input v-model="registerForm.positionpost" placeholder="请输入员工职位"></el-input>
                     </el-form-item>
 
                     <el-form-item label="邮箱" prop="email" class="register_input_box">
@@ -83,6 +91,7 @@ import router from '@/routes/router';
 import qs from 'qs';
 import { ElMessage } from 'element-plus';
 import pageChange from '@/components/pageChange.vue';
+//import { throwStatement } from '@babel/types';
 
 
 export default {
@@ -169,6 +178,8 @@ export default {
                 merchantName: '',
                 merchantRealname: '',
                 merchantRealID: '',
+                adminRealID: '',
+                positionpost: '',
             },
 
             rules: {
@@ -224,6 +235,16 @@ export default {
                     {required: true, message: '商户真实身份证号不能为空', trigger: 'blur'},
                     {validator: validateRealID, trigger: 'blur'}
                 ],
+
+                adminRealID: [
+                    {required: true, message: '工作人员身份证号不能为空', trigger: 'blur'},
+                    {validator: validateRealID, trigger: 'blur'}
+                ],
+
+                positionpost:[
+                    {required: true, message: '工作人员职位不能为空', trigger: 'blur'},
+                    {validator: validateName, trigger: 'blur'}
+                ]
             },
 
         }
@@ -305,11 +326,16 @@ export default {
         {
             this.$http({
               method: "post" /* 指明请求方式，可以是 get 或 post */,
-              url: "/admin/register" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
-              data: qs.stringify(
+              url: "/staff/logup" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+              data: qs.stringify({
               /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-              this.registerForm
-            ),
+                realname: this.registerForm.adminName,
+                positionpost: this.registerForm.positionpost,
+                email: this.registerForm.email,
+                idnumber: this.registerForm.adminRealID,
+                passwords: this.registerForm.pass,
+                repasswords: this.registerForm.checkPass,
+              }),
           })
             .then((res) => {
               /* res 是 response 的缩写 */
@@ -358,11 +384,16 @@ export default {
         {
             this.$http({
               method: "post" /* 指明请求方式，可以是 get 或 post */,
-              url: "/merchant/register" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
-              data: qs.stringify(
+              url: "/merchant/logup" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+              data: qs.stringify({
               /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-              this.registerForm
-            ),
+                realname: this.registerForm.merchantRealname,
+                shopname: this.registerForm.merchantName,
+                idnumber: this.registerForm.merchantRealID,
+                email: this.registerForm.email,
+                passwords: this.registerForm.pass,
+                repasswords: this.registerForm.checkPass,
+              }),
           })
             .then((res) => {
               /* res 是 response 的缩写 */

@@ -40,13 +40,27 @@
                 <el-menu-item index="/company/changeticket">修改机票信息</el-menu-item>
                 <el-menu-item index="/company/deleteticket">删除机票信息</el-menu-item>
               </el-sub-menu>
+              <el-sub-menu index="3">
+                  <template #title>
+                    <el-icon><PieChart /></el-icon>
+                    <span>个人中心</span>
+                  </template>
+                  <el-menu-item index="/company/selfmanage">个人中心</el-menu-item>
+                </el-sub-menu>
+              <el-sub-menu index="4">
+                <template #title>
+                    <el-icon><HomeFilled /></el-icon>
+                  <span>退出登录</span>
+                </template>
+                <el-menu-item index="/">退出登录</el-menu-item>
+              </el-sub-menu> 
             </el-menu>
           </el-aside>  
           <el-main class="company">
             <el-table :data="FlightList" stripe style="width: 100%">
-                <el-table-column prop="FlightId" label="航班ID" width="120" />
-                <el-table-column prop="Name" label="航班名称" width="120" />
-                <el-table-column prop="CompanyId" label="公司ID" width="120"/>
+                <el-table-column prop="flightid" label="航班ID" width="120" />
+                <el-table-column prop="name" label="航班名称" width="120" />
+                <el-table-column prop="companyid" label="公司ID" width="120"/>
                 <el-table-column prop="takeofflocation" label="起飞位置" width="120"/>
                 <el-table-column prop="departuretime" label="起飞时间" width="120"/>
                 <el-table-column prop="landinglocation" label="降落位置" width="120"/>
@@ -54,6 +68,9 @@
                 <el-table-column prop="departuregate" label="登机口" width="120"/>
                 <el-table-column prop="terminal" label="航站楼" width="120"/>
             </el-table>
+            <div class="button">
+              <el-button @click="getFlightList" class="submit_btn" type="primary">查询航班</el-button>
+            </div> 
           </el-main>
         </el-container>  
       </el-container>
@@ -68,23 +85,20 @@ export default{
       return{
         FlightList:[
             {
-                FlightId: 1,
-                Name: "MH560",
-                CompantyId: 1,
-                takeofflocation: "Here",
-                departuretime: "12:30",
-                landinglocation: "there",
-                landingtime: "12:50",
-                departuregate: 5,
-                terminal: 1,
+                flightid: "",
+                Name: "",
+                CompantyId: "",
+                takeofflocation: "",
+                departuretime: "",
+                landinglocation: "",
+                landingtime: "",
+                departuregate: "",
+                terminal: "",
             }
         ]
       }  
     },
-    mounted:function() {
-        //this.getFlightList();
-        //未连接后端，无法访问
-    },
+
     methods:{
         getFlightList(){
             const companytoken = window.localStorage.getItem("companytoken");

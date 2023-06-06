@@ -9,53 +9,52 @@
         <el-container>
           <el-aside width="200px" class="aside">
             <el-menu
-                class="el-menu-vertical-demo"
-                align="left" 
-                unique-opened :collapse="isCollapse"
-                router>
-                <el-sub-menu index="1">
-                  <template #title>
-                    <el-icon><House /></el-icon>
-                    <span>首页</span>
-                  </template>
-                  <el-menu-item index="/admin">返回首页</el-menu-item>
-                </el-sub-menu>
-                <el-sub-menu index="2">
-                  <template #title>
-                    <el-icon><location /></el-icon>
-                    <span>停车位管理</span>
-                  </template>
-                  <el-menu-item index="/admin/parkingManage">停车位管理</el-menu-item>
-                </el-sub-menu>
-                <el-sub-menu index="3">
-                  <template #title>
-                    <el-icon><document /></el-icon>
-                    <span>报修管理</span>
-                  </template>
-                  <el-menu-item index="/admin/repairmanage">报修管理</el-menu-item>
-                </el-sub-menu>
-                <el-sub-menu index="4">
-                  <template #title>
-                    <el-icon><Promotion /></el-icon>
-                    <span>申请管理</span>
-                  </template>
-                  <el-menu-item index="/admin/applymanage">申请管理</el-menu-item>
-                </el-sub-menu>
-                <el-sub-menu index="5">
+              class="el-menu-vertical-demo"
+              align="left" 
+              unique-opened :collapse="isCollapse"
+              router>
+              <el-sub-menu index="/company">
+                <template #title>
+                  <el-icon><House /></el-icon>
+                  <span>首页</span>
+                </template>
+                <el-menu-item index="/company">返回首页</el-menu-item>
+              </el-sub-menu>
+              <el-sub-menu index="1">
+                <template #title>
+                  <el-icon><location /></el-icon>
+                  <span>航班管理</span>
+                </template>
+                <el-menu-item index="/company/checkflight">查看航班信息</el-menu-item>
+                <el-menu-item index="/company/addflight">添加航班信息</el-menu-item>
+                <el-menu-item index="/company/changeflight">修改航班信息</el-menu-item>
+                <el-menu-item index="/company/deleteflight">删除航班信息</el-menu-item>
+              </el-sub-menu>
+              <el-sub-menu index="2">
+                <template #title>
+                  <el-icon><document /></el-icon>
+                  <span>机票管理</span>
+                </template>
+                <el-menu-item index="/company/checkticket">查看机票信息</el-menu-item>
+                <el-menu-item index="/company/addticket">添加机票信息</el-menu-item>
+                <el-menu-item index="/company/changeticket">修改机票信息</el-menu-item>
+                <el-menu-item index="/company/deleteticket">删除机票信息</el-menu-item>
+              </el-sub-menu>
+              <el-sub-menu index="3">
                   <template #title>
                     <el-icon><PieChart /></el-icon>
                     <span>个人中心</span>
                   </template>
-                  <el-menu-item index="/admin/selfmanage">个人中心</el-menu-item>
+                  <el-menu-item index="/company/selfmanage">个人中心</el-menu-item>
                 </el-sub-menu>
-                <el-sub-menu index="6">
-                  <template #title>
+              <el-sub-menu index="4">
+                <template #title>
                     <el-icon><HomeFilled /></el-icon>
-                    <span>退出登录</span>
-                  </template>
-                  <el-menu-item index="/">退出登录</el-menu-item>
-                </el-sub-menu>
-              </el-menu>
+                  <span>退出登录</span>
+                </template>
+                <el-menu-item index="/">退出登录</el-menu-item>
+              </el-sub-menu> 
+            </el-menu>  
           </el-aside>  
           <el-main>
             <el-tabs tab-position="left" class="card">
@@ -83,22 +82,14 @@
                 </el-tab-pane>
                 <el-tab-pane label="修改个人信息" name="second">
                     <div class="self"  @keyup.enter="keyPressed">
-                        <h4>修改个人信息</h4>
+                        <h4>修改公司信息</h4>
                         <el-form :model="SelfForm" :rules="selfrules" ref="SelfForm" label-width="100px" status-icon="true">
                             <el-form-item label="新邮箱" class="login_input_box" prop="newemail">
                                 <el-input v-model="SelfForm.newemail" placeholder="请输入新邮箱"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="真实姓名" class="login_input_box" prop="realname">
-                                <el-input v-model="SelfForm.realname" placeholder="请输入真实姓名"></el-input>
-                            </el-form-item>
-
-                            <el-form-item label="身份证号" class="login_input_box" prop="idnumber">
-                                <el-input v-model="SelfForm.idnumber" placeholder="请输入身份证号"></el-input>
-                            </el-form-item>
-
-                            <el-form-item label="职位" class="login_input_box" prop="positionpost">
-                                <el-input v-model="SelfForm.positionpost" placeholder="请输入职位"></el-input>
+                            <el-form-item label="公司名称" class="login_input_box" prop="realname">
+                                <el-input v-model="SelfForm.realname" placeholder="请输入名称"></el-input>
                             </el-form-item>
 
                             <div class="button">
@@ -115,9 +106,9 @@
   </template>
   
   <script>
+  //import companyChange from '@/components/companyChange.vue';
   import { ElMessage } from 'element-plus';
   import qs from 'qs';
-  //import companyChange from '@/components/companyChange.vue';
   //import { useStore } from 'vuex';
   export default{
   //
@@ -215,13 +206,13 @@
             this.$refs.SelfForm.validate((valid)=>{
                 if(valid)
                 {
-                    const admintoken = window.localStorage.getItem("admintoken");
+                    const companytoken = window.localStorage.getItem("companytoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/staff/updatepassword" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        url: "/company/updatepassword" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                            token:admintoken,
+                            token:companytoken,
                             passwords: this.SelfForm.password,
                             newpasswords: this.SelfForm.newpassword,
                             renewpasswords: this.SelfForm.renewpassword,
@@ -253,17 +244,15 @@
             this.$refs.SelfForm.validate((valid)=>{
                 if(valid)
                 {
-                    const admintoken = window.localStorage.getItem("admintoken");
+                    const companytoken = window.localStorage.getItem("companytoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/staff/updatestaff" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        url: "/company/updatecompany" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                            token:admintoken,
-                            realname: this.SelfForm.realname,
-                            positionpost: this.SelfForm.positionpost,
-                            email: this.SelfForm.email,
-                            idnumber: this.SelfForm.idnumber,
+                            token:companytoken,
+                            email: this.SelfForm.newemail,
+                            name: this.SelfForm.realname,
                         }),
                     })
                     .then((res) => {

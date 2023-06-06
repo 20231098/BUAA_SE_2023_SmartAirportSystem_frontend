@@ -16,17 +16,21 @@ import CompanyCheckTicket from "@/views/company/companyCheckTicket.vue"
 import CompanyAddTicket from "@/views/company/companyAddTicket.vue"
 import CompanyChangeTicket from "@/views/company/companyChangeTicket.vue"
 import CompanyDeleteTicket from "@/views/company/companyDeleteTicket.vue"
+import CompanySelfManage from "@/views/company/companySelfManage.vue"
+
 import TouristHome from "@/views/tourist/touristHome.vue"
 import TouristSelfInformation from "@/views/tourist/touristSelfInformation.vue"
 import TouristTicketManage from "@/views/tourist/touristTicketManagement.vue"
 import TouristOrderManage from "@/views/tourist/touristOrderManagement.vue"
 import TouristPurchaseManage from "@/views/tourist/touristPurchaseManage.vue"
 import TouristSelfManage from "@/views/tourist/touristSelfManagement.vue"
+
 import MerchantHome from "@/views/merchant/merchantHome.vue"
 import MerchantGoodsManage from "@/views/merchant/merchantGoodsManage.vue"
 import MerchantSelfManage from "@/views/merchant/merchantSelfManage.vue"
 import MerchantOrderManage from "@/views/merchant/merchantOrderManage.vue"
 import AdminHome from "@/views/admin/adminHome.vue"
+import AdminSelfManage from "@/views/admin/adminSelfManage.vue"
 
 const routes = [
     {
@@ -119,6 +123,12 @@ const routes = [
     },
 
     {
+        name: "CompanySelfManage",
+        path: '/company/selfmanage',
+        component: CompanySelfManage,
+    },
+
+    {
         name: "TouristHome",
         path: '/tourist',
         component: TouristHome,
@@ -183,6 +193,12 @@ const routes = [
         name: "AdminHome",
         path: '/admin',
         component: AdminHome,
+    },
+
+    {
+        name: "AdminSelfManage",
+        path: '/admin/selfmanage',
+        component: AdminSelfManage,
     },
 ]
 

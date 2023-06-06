@@ -40,6 +40,20 @@
                 <el-menu-item index="/company/changeticket">修改机票信息</el-menu-item>
                 <el-menu-item index="/company/deleteticket">删除机票信息</el-menu-item>
               </el-sub-menu>
+              <el-sub-menu index="3">
+                  <template #title>
+                    <el-icon><PieChart /></el-icon>
+                    <span>个人中心</span>
+                  </template>
+                  <el-menu-item index="/company/selfmanage">个人中心</el-menu-item>
+                </el-sub-menu>
+              <el-sub-menu index="4">
+                <template #title>
+                    <el-icon><HomeFilled /></el-icon>
+                  <span>退出登录</span>
+                </template>
+                <el-menu-item index="/">退出登录</el-menu-item>
+              </el-sub-menu> 
             </el-menu>
           </el-aside>  
           <el-main>
@@ -147,6 +161,7 @@ export default{
                     price: this.Flightform.price,
                     amount:this.Flightform.amount,
                 })
+              })
                 .then((res) => {
                     /* res 是 response 的缩写 */
                     console.log(res.data);
@@ -159,7 +174,6 @@ export default{
                         setTimeout(() => {this.$router.push("/company")}, 1000);
                     }
                 })
-            });
           }
         },
     }

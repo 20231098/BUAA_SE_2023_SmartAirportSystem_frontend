@@ -40,6 +40,20 @@
                 <el-menu-item index="/company/changeticket">修改机票信息</el-menu-item>
                 <el-menu-item index="/company/deleteticket">删除机票信息</el-menu-item>
               </el-sub-menu>
+              <el-sub-menu index="3">
+                  <template #title>
+                    <el-icon><PieChart /></el-icon>
+                    <span>个人中心</span>
+                  </template>
+                  <el-menu-item index="/company/selfmanage">个人中心</el-menu-item>
+                </el-sub-menu>
+              <el-sub-menu index="4">
+                <template #title>
+                    <el-icon><HomeFilled /></el-icon>
+                  <span>退出登录</span>
+                </template>
+                <el-menu-item index="/">退出登录</el-menu-item>
+              </el-sub-menu> 
             </el-menu>
           </el-aside>  
           <el-main>
@@ -52,15 +66,17 @@
                     </el-form-item>
 
                     <el-form-item label="起飞地点" class="login_input_box" prop="takeofflocation">
-                        <el-cascader placeholder="出发地" size="large" :options="options" v-model="Flightform.takeofflocation"
+                        <!--el-cascader placeholder="出发地" size="large" :options="options" v-model="Flightform.takeofflocation"
                         @change="handleChange">
-                      </el-cascader>
+                      </el-cascader-->
+                      <el-input v-model="Flightform.takeofflocation" placeholder="请输入起飞地点"></el-input>
                     </el-form-item>
 
                     <el-form-item label="降落地点" class="login_input_box" prop="landinglocation">
-                      <el-cascader placeholder="到达地" size="large" :options="options" v-model="Flightform.landinglocation"
+                      <!--el-cascader placeholder="到达地" size="large" :options="options" v-model="Flightform.landinglocation"
                         @change="handleChange">
-                      </el-cascader>
+                      </el-cascader-->
+                      <el-input v-model="Flightform.landinglocation" placeholder="请输入降落地点"></el-input>
                     </el-form-item>
 
                     <el-form-item label="起飞时间" class="login_input_box" prop="departuretime">
@@ -94,11 +110,10 @@
 <script>
 //import companyChange from '@/components/companyChange.vue';
 import router from '@/routes/router';
-import { provinceAndCityData, codeToText } from 'element-china-area-data';
+import { provinceAndCityData } from 'element-china-area-data';
 import qs from 'qs';
 import { ElMessage } from 'element-plus';
 
-var dest = "";
 export default{
     data() {
       var validateName = (rule, value, callback) => {
@@ -136,9 +151,9 @@ export default{
             router.push("/company")
         },
         submit_btn(){
-          if(!this.Flightform.terminal || !this.Flightform.departuregate|| !this.Flightform.validateName)
+          if(!this.Flightform.terminal || !this.Flightform.departuregate|| !this.Flightform.Name)
           {
-            if(!this.Flightform.validateName)
+            if(!this.Flightform.Name)
             {
               ElMessage({
                     type: 'error',
@@ -168,9 +183,10 @@ export default{
                     landinglocation: this.Flightform.landinglocation,
                     departuretime: this.Flightform.departuretime,
                     landingtime: this.Flightform.landingtime,
-                    departuregate: this.Flightform.departgate,
+                    departuregate: this.Flightform.departuregate,
                     terminal: this.Flightform.terminal,
-                })
+                }),
+              })
                 .then((res) => {
                     /* res 是 response 的缩写 */
                     console.log(res.data);
@@ -183,7 +199,6 @@ export default{
                         setTimeout(() => {this.$router.push("/company")}, 1000);
                     }
                 })
-            });
           }
         },
 
@@ -194,11 +209,6 @@ export default{
 
         },
 
-        handleChange2() {
-            dest = codeToText[this.selectedOptions[0]] + '/' + codeToText[this.selectedOptions[1]];
-            console.log(dest)//打印区域码所对应的属性值即中文地址
-
-        },
     }
 }
 

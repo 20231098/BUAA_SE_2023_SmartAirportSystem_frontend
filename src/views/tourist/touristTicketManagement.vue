@@ -72,15 +72,11 @@
                         <el-form :model="Flightform" label-width="70px">
 
                             <el-form-item label="起飞地点" class="login_input_box" prop="takeofflocation">
-                                <el-cascader placeholder="出发地" size="large" :options="options" v-model="Flightform.takeofflocation"
-                                @change="handleChange">
-                            </el-cascader>
+                                <el-input v-model="Flightform.takeofflocation" placeholder="请输入起飞地点"></el-input>
                             </el-form-item>
 
                             <el-form-item label="降落地点" class="login_input_box" prop="landinglocation">
-                            <el-cascader placeholder="到达地" size="large" :options="options" v-model="Flightform.landinglocation"
-                                @change="handleChange">
-                            </el-cascader>
+                                <el-input v-model="Flightform.landinglocation" placeholder="请输入降落地点"></el-input>
                             </el-form-item>
 
                             <el-form-item label="起飞日期" class="login_input_box" prop="date">
@@ -162,6 +158,7 @@
                     <div class="button">
                         <el-button @click="touristCheckTicket" class="submit_btn" type="primary">列出已购机票</el-button>
                     </div>
+
 
                 </el-tab-pane>
                 <el-tab-pane label="退票" name="fifth">
@@ -610,7 +607,6 @@
     margin-top: 50px;
     margin-left: 200px;
     height: 100%;
-    min-height: max-content;
     width: 70%;
     border-color: black;
 }
