@@ -93,7 +93,7 @@
                                 ></el-date-picker>
                             </el-form-item>
 
-                            <el-form-item label="车位" prop="parkingSpot">
+                            <el-form-item label="车位" prop="parkingspaceid">
                                 <el-input v-model="parkingForm.parkingspaceid" placeholder="请输入车位ID"></el-input>
                             </el-form-item>
                             
@@ -171,9 +171,6 @@
             parkingRules: {
                 timeRange: [
                     { required: true, message: "请选择时间段", trigger: "blur" }
-                ],
-                parkingSpot: [
-                    { required: true, message: "请选择车位", trigger: "blur" }
                 ],
                 paymentMethod: [
                     { required: true, message: "请选择支付方式", trigger: "blur" }

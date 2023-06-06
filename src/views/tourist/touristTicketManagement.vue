@@ -427,7 +427,7 @@
                     /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                         token:touristtoken,
                         ticketid: this.TicketFrom.TicketId,
-                        personid: this.TicketFrom.personid,
+                        personidlist: this.TicketFrom.personid + "&",
                     }),
                 })
                 .then((res) => {

@@ -62,7 +62,7 @@
                 <el-tab-pane label="添加报修申请" name="first" >
                     <div class="goods"  @keyup.enter="keyPressed">
                             <h4>添加报修申请</h4>
-                            <el-form :model="recordForm" :rules="recordrules" label-width="100px" status-icon="true">
+                            <el-form :model="recordForm" label-width="100px" status-icon="true">
 
                                 <el-form-item label="设备名称" class="login_input_box" prop="devicename">
                                     <el-input v-model="recordForm.devicename" placeholder="请输入设备名称"></el-input>
@@ -122,7 +122,7 @@
                 <el-tab-pane label="审核保修申请" name="third" v-if="positionpost=='0'">
                     <div class="goods"  @keyup.enter="keyPressed">
                             <h4>审核报修申请</h4>
-                            <el-form :model="recordForm" :rules="recordrules" label-width="100px" status-icon="true">
+                            <el-form :model="recordForm" label-width="100px" status-icon="true">
 
                                 <el-form-item label="申请id" class="login_input_box" prop="recordid">
                                     <el-input v-model="recordForm.recordid" placeholder="请输入申请ID"></el-input>
@@ -155,7 +155,7 @@
                 <el-tab-pane label="审核入驻申请" name="fifth" v-if="positionpost=='0'">
                     <div class="goods"  @keyup.enter="keyPressed">
                             <h4>审核入驻申请</h4>
-                            <el-form :model="requestForm" :rules="requestList" label-width="100px" status-icon="true">
+                            <el-form :model="requestForm" label-width="100px" status-icon="true">
 
                                 <el-form-item label="申请id" class="login_input_box" prop="requestid">
                                     <el-input v-model="requestForm.requestid" placeholder="请输入申请ID"></el-input>
@@ -176,7 +176,7 @@
                 <el-tab-pane label="删除保修申请" name="sixth">
                     <div class="goods"  @keyup.enter="keyPressed">
                             <h4>删除报修申请</h4>
-                            <el-form :model="recordForm" :rules="recordrules" label-width="100px" status-icon="true">
+                            <el-form :model="recordForm" label-width="100px" status-icon="true">
 
                                 <el-form-item label="申请id" class="login_input_box" prop="recordid">
                                     <el-input v-model="recordForm.recordid" placeholder="请输入申请ID"></el-input>
@@ -267,37 +267,6 @@ import { ElMessage } from 'element-plus';
                 approved: "",
             },
 
-            recordrules:{
-                recordid: [
-                    { required: true, message: '报修记录id不能为空', trigger: 'blur' },
-                ],
-
-                location: [
-                    { required: true, message: '设备位置不能为空', trigger: 'blur' },
-                ],
-
-                devicename: [
-                    { required: true, message: '设备名称不能为空', trigger: 'blur' },
-                ],
-
-                deviceinfo: [
-                    { required: true, message: '设备状况不能为空', trigger: 'blur' },  
-                ],
-
-                devicepicture: [
-                    { required: true, message: '请上传图片', trigger: 'blur' },
-                ],
-            },
-
-            requestrules:{
-                requestid: [
-                { required: true, message: '入驻记录id不能为空', trigger: 'blur' },
-                ],
-
-                approved: [
-                { required: true, message: '审批意见不能为空', trigger: 'blur' },
-                ],
-            }
         }
     },
     methods:{
@@ -348,8 +317,7 @@ import { ElMessage } from 'element-plus';
             
 
         solveRecord(){
-            this.$refs.recordForm.validate((valid)=>{
-            if(valid)
+            if(!(!this.recordForm.recordid || !this.recordForm.approved))
             {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
@@ -381,12 +349,10 @@ import { ElMessage } from 'element-plus';
                         duration: 2000,
                     })
             }
-          });
         },
 
         solveRequest(){
-            this.$refs.requestForm.validate((valid)=>{
-            if(valid)
+            if(this.requestForm.requestid)
             {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
@@ -418,12 +384,10 @@ import { ElMessage } from 'element-plus';
                         duration: 2000,
                     })
             }
-          });
         },
 
         deleteRecord(){
-            this.$refs.recordForm.validate((valid)=>{
-            if(valid)
+            if(this.recordForm.recordid)
             {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
@@ -454,12 +418,10 @@ import { ElMessage } from 'element-plus';
                         duration: 2000,
                     })
             }
-          });
         },
 
         addRecord(){
-            this.$refs.recordForm.validate((valid)=>{
-            if(valid)
+            if(!(!this.recordForm.deviceinfo || !this.recordForm.devicename || !this.recordForm.location))
             {
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
@@ -470,7 +432,7 @@ import { ElMessage } from 'element-plus';
                             token:admintoken,
                             devicename: this.recordForm.devicename,
                             deviceinfo: this.recordForm.deviceinfo,
-                            devicepicture: this.recordForm.devicepicture,
+                            devicepicture: "",
                             location: this.recordForm.location,
                         }),
                     })
@@ -493,7 +455,6 @@ import { ElMessage } from 'element-plus';
                         duration: 2000,
                     })
             }
-          });
         },
 
         addPicture(){
