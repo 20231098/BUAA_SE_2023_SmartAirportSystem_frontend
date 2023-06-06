@@ -94,7 +94,7 @@
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="订购商户商品" name="third">
-                    <div class="merchant"  @keyup.enter="keyPressed">
+                    <div class="goods"  @keyup.enter="keyPressed">
                             <h4>订购商户商品</h4>
                             <el-form :model="goodsForm" :rules="goodsrules" label-width="100px" status-icon="true">
 
@@ -125,7 +125,7 @@
                         </div>
                 </el-tab-pane>
                 <el-tab-pane label="退订商户商品" name="fourth">
-                    <div class="merchant"  @keyup.enter="keyPressed">
+                    <div class="goods"  @keyup.enter="keyPressed">
                             <h4>退订订单</h4>
                             <el-form :model="goodsForm" label-width="100px" status-icon="true">
 

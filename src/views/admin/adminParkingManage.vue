@@ -60,16 +60,71 @@
           <el-main>
             <el-tabs tab-position="left" class="card">
                 <el-tab-pane label="添加停车位" name="first">
-                    
+                    <div class="Goods"  @keyup.enter="keyPressed">
+                        <h4>添加停车位</h4>
+                        <el-form :model="parkingForm" :rules="parkingRules" label-width="100px" status-icon="true">
+
+                            <el-form-item label="停车位位置" class="login_input_box" prop="location">
+                                <el-input v-model="parkingForm.location" placeholder="请输入停车位位置"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="停车位价格" class="login_input_box" prop="price">
+                                <el-input v-model="parkingForm.price" placeholder="请输入停车位价格"></el-input>
+                            </el-form-item>
+
+                            <div class="button">
+                                <el-button @click="addParkingspace" class="button" type="primary">添加停车位信息</el-button>
+                            </div>
+                        </el-form>
+                    </div>
                 </el-tab-pane>
                 <el-tab-pane label="查看停车位信息" name="second">
-                    
+                    <el-table :data="parkingList" stripe style="width: 100%">
+                            <el-table-column prop="parkingspaceid" label="停车位ID" width="120" />
+                            <el-table-column prop="location" label="停车位位置" width="120"/>
+                            <el-table-column prop="price" label="停车位位置" width="120"/>
+                    </el-table>
+                    <div class="button">
+                        <el-button @click="checkParkingspace" class="button" type="primary">查看停车位信息</el-button>
+                    </div>
                 </el-tab-pane>
                 <el-tab-pane label="修改停车位信息" name="second">
-                    
+                    <div class="Goods"  @keyup.enter="keyPressed">
+                        <h4>修改停车位</h4>
+                        <el-form :model="parkingForm" :rules="parkingRules" label-width="100px" status-icon="true">
+
+                            <el-form-item label="停车位ID" class="login_input_box" prop="parkingspaceid">
+                                <el-input v-model="parkingForm.parkingspaceid" placeholder="请输入停车位ID"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="停车位位置" class="login_input_box" prop="location">
+                                <el-input v-model="parkingForm.location" placeholder="请输入停车位位置"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="停车位价格" class="login_input_box" prop="price">
+                                <el-input v-model="parkingForm.price" placeholder="请输入停车位价格"></el-input>
+                            </el-form-item>
+
+                            <div class="button">
+                                <el-button @click="changeParkingspace" class="button" type="primary">修改停车位信息</el-button>
+                            </div>
+                        </el-form>
+                    </div>
                 </el-tab-pane>
                 <el-tab-pane label="删除停车位信息" name="second">
-                    
+                    <div class="Goods"  @keyup.enter="keyPressed">
+                        <h4>删除停车位</h4>
+                        <el-form :model="parkingForm" :rules="parkingRules" label-width="100px" status-icon="true">
+
+                            <el-form-item label="停车位ID" class="login_input_box" prop="parkingspaceid">
+                                <el-input v-model="parkingForm.parkingspaceid" placeholder="请输入停车位ID"></el-input>
+                            </el-form-item>
+
+                            <div class="button">
+                                <el-button @click="deleteParkingspace" class="button" type="primary">删除停车位信息</el-button>
+                            </div>
+                        </el-form>
+                    </div>
                 </el-tab-pane>
             </el-tabs>
           </el-main>
@@ -89,11 +144,145 @@
         
 
         return {
-            
+            parkingList:[{
+                parkingspaceid:"",
+                location:"",
+                price:"",
+            }],
+
+            parkingForm: {
+                parkingspaceid: "",
+                location: "",
+                price: "",
+            },
+
+            parkingRules: {
+                price: [
+                    { required: true, message: "请输入停车位价格", trigger: "blur" }
+                ],
+                parkingspaceid: [
+                    { required: true, message: "请输入停车位id", trigger: "blur" }
+                ],
+                location: [
+                    { required: true, message: "请输入停车位位置", trigger: "blur" }
+                ],
+            },
         }
     },
     methods:{
-        
+        checkParkingspace(){
+            this.$refs.LuggageForm.validate((valid)=>{
+            if(valid)
+            {
+                    const admintoken = window.localStorage.getItem("admintoken");
+                    this.$http({
+                        method: "post" /* 指明请求方式，可以是 get 或 post */,
+                        url: "/staff/addparkingspace" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        data: qs.stringify({
+                        /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                            token:admintoken,
+                        }),
+                    })
+                    .then((res) => {
+                        /* res 是 response 的缩写 */
+                        console.log(res.data);
+                        if(!res.data.success){
+                            this.$message.error(res.data.message);
+                        }
+                        else{
+                            this.parkingList = res.data.message;
+                        }
+                    });
+            }
+            else
+            {
+              ElMessage({
+                        type: 'error',
+                        message: "请完成输入",
+                        duration: 2000,
+                    })
+            }
+          });
+        },
+
+        addParkingspace(){
+            this.$refs.LuggageForm.validate((valid)=>{
+            if(valid)
+            {
+                    const admintoken = window.localStorage.getItem("admintoken");
+                    this.$http({
+                        method: "post" /* 指明请求方式，可以是 get 或 post */,
+                        url: "/staff/addparkingspace" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        data: qs.stringify({
+                        /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                            token:admintoken,
+                            location: this.parkingForm.location,
+                            price: this.parkingForm.price,
+                        }),
+                    })
+                    .then((res) => {
+                        /* res 是 response 的缩写 */
+                        console.log(res.data);
+                        if(!res.data.success){
+                            this.$message.error(res.data.message);
+                        }
+                        else{
+                            this.$message.success(res.data.message);
+                        }
+                    });
+            }
+            else
+            {
+              ElMessage({
+                        type: 'error',
+                        message: "请完成输入",
+                        duration: 2000,
+                    })
+            }
+          });
+        },
+
+        changeParkingspace(){
+            this.$refs.LuggageForm.validate((valid)=>{
+            if(valid)
+            {
+                    const admintoken = window.localStorage.getItem("admintoken");
+                    this.$http({
+                        method: "post" /* 指明请求方式，可以是 get 或 post */,
+                        url: "/staff/addparkingspace" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        data: qs.stringify({
+                        /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                            token:admintoken,
+                            parkingspaceid: this.parkingForm.parkingspaceid,
+                            location: this.parkingForm.location,
+                            price: this.parkingForm.price,
+                        }),
+                    })
+                    .then((res) => {
+                        /* res 是 response 的缩写 */
+                        console.log(res.data);
+                        if(!res.data.success){
+                            this.$message.error(res.data.message);
+                        }
+                        else{
+                            this.$message.success(res.data.message);
+                        }
+                    });
+            }
+            else
+            {
+              ElMessage({
+                        type: 'error',
+                        message: "请完成输入",
+                        duration: 2000,
+                    })
+            }
+          });
+        },
+
+        deleteParkingspace(){
+
+        }
         }
     }
   
