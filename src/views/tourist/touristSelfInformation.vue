@@ -48,6 +48,20 @@
                 </template>
                 <el-menu-item index="/tourist/purchasemanage">管理商品订单</el-menu-item>
               </el-sub-menu>
+              <el-sub-menu index="6">
+                <template #title>
+                    <el-icon><PieChart /></el-icon>
+                  <span>个人中心</span>
+                </template>
+                <el-menu-item index="/tourist/selfmanage">个人中心</el-menu-item>
+              </el-sub-menu>
+              <el-sub-menu index="7">
+                <template #title>
+                    <el-icon><HomeFilled /></el-icon>
+                  <span>退出登录</span>
+                </template>
+                <el-menu-item index="/">退出登录</el-menu-item>
+              </el-sub-menu> 
             </el-menu>
           </el-aside>  
           <el-main>
@@ -67,7 +81,7 @@
                 <el-tab-pane label="添加实名信息" name="second">
                     <div class="Addperson"  @keyup.enter="keyPressed">
                             <h4>添加实名信息</h4>
-                            <el-form :model="InformationForm" label-width="70px">
+                            <el-form :model="InformationForm" :rules="rules" ref="InformationForm" label-width="100px" status-icon="true">
 
                                 <el-form-item label="真实姓名" class="login_input_box" prop="RealName">
                                     <el-input v-model="InformationForm.RealName" placeholder="请输入真实姓名"></el-input>
@@ -90,7 +104,7 @@
                 <el-tab-pane label="修改实名信息" name="third">
                     <div class="Addperson"  @keyup.enter="keyPressed">
                             <h4>修改实名信息</h4>
-                            <el-form :model="InformationForm" label-width="70px">
+                            <el-form :model="InformationForm" :rules="rules" ref="InformationForm" label-width="100px" status-icon="true">
                                 <el-form-item label="信息ID" class="login_input_box" prop="TouristId">
                                     <el-input v-model="InformationForm.TouristId" placeholder="请输入信息ID"></el-input>
                                 </el-form-item>
@@ -117,8 +131,8 @@
                     <div class="Addperson"  @keyup.enter="keyPressed">
                             <h4>删除实名信息</h4>
                             <el-form :model="InformationForm" label-width="70px">
-                                <el-form-item label="信息ID" class="login_input_box" prop="TouristId">
-                                    <el-input v-model="InformationForm.TouristId" placeholder="请输入信息ID"></el-input>
+                                <el-form-item label="信息ID" class="login_input_box" prop="TTID">
+                                    <el-input v-model="InformationForm.TTID" placeholder="请输入信息ID"></el-input>
                                 </el-form-item>
 
                                 <div class="button">
@@ -328,7 +342,7 @@
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:touristtoken,
-                            personid: this.InformationForm.TouristId
+                            personid: this.InformationForm.TTID,
                         }),
                     })
                     .then((res) => {

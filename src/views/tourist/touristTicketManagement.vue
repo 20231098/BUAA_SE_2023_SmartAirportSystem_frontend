@@ -48,6 +48,20 @@
                 </template>
                 <el-menu-item index="/tourist/purchasemanage">管理商品订单</el-menu-item>
               </el-sub-menu>
+              <el-sub-menu index="6">
+                <template #title>
+                    <el-icon><PieChart /></el-icon>
+                  <span>个人中心</span>
+                </template>
+                <el-menu-item index="/tourist/selfmanage">个人中心</el-menu-item>
+              </el-sub-menu>
+              <el-sub-menu index="7">
+                <template #title>
+                    <el-icon><HomeFilled /></el-icon>
+                  <span>退出登录</span>
+                </template>
+                <el-menu-item index="/">退出登录</el-menu-item>
+              </el-sub-menu> 
             </el-menu>
           </el-aside>  
           <el-main>
@@ -115,7 +129,7 @@
                 <el-tab-pane label="购买机票" name="third">
                     <div class="Ticket"  @keyup.enter="keyPressed">
                         <h4>购买航班机票</h4>
-                        <el-form :model="TicketFrom" label-width="70px">
+                        <el-form :model="TicketFrom" label-width="100px">
 
                             <el-form-item label="机票ID" class="login_input_box" prop="TouristId">
                                 <el-input v-model="TicketFrom.TicketId" placeholder="请输入机票ID"></el-input>
@@ -148,11 +162,12 @@
                     <div class="button">
                         <el-button @click="touristCheckTicket" class="submit_btn" type="primary">列出已购机票</el-button>
                     </div>
+
                 </el-tab-pane>
                 <el-tab-pane label="退票" name="fifth">
                     <div class="Ticket"  @keyup.enter="keyPressed">
                         <h4>退票</h4>
-                        <el-form :model="RecordForm" label-width="70px">
+                        <el-form :model="RecordForm" label-width="100px">
 
                             <el-form-item label="订单ID" class="login_input_box" prop="TouristId">
                                 <el-input v-model="RecordForm.orderid" placeholder="请输入订单ID"></el-input>
@@ -167,7 +182,7 @@
                 <el-tab-pane label="列出空闲座位" name="sixth">
                     <div class="Ticket"  @keyup.enter="keyPressed">
                         <h4>列出空闲座位</h4>
-                        <el-form :model="RecordForm" label-width="70px">
+                        <el-form :model="RecordForm" label-width="100px">
 
                             <el-form-item label="订单ID" class="login_input_box" prop="TouristId">
                                 <el-input v-model="RecordForm.orderid" placeholder="请输入订单ID"></el-input>
@@ -185,7 +200,7 @@
                 <el-tab-pane label="选择机票座位" name="seventh">
                     <div class="Ticket"  @keyup.enter="keyPressed">
                         <h4>选择机票座位</h4>
-                        <el-form :model="SeatForm" label-width="70px">
+                        <el-form :model="SeatForm" label-width="100px">
 
                             <el-form-item label="订单ID" class="login_input_box" prop="TouristId">
                                 <el-input v-model="SeatForm.orderid" placeholder="请输入订单ID"></el-input>
@@ -261,18 +276,18 @@
             },
 
             RecordList:[{
-                orderid: "",
-                companyname: "",
-                flightname: "",
-                takeofflocation: "",
-                landinglocation: "",
-                departuretime: "",
-                landingtime: "",
-                departuregate: "",
-                terminal: "",
-                realname: "",
-                seatinfo: "",
-                tickettype: "",
+                orderid: "1",
+                companyname: "1",
+                flightname: "1",
+                takeofflocation: "1",
+                landinglocation: "1",
+                departuretime: "1",
+                landingtime: "1",
+                departuregate: "1",
+                terminal: "1",
+                realname: "1",
+                seatinfo: "1",
+                tickettype: "1",
             }],
 
             RecordForm:{
@@ -595,6 +610,7 @@
     margin-top: 50px;
     margin-left: 200px;
     height: 100%;
+    min-height: max-content;
     width: 70%;
     border-color: black;
 }

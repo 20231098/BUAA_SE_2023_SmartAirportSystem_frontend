@@ -10,7 +10,7 @@
             <title>注册</title>
             <div class="register" @keyup.enter="keyPressed">
                 <h4>注册新账号</h4>
-                <el-form :model="registerForm" :rules="rules" ref="registerForm" label-width="80px" class="registerFormStyle"
+                <el-form :model="registerForm" :rules="rules" ref="registerForm" label-width="120px" class="registerFormStyle"
                     status-icon="true">
 
                     <el-form-item label="用户类型" prop="uType" class="register_input_box">
@@ -34,9 +34,9 @@
                         <el-input v-model="registerForm.adminName" placeholder="请输入名称"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="商户名称" prop="merchantName" v-if="registerForm.uType == 'merchant'"
+                    <el-form-item label="商店名称" prop="merchantName" v-if="registerForm.uType == 'merchant'"
                         class="register_input_box">
-                        <el-input v-model="registerForm.merchantName" placeholder="请输入名称"></el-input>
+                        <el-input v-model="registerForm.merchantName" placeholder="请输入商店名称"></el-input>
                     </el-form-item>
 
                     <el-form-item label="商户姓名" prop="merchantRealName" v-if="registerForm.uType == 'merchant'"

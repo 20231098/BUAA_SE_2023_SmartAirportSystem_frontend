@@ -48,6 +48,20 @@
                 </template>
                 <el-menu-item index="/tourist/purchasemanage">管理商品订单</el-menu-item>
               </el-sub-menu>
+              <el-sub-menu index="6">
+                <template #title>
+                  <el-icon><PieChart /></el-icon>
+                  <span>个人中心</span>
+                </template>
+                <el-menu-item index="/tourist/selfmanage">个人中心</el-menu-item>
+              </el-sub-menu>
+              <el-sub-menu index="7">
+                <template #title>
+                    <el-icon><HomeFilled /></el-icon>
+                  <span>退出登录</span>
+                </template>
+                <el-menu-item index="/">退出登录</el-menu-item>
+              </el-sub-menu> 
             </el-menu>
         </el-aside>  
         <el-main>

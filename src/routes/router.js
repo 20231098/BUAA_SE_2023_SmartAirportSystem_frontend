@@ -19,7 +19,14 @@ import CompanyDeleteTicket from "@/views/company/companyDeleteTicket.vue"
 import TouristHome from "@/views/tourist/touristHome.vue"
 import TouristSelfInformation from "@/views/tourist/touristSelfInformation.vue"
 import TouristTicketManage from "@/views/tourist/touristTicketManagement.vue"
-
+import TouristOrderManage from "@/views/tourist/touristOrderManagement.vue"
+import TouristPurchaseManage from "@/views/tourist/touristPurchaseManage.vue"
+import TouristSelfManage from "@/views/tourist/touristSelfManagement.vue"
+import MerchantHome from "@/views/merchant/merchantHome.vue"
+import MerchantGoodsManage from "@/views/merchant/merchantGoodsManage.vue"
+import MerchantSelfManage from "@/views/merchant/merchantSelfManage.vue"
+import MerchantOrderManage from "@/views/merchant/merchantOrderManage.vue"
+import AdminHome from "@/views/admin/adminHome.vue"
 
 const routes = [
     {
@@ -130,6 +137,53 @@ const routes = [
         component: TouristTicketManage,
     },
 
+    {
+        name: "TouristOrderManage",
+        path: '/tourist/ordermanage',
+        component: TouristOrderManage,
+    },
+
+    {
+        name: "TouristPurchaseManage",
+        path: '/tourist/purchasemanage',
+        component: TouristPurchaseManage,
+    },
+
+    {
+        name: "TouristSelfManage",
+        path: '/tourist/selfmanage',
+        component: TouristSelfManage,
+    },
+
+    {
+        name: "MerchantHome",
+        path: '/merchant',
+        component: MerchantHome,
+    },
+
+    {
+        name: "MerchantGoodsManage",
+        path: '/merchant/goodsmanage',
+        component: MerchantGoodsManage,
+    },
+
+    {
+        name: "MerchantSelfManage",
+        path: '/merchant/selfmanage',
+        component: MerchantSelfManage,
+    },
+
+    {
+        name: "MerchantOrderManage",
+        path: '/merchant/ordermanage',
+        component: MerchantOrderManage,
+    },
+
+    {
+        name: "AdminHome",
+        path: '/admin',
+        component: AdminHome,
+    },
 ]
 
 const router = createRouter({
