@@ -60,7 +60,7 @@
                     <el-icon><HomeFilled /></el-icon>
                   <span>退出登录</span>
                 </template>
-                <el-menu-item index="/">退出登录</el-menu-item>
+                <el-menu-item @click="returnHome">退出登录</el-menu-item>
               </el-sub-menu> 
             </el-menu>
           </el-aside>  
@@ -174,6 +174,9 @@
 
 
     methods:{
+        returnHome(){
+          this.$router.push("/");
+        },
         changePassword(){
             this.$refs.SelfForm.validate((valid)=>{
                 if(valid)

@@ -71,36 +71,38 @@
                             <el-table-column prop="merchantid" label="商户ID" width="120" />
                             <el-table-column prop="shopname" label="商店名称" width="120"/>
                             <el-table-column prop="email" label="联系方式" width="120"/>
+                            <el-table-column fixed="right" label="Opeations" width="120">
+                                <template #default="scope">
+                                    <el-button link type="primary" style="margin-left: 16px" size="small" @click="openDiager(scope.row)">列出商户商品</el-button>
+                                </template>
+                        </el-table-column>
                     </el-table>
                     <div class="button">
                         <el-button @click="checkMerchant" class="submit_btn" type="primary">列出商户</el-button>
-                    </div>                           
-                </el-tab-pane>
-                <el-tab-pane label="列出商户商品" name="second">
-                    <el-form :model="goodsForm" label-width="100px">
-                        <el-form-item label="商户ID" class="login_input_box" prop="merchantid">
-                            <el-input v-model="goodsForm.merchantid" placeholder="请输入商户ID"></el-input>
-                        </el-form-item>
-                        <div class="button">
-                            <el-button @click="checkMerchantCommodity" class="submit_btn" type="primary">查询商户商品</el-button>
-                        </div> 
-                    </el-form>
-                    <el-table :data="goodsList" stripe style="width: 100%">
+                    </div>
+                    <el-drawer
+                        v-model="drawer"
+                        title="商户商品"
+                        :direction="direction"
+                    >
+                        <el-table :data="goodsList" stripe style="width: 100%">
                             <el-table-column prop="merchantid" label="商户ID" width="120" />
                             <el-table-column prop="commodityid" label="商品ID" width="120"/>
                             <el-table-column prop="name" label="商品名称" width="120"/>
                             <el-table-column prop="count" label="商品库存" width="120"/>
                             <el-table-column prop="price" label="商品价格" width="120"/>
-                    </el-table>
-                </el-tab-pane>
-                <el-tab-pane label="订购商户商品" name="third">
-                    <div class="goods"  @keyup.enter="keyPressed">
-                            <h4>订购商户商品</h4>
+                            <el-table-column fixed="right" label="Opeations" width="120">
+                                <template #default="scope">
+                                    <el-button link type="primary" style="margin-left: 16px" size="small" @click="openGoodsDiager(scope.row)">购买商户商品</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                        <el-drawer
+                            v-model="drawer1"
+                            title="添加商品订单"
+                            :direction="direction"
+                        >
                             <el-form :model="goodsForm" :rules="goodsrules" label-width="100px" status-icon="true">
-
-                                <el-form-item label="商品ID" class="login_input_box" prop="commodityid">
-                                    <el-input v-model="goodsForm.commodityid" placeholder="请输入商品ID"></el-input>
-                                </el-form-item>
 
                                 <el-form-item label="数量" class="login_input_box" prop="counts">
                                     <el-input v-model="goodsForm.counts" placeholder="请输入购买数量"></el-input>
@@ -115,29 +117,15 @@
                                 </el-form-item>
 
                                 <el-form-item label="抵达时间" class="login_input_box" prop="arrivetime">
-                                    <el-date-picker v-model="goodsForm.arrivetime" value-format="YYYY-MM-DD HH:mm:ss" type="datetime" placeholder="预定抵达时间"/>
+                                    <el-date-picker v-model="goodsForm.arrivetime" value-format="YYYY-MM-DD HH:mm" type="datetime" placeholder="预定抵达时间"/>
                                 </el-form-item>
 
                                 <div class="button">
                                     <el-button @click="addPurchase" class="button" type="primary">添加商品订单</el-button>
                                 </div>
-                            </el-form>
-                        </div>
-                </el-tab-pane>
-                <el-tab-pane label="退订商户商品" name="fourth">
-                    <div class="goods"  @keyup.enter="keyPressed">
-                            <h4>退订订单</h4>
-                            <el-form :model="goodsForm" label-width="100px" status-icon="true">
-
-                                <el-form-item label="订单ID" class="login_input_box" prop="orderid">
-                                    <el-input v-model="goodsForm.orderid" placeholder="请输入订单ID"></el-input>
-                                </el-form-item>
-
-                                <div class="button">
-                                    <el-button @click="deletePurchase" class="button" type="primary">退订商品</el-button>
-                                </div>
-                            </el-form>
-                        </div>
+                            </el-form>  
+                        </el-drawer>
+                    </el-drawer>                         
                 </el-tab-pane>
                 <el-tab-pane label="查看已有订单" name="fifth">
                     <el-table :data="orderList" stripe style="width: 100%">
@@ -147,6 +135,11 @@
                         <el-table-column prop="departuregate" label="登机口" width="120"/>
                         <el-table-column prop="terminal" label="航站楼" width="120"/>
                         <el-table-column prop="arrivaltime" label="预定到达时间" width="120"/>
+                        <el-table-column fixed="right" label="Opeations" width="120">
+                                <template #default="scope">
+                                    <el-button link type="primary" style="margin-left: 16px" size="small" @click="deletePurchase(scope.row)">退订订单</el-button>
+                                </template>
+                            </el-table-column>
                     </el-table>
                     <div class="button">
                         <el-button @click="checkGoodsOrder" class="submit_btn" type="primary">查询已有订单</el-button>
@@ -164,10 +157,16 @@
   //import { useStore } from 'vuex';
   import { ElMessage } from 'element-plus';
   import qs from 'qs';
+  import { ref } from 'vue';
+  const direction = ref("btt");
   export default{
   //
     data() {
         return {
+            drawer: false,
+            drawer1: false,
+            drawer2: false,
+            direction: direction,
             MechantList:[{
                 merchantid: "",
                 realname: "",
@@ -235,6 +234,23 @@
 
 
     methods:{
+        openDiager(row){
+            if(!row.merchantid)
+            {
+                ElMessage({
+                        type: 'error',
+                        message: "商户信息不存在",
+                        duration: 2000,
+                    });
+            }
+            else
+            {
+                this.drawer = true;
+                this.checkMerchantCommodity(row);
+            }
+
+        },
+
         checkMerchant(){
             const touristtoken = window.localStorage.getItem("touristtoken");
             this.$http({
@@ -257,12 +273,12 @@
                 });
         },
 
-        checkMerchantCommodity(){
-            if(!this.goodsForm.merchantid)
+        checkMerchantCommodity(row){
+            if(!row.merchantid)
             {
                 ElMessage({
                         type: 'error',
-                        message: "请完成填写",
+                        message: "商户信息不存在",
                         duration: 2000,
                     });
             }
@@ -275,7 +291,7 @@
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:touristtoken,
-                            merchantid: this.goodsForm.merchantid,
+                            merchantid: row.merchantid,
                         }),
                     })
                     .then((res) => {
@@ -291,18 +307,35 @@
             }
         },
 
+        openGoodsDiager(row){
+            if(!row.commodityid)
+            {
+                ElMessage({
+                        type: 'error',
+                        message: "商品信息不存在",
+                        duration: 2000,
+                    });
+            }
+            else
+            {
+                this.drawer1 = true;
+                window.localStorage.setItem("commodityid", row.commodityid);
+            }
+        },
+
         addPurchase(){
             this.$refs.goodsForm.validate((valid)=>{
                 if(valid)
                 {
                     const touristtoken = window.localStorage.getItem("touristtoken");
+                    const commodityid = window.localStorage.getItem("commodityid")
                     this.$http({
                             method: "post" /* 指明请求方式，可以是 get 或 post */,
                             url: "/tourist/purchasecommodity" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                             data: qs.stringify({
                             /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                                 token:touristtoken,
-                                commodityid: this.goodsForm.commodityid,
+                                commodityid: commodityid,
                                 counts: this.goodsForm.counts,
                                 departuregate: this.goodsForm.departuregate,
                                 terminal: this.goodsForm.terminal,
@@ -331,8 +364,8 @@
             });
         },
 
-        deletePurchase(){
-            if(!this.goodsForm.orderid)
+        deletePurchase(row){
+            if(!row.orderid)
             {
                 ElMessage({
                         type: 'error',
@@ -349,7 +382,7 @@
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:touristtoken,
-                            orderid: this.goodsForm.orderid
+                            orderid: row.orderid,
                         }),
                     })
                     .then((res) => {

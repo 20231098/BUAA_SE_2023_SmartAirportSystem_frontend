@@ -11,12 +11,12 @@
                 <h1 class="search_title">机票查询</h1>
 
                 <div class="location_container">
-                    <div class="radio">
+                    <!--div class="radio">
                         <el-radio-group v-model="radio">
                             <el-radio :label="1">单程</el-radio>
                             <el-radio :label="2">往返</el-radio>
                         </el-radio-group>
-                    </div>
+                    </div-->
 
                     <div class="location">
                         <div class="dest">
@@ -36,10 +36,6 @@
                                 :disabled-date="setDisableDate" size="large" style="width: 370px;" @change="dateChange" />
                         </div>
 
-                        <div class="date" v-if="radio == 2">
-                            <el-date-picker v-model="dateValue2" type="daterange" start-placeholder="出发日期"
-                                end-placeholder="返回日期" :disabled-date="setDisableDate" size="large" />
-                        </div>
                     </div>
                 </div>
 
@@ -49,99 +45,6 @@
             </div>
 
             <div v-if="showFlight">
-                <div v-if="radio == 2" class="tabs_container">
-                    <el-tabs v-model="activeName" type="border-card" class="tabs">
-                        <el-tab-pane name="go" label="选择去程" class="tab_label">
-                            <div v-if="hasGoFlight">
-                                <div v-for="flight in flightListGo" :key="flight.id" class="ticket">
-                                    <div class="itemBox">
-                                        <div class="subItemBox">
-                                            <p class="companyName">{{ flight.companyName }}</p>
-                                            <p class="flightName">{{ flight.flightName }}</p>
-                                        </div>
-
-                                        <div class="subItemBox2">
-                                            <div class="sub_subItemBox">
-                                                <p class="departureTime">{{ flight.departureTime }}</p>
-                                                <p class="departureLocation">{{ flight.departureLocation }}</p>
-                                            </div>
-
-                                            <div class="sub_subItemBox">
-                                                <img src="@/assets/flights.png"
-                                                    style="height: 25px; width: 25px; margin: 20px;" />
-                                            </div>
-
-                                            <div class="sub_subItemBox">
-                                                <p class="landingTime">{{ flight.landingTime }}</p>
-                                                <p class="landingLocation">{{ flight.landingLocation }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="totalTime">{{ flight.totalTime }}</div>
-
-                                        <div class="priceBox">
-                                            <p style="font-size: 15px; margin: 5px; color: rgb(255, 149, 20);">￥</p>
-                                            <p class="price">{{ flight.price }}</p>
-                                            <p style="font-size: 10px; margin: 5px;">起</p>
-                                        </div>
-
-
-                                        <el-button class="confirm_btn" @click="chooseGo(flight.id)">选择去程</el-button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <el-empty description="没有相关机票" :image="plane" />
-                            </div>
-                        </el-tab-pane>
-
-                        <el-tab-pane name="back" label="选择返程" class="tab_label" :disabled="disabled">
-                            <div v-if="hasBackFlight">
-                                <div v-for="flight in flightListBack" :key="flight.id" class="ticket">
-                                    <div class="itemBox">
-                                        <div class="subItemBox">
-                                            <p class="companyName">{{ flight.companyName }}</p>
-                                            <p class="flightName">{{ flight.flightName }}</p>
-                                        </div>
-
-                                        <div class="subItemBox2">
-                                            <div class="sub_subItemBox">
-                                                <p class="departureTime">{{ flight.departureTime }}</p>
-                                                <p class="departureLocation">{{ flight.departureLocation }}</p>
-                                            </div>
-
-                                            <div class="sub_subItemBox">
-                                                <img src="@/assets/flights.png"
-                                                    style="height: 25px; width: 25px; margin: 20px;" />
-                                            </div>
-
-                                            <div class="sub_subItemBox">
-                                                <p class="landingTime">{{ flight.landingTime }}</p>
-                                                <p class="landingLocation">{{ flight.landingLocation }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="totalTime">{{ flight.totalTime }}</div>
-
-                                        <div class="priceBox">
-                                            <p style="font-size: 15px; margin: 5px; color: rgb(255, 149, 20);">￥</p>
-                                            <p class="price">{{ flight.price }}</p>
-                                            <p style="font-size: 10px; margin: 5px;">起</p>
-                                        </div>
-
-
-                                        <el-button class="confirm_btn" @click="orderTicket(flight.id)">选择机票</el-button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <el-empty description="没有相关机票" :image="plane" />
-                            </div>
-
-
-                        </el-tab-pane>
-                    </el-tabs>
-                </div>
 
                 <div v-if="radio == 1">
                     <el-tabs v-model="activeName" type="border-card" class="tabs">
@@ -179,8 +82,6 @@
                                             <p style="font-size: 10px; margin: 5px;">起</p>
                                         </div>
 
-
-                                        <el-button class="confirm_btn" @click="orderTicket(flight.id)">选择机票</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -257,6 +158,7 @@ export default {
             this.flightListGo.length = 0;
             var month1 = "";
             var month2 = "";
+            this.$message.success(this.from);
             // var totalTime = "";
             if (this.radio == 2) {
                 this.dateValue1 = this.dateValue2[0];

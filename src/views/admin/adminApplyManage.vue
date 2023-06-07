@@ -76,27 +76,6 @@
                                     <el-input v-model="recordForm.location" placeholder="请输入设备位置"></el-input>
                                 </el-form-item>
 
-                                
-                                <el-form-item label="设备图片"
-                                    :rules="[
-                                    {
-                                    required: true,
-                                    message: '请上传运行效果',
-                                    trigger: 'blur',
-                                    },
-                                    ]"
-                                >
-                                    <el-upload
-                                        :file-list="fileList"
-                                        list-type="picture-card"
-                                        :auto-upload="false"
-                                        :on-change="handleChange"
-                                        :on-remove="handleRemove"
-                                    >
-                                    <el-icon><Plus /></el-icon>
-                                    </el-upload>
-                                </el-form-item>
-
                                 <div class="button">
                                     <el-button @click="addRecord" class="button" type="primary">添加报修申请</el-button>
                                 </div>
@@ -104,41 +83,38 @@
                         </div>
                 </el-tab-pane>
                 <el-tab-pane label="查看保修申请" name="second">
-                    <span>对于处理意见,0为同意,1为拒绝,2为未处理</span>
                     <el-table :data="recordList" stripe style="width: 100%">
                             <el-table-column prop="recordid" label="报修申请ID" width="120" />
                             <el-table-column prop="devicename" label="设备名称" width="120"/>
-                            <el-table-column prop="deviceinfo" label="设备情况" width="120"/>
-                            <el-table-column prop="devicepicture" label="设备照片" width="120">
-                                <img :src="devicepicture" alt="" />
-                            </el-table-column>    
+                            <el-table-column prop="deviceinfo" label="设备情况" width="120"/> 
                             <el-table-column prop="location" label="设备位置" width="120"/>
                             <el-table-column prop="approved" label="处理意见" width="120" />
+                            <el-table-column fixed="right" label="Opeations" width="120">
+                                <template #default="scope">
+                                    <el-button link type="primary" style="margin-left: 16px" size="small" @click="openRecordDiager(scope.row)" v-if="positionpost== 0">审核报修申请</el-button>
+                                    <el-button link type="primary" style="margin-left: 16px" size="small" @click="deleteRecord(scope.row)">删除报修申请</el-button>
+                                </template>
+                            </el-table-column>
                     </el-table>
                     <div class="button">
                         <el-button @click="checkRecord" class="button" type="primary">查看报修请求</el-button>
                     </div>
-                </el-tab-pane>
-                <el-tab-pane label="审核保修申请" name="third" v-if="positionpost=='0'">
-                    <div class="goods"  @keyup.enter="keyPressed">
-                            <h4>审核报修申请</h4>
-                            <el-form :model="recordForm" label-width="100px" status-icon="true">
-
-                                <el-form-item label="申请id" class="login_input_box" prop="recordid">
-                                    <el-input v-model="recordForm.recordid" placeholder="请输入申请ID"></el-input>
-                                </el-form-item>
-
-                                <el-form-item label="审核意见" class="login_input_box" prop="deviceinfo">
-                                    <el-select v-model="recordForm.approved" class="m-2" placeholder="Select">
-                                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"/>
-                                    </el-select>
-                                </el-form-item>
-
-                                <div class="button">
-                                    <el-button @click="solveRecord" class="button" type="primary">审核报修申请</el-button>
-                                </div>
-                            </el-form>
-                        </div>
+                    <el-drawer
+                        v-model="drawer"
+                        title="审核报修申请"
+                        :direction="direction"
+                        >
+                        <el-form :model="recordForm" label-width="100px" status-icon="true">
+                            <el-form-item label="审核意见" class="login_input_box" prop="deviceinfo">
+                                <el-select v-model="recordForm.approved" class="m-2" placeholder="Select">
+                                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"/>
+                                </el-select>
+                            </el-form-item>
+                            <div class="button">
+                                <el-button @click="solveRecord" class="button" type="primary">审核报修申请</el-button>
+                            </div>
+                        </el-form>
+                    </el-drawer>    
                 </el-tab-pane>
                 <el-tab-pane label="查看入驻申请" name="fourth">
                     <el-table :data="requestList" stripe style="width: 100%">
@@ -147,46 +123,33 @@
                             <el-table-column prop="idnumber" label="商户身份证号" width="120"/>
                             <el-table-column prop="shopname" label="商店名称" width="120"/>
                             <el-table-column prop="email" label="商户邮箱" width="120"/>
+                            <el-table-column fixed="right" label="Opeations" width="120">
+                                <template #default="scope">
+                                    <el-button link type="primary" style="margin-left: 16px" size="small" @click="openRequestDiager(scope.row)" v-if="positionpost== 0">审核报修申请</el-button>
+                                </template>
+                            </el-table-column>
                     </el-table>
                     <div class="button">
                         <el-button @click="checkRequest" class="button" type="primary">查看入驻请求</el-button>
                     </div>
-                </el-tab-pane>
-                <el-tab-pane label="审核入驻申请" name="fifth" v-if="positionpost=='0'">
-                    <div class="goods"  @keyup.enter="keyPressed">
-                            <h4>审核入驻申请</h4>
-                            <el-form :model="requestForm" label-width="100px" status-icon="true">
+                    <el-drawer
+                        v-model="drawer2"
+                        title="审核入驻申请"
+                        :direction="direction"
+                        >
+                        <el-form :model="requestForm" label-width="100px" status-icon="true">
 
-                                <el-form-item label="申请id" class="login_input_box" prop="requestid">
-                                    <el-input v-model="requestForm.requestid" placeholder="请输入申请ID"></el-input>
-                                </el-form-item>
+                            <el-form-item label="审核意见" class="login_input_box" prop="deviceinfo">
+                                <el-select v-model="requestForm.approved" class="m-2" placeholder="Select">
+                                    <el-option v-for="item in newoptions" :key="item.value" :label="item.label" :value="item.value"/>
+                                </el-select>
+                            </el-form-item>
 
-                                <el-form-item label="审核意见" class="login_input_box" prop="deviceinfo">
-                                    <el-select v-model="requestForm.approved" class="m-2" placeholder="Select">
-                                        <el-option v-for="item in newoptions" :key="item.value" :label="item.label" :value="item.value"/>
-                                    </el-select>
-                                </el-form-item>
-
-                                <div class="button">
-                                    <el-button @click="solveRequest" class="button" type="primary">审核报修申请</el-button>
-                                </div>
-                            </el-form>
-                        </div>
-                </el-tab-pane>
-                <el-tab-pane label="删除保修申请" name="sixth">
-                    <div class="goods"  @keyup.enter="keyPressed">
-                            <h4>删除报修申请</h4>
-                            <el-form :model="recordForm" label-width="100px" status-icon="true">
-
-                                <el-form-item label="申请id" class="login_input_box" prop="recordid">
-                                    <el-input v-model="recordForm.recordid" placeholder="请输入申请ID"></el-input>
-                                </el-form-item>
-
-                                <div class="button">
-                                    <el-button @click="deleteRecord" class="button" type="primary">审核报修申请</el-button>
-                                </div>
-                            </el-form>
-                        </div>
+                            <div class="button">
+                                <el-button @click="solveRequest" class="button" type="primary">审核入驻申请</el-button>
+                            </div>
+                        </el-form>
+                    </el-drawer>  
                 </el-tab-pane>
                 <el-tab-pane label="查看财务报表" name="seventh">
                     
@@ -201,6 +164,8 @@
   <script>
 import { ElMessage } from 'element-plus';
   import qs from 'qs';
+import { ref } from 'vue';
+  const direction = ref("btt");
   const position = window.localStorage.getItem("positionpost");
   //import companyChange from '@/components/companyChange.vue';
   //import { useStore } from 'vuex';
@@ -209,6 +174,9 @@ import { ElMessage } from 'element-plus';
     data() {
     
         return {
+            direction: direction,
+            drawer: false,
+            drawer2: false,
             positionpost: position,
 
             options:[
@@ -270,6 +238,38 @@ import { ElMessage } from 'element-plus';
         }
     },
     methods:{
+        openRecordDiager(row){
+            if(!row.recordid)
+            {
+                ElMessage({
+                        type: 'error',
+                        message: "报修申请信息不存在",
+                        duration: 2000,
+                    })
+            }
+            else
+            {
+                this.drawer = true;
+                window.localStorage.setItem("recordid", row.recordid);
+            }
+        },
+
+        openRequestDiager(row){
+            if(!row.requestid)
+            {
+                ElMessage({
+                        type: 'error',
+                        message: "入驻申请信息不存在",
+                        duration: 2000,
+                    })
+            }
+            else
+            {
+                this.drawer2 = true;
+                window.localStorage.setItem("requestid", row.requestid);
+            }
+        },
+
         checkRecord(){
                 const admintoken = window.localStorage.getItem("admintoken");
                 this.$http({
@@ -317,16 +317,15 @@ import { ElMessage } from 'element-plus';
             
 
         solveRecord(){
-            if(!(!this.recordForm.recordid || !this.recordForm.approved))
-            {
                     const admintoken = window.localStorage.getItem("admintoken");
+                    const recordid = window.localStorage.getItem("recordid");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
                         url: "/staff/examinerepairrecord" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:admintoken,
-                            recordid: this.recordForm.recordid,
+                            recordid: recordid,
                             approved: this.recordForm.approved,
                         }),
                     })
@@ -340,28 +339,19 @@ import { ElMessage } from 'element-plus';
                             this.$message.success(res.data.message);
                         }
                     });
-            }
-            else
-            {
-              ElMessage({
-                        type: 'error',
-                        message: "请完成输入",
-                        duration: 2000,
-                    })
-            }
+            
         },
 
         solveRequest(){
-            if(this.requestForm.requestid)
-            {
                     const admintoken = window.localStorage.getItem("admintoken");
+                    const requestid = window.localStorage.getItem("requestid")
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
                         url: "/staff/examinemerchantrequest" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:admintoken,
-                            requestid: this.requestForm.requestid,
+                            requestid: requestid,
                             approved: this.requestForm.approved,
                         }),
                     })
@@ -375,28 +365,17 @@ import { ElMessage } from 'element-plus';
                             this.$message.success(res.data.message);
                         }
                     });
-            }
-            else
-            {
-              ElMessage({
-                        type: 'error',
-                        message: "请完成输入",
-                        duration: 2000,
-                    })
-            }
-        },
+            },
 
-        deleteRecord(){
-            if(this.recordForm.recordid)
-            {
+        deleteRecord(row){
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/staff/examinemerchantrequest" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        url: "/staff/removerepairrecord" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:admintoken,
-                            recordid: this.recordForm.recordid,
+                            recordid: row.recordid,
                         }),
                     })
                     .then((res) => {
@@ -409,15 +388,7 @@ import { ElMessage } from 'element-plus';
                             this.$message.success(res.data.message);
                         }
                     });
-            }
-            else
-            {
-              ElMessage({
-                        type: 'error',
-                        message: "请完成输入",
-                        duration: 2000,
-                    })
-            }
+            
         },
 
         addRecord(){
@@ -426,14 +397,14 @@ import { ElMessage } from 'element-plus';
                     const admintoken = window.localStorage.getItem("admintoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
-                        url: "/staff/examinemerchantrequest" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        url: "/staff/addrepairrecord" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:admintoken,
                             devicename: this.recordForm.devicename,
                             deviceinfo: this.recordForm.deviceinfo,
-                            devicepicture: "",
                             location: this.recordForm.location,
+                            devicepicture: "",
                         }),
                     })
                     .then((res) => {
@@ -457,10 +428,7 @@ import { ElMessage } from 'element-plus';
             }
         },
 
-        addPicture(){
-
-        }
-        }
+    }
     }
   
   

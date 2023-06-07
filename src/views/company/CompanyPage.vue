@@ -25,34 +25,21 @@
                   <el-icon><location /></el-icon>
                   <span>航班管理</span>
                 </template>
-                <el-menu-item index="/company/checkflight">查看航班信息</el-menu-item>
-                <el-menu-item index="/company/addflight">添加航班信息</el-menu-item>
-                <el-menu-item index="/company/changeflight">修改航班信息</el-menu-item>
-                <el-menu-item index="/company/deleteflight">删除航班信息</el-menu-item>
+                <el-menu-item index="/company/manage">查看航班信息</el-menu-item>
               </el-sub-menu>
               <el-sub-menu index="2">
-                <template #title>
-                  <el-icon><document /></el-icon>
-                  <span>机票管理</span>
-                </template>
-                <el-menu-item index="/company/checkticket">查看机票信息</el-menu-item>
-                <el-menu-item index="/company/addticket">添加机票信息</el-menu-item>
-                <el-menu-item index="/company/changeticket">修改机票信息</el-menu-item>
-                <el-menu-item index="/company/deleteticket">删除机票信息</el-menu-item>
-              </el-sub-menu>
-              <el-sub-menu index="3">
                   <template #title>
                     <el-icon><PieChart /></el-icon>
                     <span>个人中心</span>
                   </template>
                   <el-menu-item index="/company/selfmanage">个人中心</el-menu-item>
                 </el-sub-menu>
-              <el-sub-menu index="4">
+              <el-sub-menu index="3">
                 <template #title>
                     <el-icon><HomeFilled /></el-icon>
                   <span>退出登录</span>
                 </template>
-                <el-menu-item index="/">退出登录</el-menu-item>
+                <el-menu-item @click="returnHome">退出登录</el-menu-item>
               </el-sub-menu> 
             </el-menu>
           </el-aside>  
@@ -88,6 +75,12 @@ export default{
         return {
             time: ret,
         }
+    },
+
+    methods:{
+      returnHome(){
+        this.$router.push("/");
+      }
     }
 }
 

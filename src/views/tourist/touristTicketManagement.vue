@@ -60,13 +60,13 @@
                     <el-icon><HomeFilled /></el-icon>
                   <span>退出登录</span>
                 </template>
-                <el-menu-item index="/">退出登录</el-menu-item>
+                <el-menu-item @click="returnHome">退出登录</el-menu-item>
               </el-sub-menu> 
             </el-menu>
           </el-aside>  
           <el-main>
             <el-tabs tab-position="left" class="card">
-                <el-tab-pane label="查询航班信息" name="first">
+                <el-tab-pane label="购票服务" name="first">
                     <div class="Ticket"  @keyup.enter="keyPressed">
                         <h4>查询航班信息</h4>
                         <el-form :model="Flightform" label-width="70px">
@@ -98,51 +98,54 @@
                         <el-table-column prop="landingtime" label="降落时间" width="120"/>
                         <el-table-column prop="departuregate" label="登机口" width="120"/>
                         <el-table-column prop="terminal" label="航站楼" width="120"/>
-                    </el-table>           
+                        <el-table-column fixed="right" label="Opeations" width="120">
+                            <template #default="scope">
+                                <el-button link type="primary" size="small" @click="openFlightDrawer(scope.row)">查看航班机票</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-drawer
+                        v-model="drawer"
+                        title="航班机票"
+                        :direction="direction"
+                        size="50%"
+                    >
+                        <el-table :data="TicketList" stripe style="width: 100%">
+                            <el-table-column prop="flightid" label="航班ID" width="120" />
+                            <el-table-column prop="ticketid" label="机票ID" width="120" />
+                            <el-table-column prop="price" label="机票价格" width="120"/>
+                            <el-table-column prop="tickettype" label="机票类型" width="120"/>
+                            <el-table-column prop="amount" label="机票数量" width="120"/>
+                            <el-table-column fixed="right" label="Opeations" width="120">
+                                <template #default="scope">
+                                    <el-button link type="primary" size="small" @click="openTicketDrawer(scope.row)">购买航班机票</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                        <el-drawer
+                        v-model="drawer2"
+                        title="实名信息"
+                        :direction="direction"
+                        size="50%"
+                        >
+                            <el-table :data="InformationList" stripe style="width: 100%">
+                                <el-table-column prop="personid" label="实名信息ID" width="120" />
+                                <el-table-column prop="touristid" label="旅客ID" width="120"/>
+                                <el-table-column prop="realname" label="真实姓名" width="120"/>
+                                <el-table-column prop="idnumber" label="身份证号" width="300"/>
+                                <el-table-column prop="email" label="联系方式" width="200"/>
+                                <el-table-column fixed="right" label="Opeations" width="120">
+                                    <template #default="scope">
+                                        <el-button link type="primary" size="small" @click="buyTicket(scope.row)">购票</el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-drawer>
+                        
+                    </el-drawer>
                 </el-tab-pane>
-                <el-tab-pane label="查询航班机票" name="second">
-                    <div class="Ticket"  @keyup.enter="keyPressed">
-                        <h4>查询航班机票</h4>
-                        <el-form :model="Flightform" label-width="70px">
-
-                            <el-form-item label="航班ID" class="login_input_box" prop="TouristId">
-                                    <el-input v-model="Flightform.FlightId" placeholder="请输入航班ID"></el-input>
-                                </el-form-item>
-
-                            <div class="button">
-                                <el-button @click="touristCheckFlightTicket" class="submit_btn" type="primary">查询航班信息</el-button>
-                            </div>
-                        </el-form>
-                    </div>
-                    <el-table :data="TicketList" stripe style="width: 100%">
-                        <el-table-column prop="flightid" label="航班ID" width="120" />
-                        <el-table-column prop="ticketid" label="机票ID" width="120" />
-                        <el-table-column prop="price" label="机票价格" width="120"/>
-                        <el-table-column prop="tickettype" label="机票类型" width="120"/>
-                        <el-table-column prop="amount" label="机票数量" width="120"/>
-                    </el-table> 
-                </el-tab-pane>
-                <el-tab-pane label="购买机票" name="third">
-                    <div class="Ticket"  @keyup.enter="keyPressed">
-                        <h4>购买航班机票</h4>
-                        <el-form :model="TicketFrom" label-width="100px">
-
-                            <el-form-item label="机票ID" class="login_input_box" prop="TouristId">
-                                <el-input v-model="TicketFrom.TicketId" placeholder="请输入机票ID"></el-input>
-                            </el-form-item>
-
-                            <el-form-item label="实名信息ID" class="login_input_box" prop="personid">
-                                <el-input v-model="TicketFrom.personid" placeholder="请输入实名信息ID"></el-input>
-                            </el-form-item>
-
-                            <div class="button">
-                                <el-button @click="touristBuyTicket" class="submit_btn" type="primary">购买航班机票</el-button>
-                            </div>
-                        </el-form>
-                    </div>
-                </el-tab-pane>
-                <el-tab-pane label="列出已购机票" name="fourth">
-                    <el-table :data="RecordList" stripe style="width: 100%">
+                <el-tab-pane label="已购机票" name="fourth">
+                    <el-table :data="RecordList" stripe style="width: fit-content">
                         <el-table-column prop="orderid" label="订单ID" width="120" />
                         <el-table-column prop="flightname" label="航班名称" width="120" />
                         <el-table-column prop="companyname" label="公司名称" width="120"/>
@@ -154,84 +157,43 @@
                         <el-table-column prop="realname" label="真实姓名" width="120"/>
                         <el-table-column prop="seatinfo" label="座位信息" width="120"/>
                         <el-table-column prop="tickettype" label="机票类型" width="120"/>
+                        <el-table-column fixed="right" label="Opeations" width="120">
+                            <template #default="scope">
+                                <el-button link type="primary" style="margin-left: 16px" size="small" @click="touristCancelTicket(scope.row)">退票</el-button>
+                                <el-button link type="primary" style="margin-left: 16px" size="small" @click="openLuggageDraer(scope.row)">查看行李信息</el-button>
+                                <el-button link type="primary" style="margin-left: 16px" size="small" @click="openSeatDraer(scope.row)">选择座位信息</el-button>
+                            </template>
+                        </el-table-column>    
                     </el-table> 
                     <div class="button">
                         <el-button @click="touristCheckTicket" class="submit_btn" type="primary">列出已购机票</el-button>
                     </div>
-
-
-                </el-tab-pane>
-                <el-tab-pane label="退票" name="fifth">
-                    <div class="Ticket"  @keyup.enter="keyPressed">
-                        <h4>退票</h4>
-                        <el-form :model="RecordForm" label-width="100px">
-
-                            <el-form-item label="订单ID" class="login_input_box" prop="orderid">
-                                <el-input v-model="RecordForm.orderid" placeholder="请输入订单ID"></el-input>
-                            </el-form-item>
-
-                            <div class="button">
-                                <el-button @click="touristCancelTicket" class="submit_btn" type="primary">退票</el-button>
-                            </div>
-                        </el-form>
-                    </div>
-                </el-tab-pane>
-                <el-tab-pane label="列出空闲座位" name="sixth">
-                    <div class="Ticket"  @keyup.enter="keyPressed">
-                        <h4>列出空闲座位</h4>
-                        <el-form :model="RecordForm" label-width="100px">
-
-                            <el-form-item label="订单ID" class="login_input_box" prop="TouristId">
-                                <el-input v-model="RecordForm.orderid" placeholder="请输入订单ID"></el-input>
-                            </el-form-item>
-
-                            <div class="button">
-                                <el-button @click="touristCheckSeat" class="submit_btn" type="primary">列出空闲座位</el-button>
-                            </div>
-                        </el-form>
-                    </div>
-                    <el-table :data="SeatList" style="width: 100%" :row-class-name="tableRowClassName">
-                        <el-table-column prop="seatid" label="座位ID" width="120" />
-                    </el-table> 
-                </el-tab-pane>
-                <el-tab-pane label="选择机票座位" name="seventh">
-                    <div class="Ticket"  @keyup.enter="keyPressed">
-                        <h4>选择机票座位</h4>
-                        <el-form :model="SeatForm" label-width="100px">
-
-                            <el-form-item label="订单ID" class="login_input_box" prop="TouristId">
-                                <el-input v-model="SeatForm.orderid" placeholder="请输入订单ID"></el-input>
-                            </el-form-item>
-
-                            <el-form-item label="座位ID" class="login_input_box" prop="TouristId">
-                                <el-input v-model="SeatForm.seatid" placeholder="请输入座位ID"></el-input>
-                            </el-form-item>
-
-                            <div class="button">
-                                <el-button @click="touristChooseSeat" class="submit_btn" type="primary">选择机票座位</el-button>
-                            </div>
-                        </el-form>
-                    </div>
-                </el-tab-pane>
-                <el-tab-pane label="查看行李信息" name="eighth">
-                    <div class="Ticket"  @keyup.enter="keyPressed">
-                        <h4>查看行李信息</h4>
-                        <el-form :model="RecordForm" label-width="100px">
-
-                            <el-form-item label="订单ID" class="login_input_box" prop="TouristId">
-                                <el-input v-model="RecordForm.orderid" placeholder="请输入订单ID"></el-input>
-                            </el-form-item>
-
-                            <div class="button">
-                                <el-button @click="touristCheckLuggage" class="submit_btn" type="primary">查看行李信息</el-button>
-                            </div>
-                        </el-form>
-                    </div>
-                    <el-table :data="LuggageList" style="width: 100%">
-                        <el-table-column prop="luggageid" label="行李id" width="120" />
-                        <el-table-column prop="state" label="行李状态" width="120" />
-                        <el-table-column prop="location" label="行李位置" width="120" />
-                    </el-table> 
+                    
+                    <el-drawer
+                        v-model="drawer"
+                        title="行李信息"
+                        :direction="direction"
+                    >
+                        <el-table :data="LuggageList" style="width: 100%">
+                            <el-table-column prop="luggageid" label="行李id" width="120" />
+                            <el-table-column prop="state" label="行李状态" width="120" />
+                            <el-table-column prop="location" label="行李位置" width="120" />
+                        </el-table>
+                    </el-drawer>
+                    <el-drawer
+                        v-model="drawer3"
+                        title="座位信息"
+                        :direction="direction"
+                    >
+                        <el-table :data="SeatList" style="width: 100%" :row-class-name="tableRowClassName">
+                            <el-table-column prop="seatid" label="座位ID" width="120" />
+                            <el-table-column fixed="right" label="Opeations" width="120">
+                            <template #default="scope">
+                                <el-button link type="primary" style="margin-left: 16px" size="small" @click="touristChooseSeat(scope.row)">选择座位信息</el-button>
+                            </template>
+                        </el-table-column>  
+                        </el-table>
+                    </el-drawer>
                 </el-tab-pane>
             </el-tabs>
           </el-main>
@@ -245,10 +207,18 @@
   //import { useStore } from 'vuex';
   import { ElMessage } from 'element-plus';
   import qs from 'qs';
+  import { ref } from 'vue'
+
+  const direction = ref('btt');
   export default{
   //
     data() {
         return {
+            drawer: false,
+            direction: direction,
+            drawer2: false,
+            drawer3: false,
+
             FlightList:[
             {
                 FlightId: "",
@@ -342,6 +312,14 @@
                 ticketid: "",
                 state: "",
                 location: "",
+            }],
+
+            InformationList:[{
+                TIID:"",
+                TouristId: "",
+                RealName: "",
+                IDNumber: "",
+                Email: "",
             }]
 
         }
@@ -349,6 +327,9 @@
     },
     
     methods:{
+        returnHome(){
+            this.$router.push("/");
+        },
         touristCheckFlight(){
             const touristtoken = window.localStorage.getItem("touristtoken");
             this.$http({
@@ -374,60 +355,78 @@
             });
         },
 
-        touristCheckFlightTicket(){
-            if(!this.Flightform.FlightId)
+        openFlightDrawer(row){
+            if(!row.flightid)
             {
                 ElMessage({
-                        type: 'error',
-                        message: "航班ID不能为空",
-                        duration: 2000,
-                    })
+                    type: 'error',
+                    message: "航班信息为空",
+                    duration: 2000,
+                })
             }
             else
             {
-                const touristtoken = window.localStorage.getItem("touristtoken");
-                this.$http({
-                    method: "post" /* 指明请求方式，可以是 get 或 post */,
-                    url: "/tourist/listticket" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
-                    data: qs.stringify({
-                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                        token:touristtoken,
-                        flightid: this.Flightform.FlightId
-                    }),
+                this.drawer = true;
+                this.touristCheckFlightTicket_test(row);  
+            }
+            
+        },
+        
+        openTicketDrawer(row){
+            if(!row.ticketid)
+            {
+                ElMessage({
+                    type: 'error',
+                    message: "机票信息为空",
+                    duration: 2000,
                 })
-                .then((res) => {
-                    /* res 是 response 的缩写 */
-                    console.log(res.data);
-                    if(!res.data.success){
-                        this.$message.error(res.data.message);
-                    }
-                    else{
-                        this.TicketList = res.data.message;
-                    }
-                }); 
+            }
+            else
+            {
+                this.drawer2 = true;
+                window.localStorage.setItem("ticketid", row.ticketid);
+                this.checkSelfInformation();  
+            }
+            
+        },
+
+        openSeatDraer(row){
+            if(!row.orderid)
+            {
+                ElMessage({
+                    type: 'error',
+                    message: "机票信息为空",
+                    duration: 2000,
+                })
+            }
+            else
+            {
+                this.drawer3 = true;
+                this.touristCheckSeat(row);
             }
         },
 
-        touristBuyTicket(){
-            if(!this.TicketFrom.TicketId || !this.TicketFrom.personid)
+        buyTicket(row){
+            if(!row.personid)
             {
                 ElMessage({
-                        type: 'error',
-                        message: "机票ID或实名信息ID不能为空",
-                        duration: 2000,
-                    })
+                    type: 'error',
+                    message: "机票信息为空",
+                    duration: 2000,
+                })
             }
             else
             {
                 const touristtoken = window.localStorage.getItem("touristtoken");
+                const ticketid = window.localStorage.getItem("ticketid");
                 this.$http({
                     method: "post" /* 指明请求方式，可以是 get 或 post */,
                     url: "/tourist/purchaseflight" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                     data: qs.stringify({
                     /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                         token:touristtoken,
-                        ticketid: this.TicketFrom.TicketId,
-                        personidlist: this.TicketFrom.personid + "&",
+                        ticketid: ticketid,
+                        personidlist: row.personid,
                     }),
                 })
                 .then((res) => {
@@ -442,6 +441,69 @@
                 }); 
             }
         },
+
+        checkSelfInformation(){
+            const touristtoken = window.localStorage.getItem("touristtoken");
+            this.$http({
+                method: "post" /* 指明请求方式，可以是 get 或 post */,
+                url: "/tourist/listperson" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                data: qs.stringify({
+                /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    token:touristtoken
+                }),
+            })
+            .then((res) => {
+                /* res 是 response 的缩写 */
+                console.log(res.data);
+                if(!res.data.success){
+                    this.$message.error(res.data.message);
+                }
+                else{
+                    this.InformationList = res.data.message;
+                }
+            });
+        },
+
+
+
+        touristCheckFlightTicket_test(row){
+            const touristtoken = window.localStorage.getItem("touristtoken");
+                this.$http({
+                    method: "post" /* 指明请求方式，可以是 get 或 post */,
+                    url: "/tourist/listticket" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                    data: qs.stringify({
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                        token:touristtoken,
+                        flightid: row.flightid
+                    }),
+                })
+                .then((res) => {
+                    /* res 是 response 的缩写 */
+                    console.log(res.data);
+                    if(!res.data.success){
+                        this.$message.error(res.data.message);
+                    }
+                    else{
+                        this.TicketList = res.data.message;
+                    }
+                });
+        },
+
+        openLuggageDraer(row){
+            if(!row.orderid)
+            {
+                ElMessage({
+                    type: 'error',
+                    message: "机票信息为空",
+                    duration: 2000,
+                })
+            }
+            else
+            {
+                this.drawer = true;
+                this.touristCheckLuggage(row);
+            }
+        }, 
 
         touristCheckTicket(){
             const touristtoken = window.localStorage.getItem("touristtoken");
@@ -465,8 +527,8 @@
             }); 
         },
 
-        touristCancelTicket(){
-            if(!this.RecordForm.orderid)
+        touristCancelTicket(row){
+            if(!row.orderid)
             {
                 ElMessage({
                         type: 'error',
@@ -483,7 +545,7 @@
                     data: qs.stringify({
                     /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                         token:touristtoken,
-                        orderid: this.RecordForm.orderid,
+                        orderid: row.orderid,
                     }),
                 })
                 .then((res) => {
@@ -499,25 +561,15 @@
             }
         },
 
-        touristCheckSeat(){
-            if(!this.RecordForm.orderid)
-            {
-                ElMessage({
-                        type: 'error',
-                        message: "订单ID不能为空",
-                        duration: 2000,
-                    })
-            }
-            else
-            {
+        touristCheckSeat(row){
                 const touristtoken = window.localStorage.getItem("touristtoken");
                 this.$http({
                     method: "post" /* 指明请求方式，可以是 get 或 post */,
-                    url: "/tourist/returnpurchase" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                    url: "/tourist/listseat" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                     data: qs.stringify({
                     /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                         token:touristtoken,
-                        orderid: this.RecordForm.orderid,
+                        orderid: row.orderid,
                     }),
                 })
                 .then((res) => {
@@ -528,10 +580,10 @@
                     }
                     else{
                         this.$message.success("绿色为座位空闲，米色为自己已买的座位");
+                        window.localStorage.setItem("orderid", row.orderid);
                         this.SeatList = res.data.message;
                     }
                 }); 
-            }
         },
 
         tableRowClassName({row}) {
@@ -550,26 +602,27 @@
             }
         },
 
-        touristChooseSeat(){
-            if(!this.SeatForm.orderid || !this.SeatForm.seatid)
+        touristChooseSeat(row){
+            if(!row.seatid)
             {
                 ElMessage({
                         type: 'error',
-                        message: "订单ID或座位ID不能为空",
+                        message: "座位ID不能为空",
                         duration: 2000,
                     })
             }
             else
             {
                 const touristtoken = window.localStorage.getItem("touristtoken");
+                const orderid = window.localStorage.getItem("orderid");
                 this.$http({
                     method: "post" /* 指明请求方式，可以是 get 或 post */,
                     url: "/tourist/selectseat" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                     data: qs.stringify({
                     /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                         token:touristtoken,
-                        orderid: this.SeatForm.orderid,
-                        seatid: this.SeatForm.seatid,
+                        orderid: orderid,
+                        seatid: row.seatid,
                     }),
                 })
                 .then((res) => {
@@ -585,41 +638,30 @@
             }
         },
 
-        touristCheckLuggage(){
-           if(!this.RecordForm.orderid)
-           {
-                ElMessage({
-                        type: 'error',
-                        message: "订单ID不能为空",
-                        duration: 2000,
-                    })
-           }
-           else
-           {
-                const touristtoken = window.localStorage.getItem("touristtoken");
-                this.$http({
-                    method: "post" /* 指明请求方式，可以是 get 或 post */,
-                    url: "/tourist/checkluggage" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
-                    data: qs.stringify({
-                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                        token:touristtoken,
-                        orderid: this.SeatForm.orderid,
-                    }),
-                })
-                .then((res) => {
-                    /* res 是 response 的缩写 */
-                    console.log(res.data);
-                    if(!res.data.success){
-                        this.$message.error(res.data.message);
-                    }
-                    else{
-                        this.LuggageList = res.data.message;
-                    }
-                });
-           } 
-        }
-
+        touristCheckLuggage(row){
+            const touristtoken = window.localStorage.getItem("touristtoken");
+            this.$http({
+                method: "post" /* 指明请求方式，可以是 get 或 post */,
+                url: "/tourist/checkluggage" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                data: qs.stringify({
+                /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    token:touristtoken,
+                    orderid: row.orderid,
+                }),
+            })
+            .then((res) => {
+                /* res 是 response 的缩写 */
+                console.log(res.data);
+                if(!res.data.success){
+                    this.$message.error(res.data.message);
+                }
+                else{
+                    this.LuggageList = res.data.message;
+                }
+            });
+        }, 
     }
+
   }
   
   </script>

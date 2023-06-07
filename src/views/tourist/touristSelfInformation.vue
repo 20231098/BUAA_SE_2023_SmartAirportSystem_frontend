@@ -73,10 +73,39 @@
                             <el-table-column prop="realname" label="真实姓名" width="120"/>
                             <el-table-column prop="idnumber" label="身份证号" width="300"/>
                             <el-table-column prop="email" label="联系方式" width="200"/>
+                            <el-table-column fixed="right" label="Opeations" width="120">
+                            <template #default="scope">
+                                <el-button link type="primary" style="margin-left: 16px" size="small" @click="openDiager(scope.row)">修改实名信息</el-button>
+                                <el-button link type="primary" style="margin-left: 16px" size="small" @click="deleteSelfInformation(scope.row)">删除实名信息</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
                     <div class="button">
                         <el-button @click="checkSelfInformation" class="submit_btn" type="primary">查询实名信息</el-button>
-                    </div>    
+                    </div>
+                    <el-drawer
+                        v-model="drawer"
+                        title="修改个人信息"
+                        :direction="direction"
+                    >
+                        <el-form :model="InformationForm" :rules="rules" ref="InformationForm" label-width="100px" status-icon="true">
+                                <el-form-item label="真实姓名" class="login_input_box" prop="RealName">
+                                    <el-input v-model="InformationForm.RealName" placeholder="请输入真实姓名"></el-input>
+                                </el-form-item>
+
+                                <el-form-item label="身份证号" class="login_input_box" prop="IDNumber">
+                                    <el-input v-model="InformationForm.IDNumber" placeholder="请输入身份证号"></el-input>
+                                </el-form-item>
+
+                                <el-form-item label="联系方式" class="login_input_box" prop="Email">
+                                    <el-input v-model="InformationForm.Email" placeholder="请输入联系方式"></el-input>
+                                </el-form-item>
+
+                                <div class="button">
+                                    <el-button @click="changeSelfInformation" class="button" type="primary">修改实名信息</el-button>
+                                </div>
+                        </el-form>
+                    </el-drawer>    
                 </el-tab-pane>
                 <el-tab-pane label="添加实名信息" name="second">
                     <div class="Addperson"  @keyup.enter="keyPressed">
@@ -101,46 +130,6 @@
                             </el-form>
                         </div>
                 </el-tab-pane>
-                <el-tab-pane label="修改实名信息" name="third">
-                    <div class="Addperson"  @keyup.enter="keyPressed">
-                            <h4>修改实名信息</h4>
-                            <el-form :model="InformationForm" :rules="rules" ref="InformationForm" label-width="100px" status-icon="true">
-                                <el-form-item label="信息ID" class="login_input_box" prop="TouristId">
-                                    <el-input v-model="InformationForm.TouristId" placeholder="请输入信息ID"></el-input>
-                                </el-form-item>
-
-                                <el-form-item label="真实姓名" class="login_input_box" prop="RealName">
-                                    <el-input v-model="InformationForm.RealName" placeholder="请输入真实姓名"></el-input>
-                                </el-form-item>
-
-                                <el-form-item label="身份证号" class="login_input_box" prop="IDNumber">
-                                    <el-input v-model="InformationForm.IDNumber" placeholder="请输入身份证号"></el-input>
-                                </el-form-item>
-
-                                <el-form-item label="联系方式" class="login_input_box" prop="Email">
-                                    <el-input v-model="InformationForm.Email" placeholder="请输入联系方式"></el-input>
-                                </el-form-item>
-
-                                <div class="button">
-                                    <el-button @click="changeSelfInformation" class="button" type="primary">修改实名信息</el-button>
-                                </div>
-                            </el-form>
-                        </div>
-                </el-tab-pane>
-                <el-tab-pane label="删除实名信息" name="fourth">
-                    <div class="Addperson"  @keyup.enter="keyPressed">
-                            <h4>删除实名信息</h4>
-                            <el-form :model="InformationForm" label-width="70px">
-                                <el-form-item label="信息ID" class="login_input_box" prop="TTID">
-                                    <el-input v-model="InformationForm.TTID" placeholder="请输入信息ID"></el-input>
-                                </el-form-item>
-
-                                <div class="button">
-                                    <el-button @click="deleteSelfInformation" class="button" type="primary">删除实名信息</el-button>
-                                </div>
-                            </el-form>
-                        </div>
-                </el-tab-pane>
             </el-tabs>
           </el-main>
         </el-container>  
@@ -152,7 +141,9 @@
   //import companyChange from '@/components/companyChange.vue';
   //import { useStore } from 'vuex';
   import { ElMessage } from 'element-plus';
+  import { ref } from 'vue';
   import qs from 'qs';
+  const direction = ref("btt"); 
   export default{
   //
     data() {
@@ -181,6 +172,8 @@
             callback(new Error('姓名只能由中英文组成，不超过30位'));
         };
         return {
+            drawer: false,
+            direction: direction,
             InformationList:[{
                 TIID:"",
                 TouristId: "",
@@ -274,28 +267,36 @@
             });
         },
 
+        openDiager(row){
+            if(!row.personid)
+            {
+                ElMessage({
+                        type: 'error',
+                        message: "个人信息不存在",
+                        duration: 2000,
+                    })
+            }
+            else
+            {
+                this.drawer = true;
+                window.localStorage.setItem("personid", row.personid);
+            }
+        },
+
         changeSelfInformation(){
             this.$refs.InformationForm.validate((vaild)=> {
                 if(vaild)
                 {
-                    if(!this.InformationForm.TouristId)
-                    {
-                        ElMessage({
-                        type: 'error',
-                        message: "信息ID不能为空",
-                        duration: 2000,
-                    })
-                    }
-                    else
-                    {
+
                         const touristtoken = window.localStorage.getItem("touristtoken");
+                        const personid = window.localStorage.getItem("personid");
                         this.$http({
                             method: "post" /* 指明请求方式，可以是 get 或 post */,
                             url: "/tourist/updateperson" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                             data: qs.stringify({
                             /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                                 token:touristtoken,
-                                personid: this.InformationForm.TouristId,
+                                personid: personid,
                                 realname: this.InformationForm.RealName,
                                 idnumber: this.InformationForm.IDNumber,
                                 email: this.InformationForm.Email
@@ -311,7 +312,6 @@
                                 this.$message.success(res.data.message);
                             }
                         }); 
-                    }
                 }
                 else
                 {
@@ -324,17 +324,7 @@
             });
         },
 
-        deleteSelfInformation(){
-            if(!this.InformationForm.TTID)
-                {
-                    ElMessage({
-                        type: 'error',
-                        message: "信息ID不能为空",
-                        duration: 2000,
-                    })
-                }
-                else
-                {
+        deleteSelfInformation(row){
                     const touristtoken = window.localStorage.getItem("touristtoken");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
@@ -342,7 +332,7 @@
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:touristtoken,
-                            personid: this.InformationForm.TTID,
+                            personid: row.personid,
                         }),
                     })
                     .then((res) => {
@@ -355,7 +345,7 @@
                             this.$message.success(res.data.message);
                         }
                     }); 
-                }
+                
         }
 
     }

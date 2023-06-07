@@ -65,7 +65,7 @@
                             </el-form-item>
 
                             <el-form-item label="联系方式" class="login_input_box" prop="email">
-                                <el-input v-model="SelfForm.email" placeholder="请输入联系方式"></el-input>
+                                <el-input v-model="SelfForm.newemail" placeholder="请输入联系方式"></el-input>
                             </el-form-item>
 
                             <div class="button">
@@ -199,7 +199,7 @@
                             token:merchanttoken,
                             shopname: this.SelfForm.shopname,
                             idnumber: this.SelfForm.idnumber,
-                            email: this.SelfForm.email,
+                            email: this.SelfForm.newemail,
                         }),
                     })
                     .then((res) => {

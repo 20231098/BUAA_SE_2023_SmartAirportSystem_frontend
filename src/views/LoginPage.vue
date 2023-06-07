@@ -175,13 +175,13 @@ export default {
                         this.$message.error(res.data.message);
                     }
                     else {
-                        //this.$message.success(res.data.message);
+                        this.$message.success(res.data.message);
                         /* 将后端返回的 user 信息使用 vuex 存储起来 */
                         this.$isLogin = true;
                         this.$loginType = "admin";
                         window.localStorage.setItem("admintoken", res.data.token);
                         window.localStorage.setItem("positionpost", res.data.positionpost);
-                        this.$message.success(res.data.positionpost)
+                        //this.$message.success(res.data.positionpost)
                         //登录成功后跳转到about页面
                         setTimeout(() => { this.$router.push("/admin") }, 1000);
                     }

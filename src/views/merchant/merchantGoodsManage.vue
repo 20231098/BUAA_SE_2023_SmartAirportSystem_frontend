@@ -58,10 +58,41 @@
                         <el-table-column prop="name" label="商品名称" width="120" />
                         <el-table-column prop="price" label="价格" width="120"/>
                         <el-table-column prop="counts" label="库存数量" width="120"/>
+                        <el-table-column fixed="right" label="Opeations" width="120">
+                            <template #default="scope">
+                                <el-button link type="primary" style="margin-left: 16px" size="small" @click="openGoodsDiager(scope.row)">修改商品信息</el-button>
+                                <el-button link type="primary" style="margin-left: 16px" size="small" @click="deleteGoods(scope.row)">删除商品信息</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
                     <div class="button">
                         <el-button @click="checkGoods" class="submit_btn" type="primary">查询商户商品</el-button>
                     </div>
+
+                    <el-drawer
+                        v-model="drawer"
+                        title="添加商品订单"
+                        :direction="direction"
+                    >
+                        <el-form :model="goodsForm" :rules="goodsrules" label-width="100px" status-icon="true">
+
+                            <el-form-item label="商品名称" class="login_input_box" prop="name">
+                                <el-input v-model="goodsForm.name" placeholder="请输入商品名称"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="库存数量" class="login_input_box" prop="count">
+                                <el-input v-model="goodsForm.count" placeholder="请输入库存数量"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="价格" class="login_input_box" prop="price">
+                                <el-input v-model="goodsForm.price" placeholder="请输入商品价格"></el-input>
+                            </el-form-item>
+
+                            <div class="button">
+                                <el-button @click="changeGoods" class="button" type="primary">修改商品信息</el-button>
+                            </div>
+                        </el-form>
+                    </el-drawer>
                 </el-tab-pane>
                 <el-tab-pane label="添加商品信息" name="second">
                     <div class="Goods"  @keyup.enter="keyPressed">
@@ -86,48 +117,6 @@
                         </el-form>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="修改商品信息" name="third">
-                    <div class="Goods"  @keyup.enter="keyPressed">
-                        <h4>修改商品信息</h4>
-                        <el-form :model="goodsForm" :rules="goodsrules" label-width="100px" status-icon="true">
-
-                            <el-form-item label="商品ID" class="login_input_box" prop="commodityid">
-                                <el-input v-model="goodsForm.commodityid" placeholder="请输入商品ID"></el-input>
-                            </el-form-item>
-
-                            <el-form-item label="商品名称" class="login_input_box" prop="name">
-                                <el-input v-model="goodsForm.name" placeholder="请输入商品名称"></el-input>
-                            </el-form-item>
-
-                            <el-form-item label="库存数量" class="login_input_box" prop="count">
-                                <el-input v-model="goodsForm.count" placeholder="请输入库存数量"></el-input>
-                            </el-form-item>
-
-                            <el-form-item label="价格" class="login_input_box" prop="price">
-                                <el-input v-model="goodsForm.price" placeholder="请输入商品价格"></el-input>
-                            </el-form-item>
-
-                            <div class="button">
-                                <el-button @click="changeGoods" class="button" type="primary">修改商品信息</el-button>
-                            </div>
-                        </el-form>
-                    </div>
-                </el-tab-pane>
-                <el-tab-pane label="删除商品信息" name="fourth">
-                    <div class="Goods"  @keyup.enter="keyPressed">
-                        <h4>删除商品信息</h4>
-                        <el-form :model="goodsForm" :rules="goodsrules" label-width="100px" status-icon="true">
-
-                            <el-form-item label="商品ID" class="login_input_box" prop="commodityid">
-                                <el-input v-model="goodsForm.commodityid" placeholder="请输入商品ID"></el-input>
-                            </el-form-item>
-
-                            <div class="button">
-                                <el-button @click="deleteGoods" class="button" type="primary">删除商品信息</el-button>
-                            </div>
-                        </el-form>
-                    </div>
-                </el-tab-pane>
             </el-tabs>
           </el-main>
         </el-container>  
@@ -140,11 +129,15 @@
   //import { useStore } from 'vuex';
   import { ElMessage } from 'element-plus';
   import qs from 'qs';
+  import { ref } from 'vue';
+  const direction = ref("btt");
   export default{
   //
     data() {
   
         return {
+            direction: direction,
+            drawer: false,
             goodsList:[{
                 commodityid: "",
                 merchantid: "",
@@ -204,6 +197,22 @@
                 });
         },
 
+        openGoodsDiager(row){
+            if(!row.commodityid)
+            {
+                ElMessage({
+                        type: 'error',
+                        message: "商品信息不存在",
+                        duration: 2000,
+                    })
+            }
+            else
+            {
+                this.drawer = true;
+                window.localStorage.setItem("commodityid", row.commodityid);
+            }
+        },
+
         addGoods(){
             this.$refs.goodsForm.validate((valid)=>{
                 if(valid)
@@ -247,13 +256,14 @@
                 if(valid)
                 {
                     const merchanttoken = window.localStorage.getItem("merchanttoken");
+                    const commodityid = window.localStorage.getItem()
                     this.$http({
                             method: "post" /* 指明请求方式，可以是 get 或 post */,
                             url: "/merchant/updatecommodity" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                             data: qs.stringify({
                             /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                                 token:merchanttoken,
-                                commodityid: this.goodsForm.commodityid,
+                                commodityid: commodityid,
                                 name: this.goodsForm.name,
                                 counts: this.goodsForm.count,
                                 price: this.goodsForm.price
@@ -281,40 +291,28 @@
             });
         },
 
-        deleteGoods(){
-            this.$refs.goodsForm.validate((valid)=>{
-                if(valid)
-                {
-                    const merchanttoken = window.localStorage.getItem("merchanttoken");
-                    this.$http({
-                            method: "post" /* 指明请求方式，可以是 get 或 post */,
-                            url: "/merchant/removecommodity" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
-                            data: qs.stringify({
-                            /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-                                token:merchanttoken,
-                                commodityid: this.goodsForm.commodityid,
-                            }),
-                        })
-                        .then((res) => {
-                            /* res 是 response 的缩写 */
-                            console.log(res.data);
-                            if(!res.data.success){
-                                this.$message.error(res.data.message);
-                            }
-                            else{
-                                this.$message.success(res.data.message);
-                            }
-                        });
-                }
-                else
-                {
-                    ElMessage({
-                        type: 'error',
-                        message: "请完成填写",
-                        duration: 2000,
+        deleteGoods(row){
+                const merchanttoken = window.localStorage.getItem("merchanttoken");
+                this.$http({
+                        method: "post" /* 指明请求方式，可以是 get 或 post */,
+                        url: "/merchant/removecommodity" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                        data: qs.stringify({
+                        /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                            token:merchanttoken,
+                            commodityid: row.commodityid,
+                        }),
                     })
-                }
-            });
+                    .then((res) => {
+                        /* res 是 response 的缩写 */
+                        console.log(res.data);
+                        if(!res.data.success){
+                            this.$message.error(res.data.message);
+                        }
+                        else{
+                            this.$message.success(res.data.message);
+                        }
+                    });
+
         }
     }
   }

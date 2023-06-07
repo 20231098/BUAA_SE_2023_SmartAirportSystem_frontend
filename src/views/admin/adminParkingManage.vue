@@ -83,19 +83,22 @@
                             <el-table-column prop="parkingspaceid" label="停车位ID" width="120" />
                             <el-table-column prop="location" label="停车位位置" width="120"/>
                             <el-table-column prop="price" label="停车位位置" width="120"/>
+                            <el-table-column fixed="right" label="Opeations" width="120">
+                                <template #default="scope">
+                                    <el-button link type="primary" style="margin-left: 16px" size="small" @click="openDiager(scope.row)">修改停车位</el-button>
+                                    <el-button link type="primary" style="margin-left: 16px" size="small" @click="deleteParkingspace(scope.row)">删除停车位</el-button>
+                                </template>
+                            </el-table-column>
                     </el-table>
                     <div class="button">
                         <el-button @click="checkParkingspace" class="button" type="primary">查看停车位信息</el-button>
                     </div>
-                </el-tab-pane>
-                <el-tab-pane label="修改停车位信息" name="third">
-                    <div class="Goods"  @keyup.enter="keyPressed">
-                        <h4>修改停车位</h4>
+                    <el-drawer
+                        v-model="drawer"
+                        title="修改停车位"
+                        :direction="direction"
+                        >
                         <el-form :model="parkingForm" :rules="parkingRules" label-width="100px" status-icon="true">
-
-                            <el-form-item label="停车位ID" class="login_input_box" prop="parkingspaceid">
-                                <el-input v-model="parkingForm.parkingspaceid" placeholder="请输入停车位ID"></el-input>
-                            </el-form-item>
 
                             <el-form-item label="停车位位置" class="login_input_box" prop="location">
                                 <el-input v-model="parkingForm.location" placeholder="请输入停车位位置"></el-input>
@@ -109,22 +112,7 @@
                                 <el-button @click="changeParkingspace" class="button" type="primary">修改停车位信息</el-button>
                             </div>
                         </el-form>
-                    </div>
-                </el-tab-pane>
-                <el-tab-pane label="删除停车位信息" name="fourth">
-                    <div class="Goods"  @keyup.enter="keyPressed">
-                        <h4>删除停车位</h4>
-                        <el-form :model="parkingForm" :rules="parkingRules" label-width="100px" status-icon="true">
-
-                            <el-form-item label="停车位ID" class="login_input_box" prop="parkingspaceid">
-                                <el-input v-model="parkingForm.parkingspaceid" placeholder="请输入停车位ID"></el-input>
-                            </el-form-item>
-
-                            <div class="button">
-                                <el-button @click="deleteParkingspace" class="button" type="primary">删除停车位信息</el-button>
-                            </div>
-                        </el-form>
-                    </div>
+                    </el-drawer>    
                 </el-tab-pane>
             </el-tabs>
           </el-main>
@@ -136,6 +124,9 @@
   <script>
   import { ElMessage } from 'element-plus';
   import qs from 'qs';
+  import { ref } from 'vue';
+
+  const direction = ref("btt");
   //import companyChange from '@/components/companyChange.vue';
   //import { useStore } from 'vuex';
   const position = window.localStorage.getItem("positionpost");
@@ -145,6 +136,8 @@
         
         
         return {
+            drawer: false,
+            direction: direction,
             positionpost: position,
 
             parkingList:[{
@@ -173,6 +166,22 @@
         }
     },
     methods:{
+        openDiager(row){
+            if(!row.parkingspaceid)
+            {
+                ElMessage({
+                        type: 'error',
+                        message: "停车位信息不存在",
+                        duration: 2000,
+                    })
+            }
+            else
+            {
+                this.drawer = true;
+                window.localStorage.setItem("parkingspaceid", row.parkingspaceid);
+            }
+        },
+
         checkParkingspace(){
                 const admintoken = window.localStorage.getItem("admintoken");
                 this.$http({
@@ -231,16 +240,17 @@
         },
 
         changeParkingspace(){
-            if(!(!this.parkingForm.parkingspaceid || !this.parkingForm.location || !this.parkingForm.price))
+            if(!(!this.parkingForm.location || !this.parkingForm.price))
             {
                     const admintoken = window.localStorage.getItem("admintoken");
+                    const parkingspaceid = window.localStorage.getItem("parkingspaceid");
                     this.$http({
                         method: "post" /* 指明请求方式，可以是 get 或 post */,
                         url: "/staff/updateparkingspce" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:admintoken,
-                            parkingspaceid: this.parkingForm.parkingspaceid,
+                            parkingspaceid: parkingspaceid,
                             location: this.parkingForm.location,
                             price: this.parkingForm.price,
                         }),
@@ -266,7 +276,7 @@
             }
         },
 
-        deleteParkingspace(){
+        deleteParkingspace(row){
             if(this.parkingForm.parkingspaceid)
             {
                     const admintoken = window.localStorage.getItem("admintoken");
@@ -276,7 +286,7 @@
                         data: qs.stringify({
                         /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                             token:admintoken,
-                            parkingspaceid: this.parkingForm.parkingspaceid,
+                            parkingspaceid: row.parkingspaceid,
                         }),
                     })
                     .then((res) => {

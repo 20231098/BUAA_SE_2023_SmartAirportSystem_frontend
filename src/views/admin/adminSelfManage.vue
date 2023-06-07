@@ -98,7 +98,9 @@
                             </el-form-item>
 
                             <el-form-item label="职位" class="login_input_box" prop="positionpost">
-                                <el-input v-model="SelfForm.positionpost" placeholder="请输入职位"></el-input>
+                                <el-select v-model="SelfForm.positionpost" class="m-2" placeholder="Select">
+                                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"/>
+                                </el-select>
                             </el-form-item>
 
                             <div class="button">
@@ -165,6 +167,29 @@
 
         return {
             positionpost: positionpost,
+
+            options:[
+                {
+                    value: 0,
+                    label: "ADMINISTRATOR",
+                },
+
+                {
+                    value: 1,
+                    label: "COMMONSTAFF",
+                },
+
+                {
+                    value: 2,
+                    label: "REPAIRSTAFF",
+                },
+
+                {
+                    value: 3,
+                    label: "CUSTOMERSERVICE",
+                },
+
+            ],
 
             SelfForm:{
                 email:"",
@@ -265,7 +290,7 @@
                             token:admintoken,
                             realname: this.SelfForm.realname,
                             positionpost: this.SelfForm.positionpost,
-                            email: this.SelfForm.email,
+                            email: this.SelfForm.newemail,
                             idnumber: this.SelfForm.idnumber,
                         }),
                     })
