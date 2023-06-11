@@ -72,11 +72,16 @@
                         <el-form :model="Flightform" label-width="70px">
 
                             <el-form-item label="起飞地点" class="login_input_box" prop="takeofflocation">
-                                <el-input v-model="Flightform.takeofflocation" placeholder="请输入起飞地点"></el-input>
+                                <el-cascader placeholder="起飞地" size="large" :options="options" v-model="selectedOptions"
+                                    @change="handleChange">
+                                </el-cascader>
                             </el-form-item>
 
                             <el-form-item label="降落地点" class="login_input_box" prop="landinglocation">
-                                <el-input v-model="Flightform.landinglocation" placeholder="请输入降落地点"></el-input>
+                                <!--l-input v-model="Flightform.landinglocation" placeholder="请输入降落地点"></el-input-->
+                                <el-cascader placeholder="目的地" size="large" :options="options" v-model="selectedOptions2"
+                                    @change="handleChange2">
+                                </el-cascader>
                             </el-form-item>
 
                             <el-form-item label="起飞日期" class="login_input_box" prop="date">
@@ -147,7 +152,7 @@
                 <el-tab-pane label="已购机票" name="fourth">
                     <el-table :data="RecordList" stripe style="width: fit-content">
                         <el-table-column prop="orderid" label="订单ID" width="120" />
-                        <el-table-column prop="flightname" label="航班名称" width="120" />
+                        <el-table-column prop="flightname" label=" 航班名称" width="120" />
                         <el-table-column prop="companyname" label="公司名称" width="120"/>
                         <el-table-column prop="takeofflocation" label="起飞位置" width="120"/>
                         <el-table-column prop="departuretime" label="起飞时间" width="120"/>
@@ -175,7 +180,6 @@
                         :direction="direction"
                     >
                         <el-table :data="LuggageList" style="width: 100%">
-                            <el-table-column prop="luggageid" label="行李id" width="120" />
                             <el-table-column prop="state" label="行李状态" width="120" />
                             <el-table-column prop="location" label="行李位置" width="120" />
                         </el-table>
@@ -205,15 +209,21 @@
   <script>
   //import companyChange from '@/components/companyChange.vue';
   //import { useStore } from 'vuex';
+  import { provinceAndCityData } from 'element-china-area-data';
+  import { codeToText } from 'element-china-area-data';
   import { ElMessage } from 'element-plus';
   import qs from 'qs';
   import { ref } from 'vue'
-
+  var from = "";
+  var dest = "";
   const direction = ref('btt');
   export default{
   //
     data() {
         return {
+            options: provinceAndCityData,
+            selectedOptions: ['11', '110101'],
+            selectedOptions2: ['11', '110101'],
             drawer: false,
             direction: direction,
             drawer2: false,
@@ -327,9 +337,41 @@
     },
     
     methods:{
-        returnHome(){
-            this.$router.push("/");
+        handleChange(value) {
+            console.log(value)
+            from = codeToText[this.selectedOptions[0]] ;
+            console.log("from=" + from)//打印区域码所对应的属性值即中文地址
+            this.Flightform.takeofflocation = from;
         },
+
+        handleChange2() {
+            dest = codeToText[this.selectedOptions2[0]];
+            console.log("dest=" + dest)//打印区域码所对应的属性值即中文地址
+            this.Flightform.landinglocation = dest;
+        },  
+
+        returnHome(){
+                    const touristtoken = window.localStorage.getItem("touristtoken");
+                    this.$http({
+                            method: "post" /* 指明请求方式，可以是 get 或 post */,
+                            url: "/tourist/logout" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                            data: qs.stringify({
+                            /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                                token:touristtoken,
+                            }),
+                        })
+                        .then((res) => {
+                            /* res 是 response 的缩写 */
+                            console.log(res.data);
+                            if(!res.data.success){
+                                this.$message.error(res.data.message);
+                            }
+                            else{
+                                this.$message.success(res.data.message);
+                                this.$router.push("/");
+                            }
+                        });
+    },
         touristCheckFlight(){
             const touristtoken = window.localStorage.getItem("touristtoken");
             this.$http({

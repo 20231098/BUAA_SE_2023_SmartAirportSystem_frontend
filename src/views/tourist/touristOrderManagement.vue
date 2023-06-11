@@ -60,7 +60,7 @@
                     <el-icon><HomeFilled /></el-icon>
                   <span>退出登录</span>
                 </template>
-                <el-menu-item index="/">退出登录</el-menu-item>
+                <el-menu-item @click="returnHome">退出登录</el-menu-item>
               </el-sub-menu> 
             </el-menu>
           </el-aside>  
@@ -129,7 +129,7 @@
                             <el-table-column prop="endtime" label="预定结束时间" width="120"/>
                             <el-table-column prop="location" label="停车位位置" width="120"/>
                             <el-table-column prop="price" label="订单价格" width="120"/>
-                            <el-table-column prop="states" label="订单状态" width="120"/>
+                            <el-table-column prop="status" label="订单状态" width="120"/>
                             <el-table-column fixed="right" label="Opeations" width="120">
                             <template #default="scope">
                                 <el-button link type="primary" style="margin-left: 16px" size="small" @click="deleteOrder(scope.row)">删除停车订单</el-button>
@@ -204,6 +204,28 @@ import { ref } from 'vue';
     },
 
     methods:{
+        returnHome(){
+                    const touristtoken = window.localStorage.getItem("touristtoken");
+                    this.$http({
+                            method: "post" /* 指明请求方式，可以是 get 或 post */,
+                            url: "/tourist/logout" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                            data: qs.stringify({
+                            /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                                token:touristtoken,
+                            }),
+                        })
+                        .then((res) => {
+                            /* res 是 response 的缩写 */
+                            console.log(res.data);
+                            if(!res.data.success){
+                                this.$message.error(res.data.message);
+                            }
+                            else{
+                                this.$message.success(res.data.message);
+                                this.$router.push("/");
+                            }
+                        });
+        },   
         parking_check(){
             const touristtoken = window.localStorage.getItem("touristtoken");
             let startTime = this.parkingForm.timeRange[0];

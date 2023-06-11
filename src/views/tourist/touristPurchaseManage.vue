@@ -60,7 +60,7 @@
                     <el-icon><HomeFilled /></el-icon>
                   <span>退出登录</span>
                 </template>
-                <el-menu-item index="/">退出登录</el-menu-item>
+                <el-menu-item @click="returnHome">退出登录</el-menu-item>
               </el-sub-menu> 
             </el-menu>
           </el-aside>  
@@ -89,7 +89,7 @@
                             <el-table-column prop="merchantid" label="商户ID" width="120" />
                             <el-table-column prop="commodityid" label="商品ID" width="120"/>
                             <el-table-column prop="name" label="商品名称" width="120"/>
-                            <el-table-column prop="count" label="商品库存" width="120"/>
+                            <el-table-column prop="counts" label="商品库存" width="120"/>
                             <el-table-column prop="price" label="商品价格" width="120"/>
                             <el-table-column fixed="right" label="Opeations" width="120">
                                 <template #default="scope">
@@ -129,12 +129,14 @@
                 </el-tab-pane>
                 <el-tab-pane label="查看已有订单" name="fifth">
                     <el-table :data="orderList" stripe style="width: 100%">
-                        <el-table-column prop="orderid" label="订单ID" width="120"/>
-                        <el-table-column prop="commodityid" label="商品ID" width="120" />
+                        <el-table-column prop="shopname" label="商店名称" width="120"/>
+                        <el-table-column prop="commodityname" label="商品名称" width="120" />
                         <el-table-column prop="counts" label="商品数量" width="120"/>
                         <el-table-column prop="departuregate" label="登机口" width="120"/>
                         <el-table-column prop="terminal" label="航站楼" width="120"/>
-                        <el-table-column prop="arrivaltime" label="预定到达时间" width="120"/>
+                        <el-table-column prop="arrivetime" label="预定到达时间" width="120"/>
+                        <el-table-column prop="price" label="订单价格" width="120"/>
+                        <el-table-column prop="merchantemail" label="商户联系方式" width="120"/>
                         <el-table-column fixed="right" label="Opeations" width="120">
                                 <template #default="scope">
                                     <el-button link type="primary" style="margin-left: 16px" size="small" @click="deletePurchase(scope.row)">退订订单</el-button>
@@ -234,6 +236,28 @@
 
 
     methods:{
+        returnHome(){
+                    const touristtoken = window.localStorage.getItem("touristtoken");
+                    this.$http({
+                            method: "post" /* 指明请求方式，可以是 get 或 post */,
+                            url: "/tourist/logout" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                            data: qs.stringify({
+                            /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                                token:touristtoken,
+                            }),
+                        })
+                        .then((res) => {
+                            /* res 是 response 的缩写 */
+                            console.log(res.data);
+                            if(!res.data.success){
+                                this.$message.error(res.data.message);
+                            }
+                            else{
+                                this.$message.success(res.data.message);
+                                this.$router.push("/");
+                            }
+                        });
+    },
         openDiager(row){
             if(!row.merchantid)
             {
@@ -324,8 +348,7 @@
         },
 
         addPurchase(){
-            this.$refs.goodsForm.validate((valid)=>{
-                if(valid)
+                if(!(!this.goodsForm.counts || !this.goodsForm.departuregate || !this.goodsForm.terminal))
                 {
                     const touristtoken = window.localStorage.getItem("touristtoken");
                     const commodityid = window.localStorage.getItem("commodityid")
@@ -361,7 +384,6 @@
                         duration: 2000,
                     });
                 }
-            });
         },
 
         deletePurchase(row){

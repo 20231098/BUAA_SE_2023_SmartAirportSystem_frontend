@@ -7,6 +7,7 @@ import RegisterPage from "@/views/RegisterPage.vue"
 import UserPage from "@/views/UserPage.vue"
 import FlightPage from "@/views/FlightPage.vue"
 import BuyTicketPage from "@/views/BuyTicketPage.vue"
+import checkFlightPage from "@/views/checkFlightTime.vue"
 
 import CompanyPage from "@/views/company/CompanyPage.vue"
 import CompanyManage from "@/views/company/companyManage.vue"
@@ -65,6 +66,12 @@ const routes = [
         name: "BuyTicketPage",
         path: '/buyTicket',
         component: BuyTicketPage
+    },
+
+    {
+        name: "checkFlightTime",
+        path: '/checkflight',
+        component: checkFlightPage
     },
     
 

@@ -11,29 +11,25 @@
                 <h1 class="search_title">机票查询</h1>
 
                 <div class="location_container">
-                    <!--div class="radio">
-                        <el-radio-group v-model="radio">
-                            <el-radio :label="1">单程</el-radio>
-                            <el-radio :label="2">往返</el-radio>
-                        </el-radio-group>
-                    </div-->
 
                     <div class="location">
                         <div class="dest">
                             <el-cascader placeholder="出发地" size="large" :options="options" v-model="selectedOptions"
                                 @change="handleChange">
                             </el-cascader>
+                            <!--el-input v-model="FlightFrom.takeofflocation" placeholder="请输入起飞地点"></el-input-->
                         </div>
 
                         <div class="dest">
                             <el-cascader placeholder="目的地" size="large" :options="options" v-model="selectedOptions2"
                                 @change="handleChange2">
                             </el-cascader>
+                            <!--el-input v-model="Flightform.landinglocation" placeholder="请输入降落地点"></el-input-->
                         </div>
 
-                        <div class="date" v-if="radio == 1">
-                            <el-date-picker v-model="dateValue1" type="date" placeholder="出发日期"
-                                :disabled-date="setDisableDate" size="large" style="width: 370px;" @change="dateChange" />
+                        <div class="date">
+
+                            <el-date-picker v-model="FlightFrom.date" value-format="YYYY-MM-DD" type="date" placeholder="Pick a day" :size="size"/>
                         </div>
 
                     </div>
@@ -45,22 +41,18 @@
             </div>
 
             <div v-if="showFlight">
-
-                <div v-if="radio == 1">
                     <el-tabs v-model="activeName" type="border-card" class="tabs">
                         <el-tab-pane name="go" label="选择机票" class="tab_label">
-                            <div v-if="hasGoFlight">
-                                <div v-for="flight in flightListGo" :key="flight.id" class="ticket">
+                                <div v-for="flight in FlightList" :key="flight.flightid" class="ticket">
                                     <div class="itemBox">
                                         <div class="subItemBox">
-                                            <p class="companyName">{{ flight.companyName }}</p>
-                                            <p class="flightName">{{ flight.flightName }}</p>
+                                            <p class="flightName">{{ flight.name }}</p>
                                         </div>
 
                                         <div class="subItemBox2">
                                             <div class="sub_subItemBox">
-                                                <p class="departureTime">{{ flight.departureTime }}</p>
-                                                <p class="departureLocation">{{ flight.departureLocation }}</p>
+                                                <p class="departureTime">{{ flight.departuretime }}</p>
+                                                <p class="departureLocation">{{ flight.takeofflocation }}</p>
                                             </div>
 
                                             <div class="sub_subItemBox">
@@ -69,31 +61,15 @@
                                             </div>
 
                                             <div class="sub_subItemBox">
-                                                <p class="landingTime">{{ flight.landingTime }}</p>
-                                                <p class="landingLocation">{{ flight.landingLocation }}</p>
+                                                <p class="landingTime">{{ flight.landingtime }}</p>
+                                                <p class="landingLocation">{{ flight.landinglocation }}</p>
                                             </div>
                                         </div>
-
-                                        <div class="totalTime">{{ flight.totalTime }}</div>
-
-                                        <div class="priceBox">
-                                            <p style="font-size: 15px; margin: 5px; color: rgb(255, 149, 20);">￥</p>
-                                            <p class="price">{{ flight.price }}</p>
-                                            <p style="font-size: 10px; margin: 5px;">起</p>
-                                        </div>
-
                                     </div>
                                 </div>
-                            </div>
-                            <div v-else>
-                                <el-empty description="没有相关机票" :image="plane" />
-                            </div>
                         </el-tab-pane>
                     </el-tabs>
                 </div>
-
-
-            </div>
         </el-main>
     </el-container>
 </template>
@@ -102,11 +78,10 @@
 import pageChange from '@/components/pageChange.vue';
 import { provinceAndCityData, codeToText } from 'element-china-area-data';
 import router from "@/routes/router";
+import qs from 'qs'
 
 var from = "";
 var dest = "";
-var dateStart = "";
-var dateEnd = "";
 var goFlightId = "";
 
 export default {
@@ -116,6 +91,11 @@ export default {
 
     data() {
         return {
+            FlightFrom:{
+                takeofflocation: "",
+                landingLocation: "",
+                date: "",
+            },
             activeName: 'go',
             disabled: true,
             plane: require('../assets/plane.png'),
@@ -131,8 +111,7 @@ export default {
             hasGoFlight: false,
             hasBackFlight: false,
             showFlight: false,
-            flightListGo: [],
-            flightListBack: [],
+            FlightList: [],
         }
     },
 
@@ -143,16 +122,41 @@ export default {
 
         handleChange(value) {
             console.log(value)
-            from = codeToText[this.selectedOptions[0]] + '/' + codeToText[this.selectedOptions[1]];
+            from = codeToText[this.selectedOptions[0]];
             console.log("from=" + from)//打印区域码所对应的属性值即中文地址
+            this.FlightFrom.takeofflocation = from;
         },
 
         handleChange2() {
-            dest = codeToText[this.selectedOptions2[0]] + '/' + codeToText[this.selectedOptions2[1]];
+            dest = codeToText[this.selectedOptions2[0]];
             console.log("dest=" + dest)//打印区域码所对应的属性值即中文地址
+            this.FlightFrom.landingLocation = dest;
+        },  
 
+        search_btn() {
+            this.$http({
+                method: "post" /* 指明请求方式，可以是 get 或 post */,
+                url: "/passby/searchflight" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                data: qs.stringify({
+                /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                    takeofflocation: this.FlightFrom.takeofflocation,
+                    landinglocation: this.FlightFrom.landingLocation,
+                    date: this.FlightFrom.date,
+                }),
+            })
+            .then((res) => {
+                /* res 是 response 的缩写 */
+                console.log(res.data);
+                if(!res.data.success){
+                    this.$message.error(res.data.message);
+                }
+                else{
+                    this.showFlight = true;
+                    this.FlightList = res.data.message;
+                }
+            });
         },
-
+        /*
         search_btn() {
             this.flightListBack.length = 0;
             this.flightListGo.length = 0;
@@ -173,13 +177,13 @@ export default {
 
                 console.log(dateStart, dateEnd);
 
-                /*查询数据库获取和from - dest（地区）和 dateStart - dateEnd（日期）内的机票
+                查询数据库获取和from - dest（地区）和 dateStart - dateEnd（日期）内的机票
 
-                */
+                
 
                 this.showFlight = true; //显示机票列表
 
-                // if(/*数据库成功查找去程*/){
+                // if(数据库成功查找去){
                 //     this.hasGoFlight = true;
                 //查找所有机票
                 //去程
@@ -191,7 +195,7 @@ export default {
                 // }
 
 
-                // if(/*数据库成功查找返程*/){
+                // if(数据库成功查找返){
                 //     this.hasBackFlight = true;
                 //返程
                 // while(数据库有相关机票){
@@ -220,14 +224,14 @@ export default {
                 month1 = dateStart.getMonth() + 1;
                 dateStart = dateStart.getFullYear() + '/' + month1 + '/' + dateStart.getDate();
                 console.log(dateStart);
-                /*查询dateStart和lfrom机票
+                查询dateStart和lfrom机票
 
 
-                */
+                
 
                 this.showFlight = true; //显示机票列表
 
-                // if(/*数据库成功查找*/){
+                // if(数据库成功查找){
                 //     this.hasGoFlight = true;
                 // while(数据库有相关机票){
                 //     totalTime = landingTime - departureTime;
@@ -245,6 +249,7 @@ export default {
                 this.flightListGo.push({ id: "2", companyName: "中国南方航空", flightName: "C109", departureTime: "14:00", landingTime: "16:00", departureLocation: "北京", landingLocation: "河南", totalTime: "2h", price: "2000" });
             }
         },
+        */
 
         chooseGo(id) { //获取去程机票
             if (this.disabled) {

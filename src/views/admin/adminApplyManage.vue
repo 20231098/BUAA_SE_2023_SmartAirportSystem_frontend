@@ -53,7 +53,7 @@
                     <el-icon><HomeFilled /></el-icon>
                     <span>退出登录</span>
                   </template>
-                  <el-menu-item index="/">退出登录</el-menu-item>
+                  <el-menu-item @click="returnHome">退出登录</el-menu-item>
                 </el-sub-menu>
               </el-menu>
           </el-aside>  
@@ -82,7 +82,7 @@
                             </el-form>
                         </div>
                 </el-tab-pane>
-                <el-tab-pane label="查看保修申请" name="second">
+                <el-tab-pane label="查看报修申请" name="second">
                     <el-table :data="recordList" stripe style="width: 100%">
                             <el-table-column prop="recordid" label="报修申请ID" width="120" />
                             <el-table-column prop="devicename" label="设备名称" width="120"/>
@@ -125,7 +125,7 @@
                             <el-table-column prop="email" label="商户邮箱" width="120"/>
                             <el-table-column fixed="right" label="Opeations" width="120">
                                 <template #default="scope">
-                                    <el-button link type="primary" style="margin-left: 16px" size="small" @click="openRequestDiager(scope.row)" v-if="positionpost== 0">审核报修申请</el-button>
+                                    <el-button link type="primary" style="margin-left: 16px" size="small" @click="openRequestDiager(scope.row)" v-if="positionpost== 0">审核入驻申请</el-button>
                                 </template>
                             </el-table-column>
                     </el-table>
@@ -152,7 +152,20 @@
                     </el-drawer>  
                 </el-tab-pane>
                 <el-tab-pane label="查看财务报表" name="seventh">
-                    
+                    <el-row>
+                        <el-col :span="6">
+                            <el-statistic title="机票售卖总收入" :value="this.ticket" />
+                        </el-col>
+                        <el-col :span="6">
+                            <el-statistic title="商品售卖总收入" :value="this.commodity" />
+                        </el-col>
+                        <el-col :span="6">
+                            <el-statistic title="停车订单总收入" :value="this.parking" />
+                        </el-col>
+                        <div class="button">
+                                <el-button @click="checkMoney" class="button" type="primary">查看财务报表</el-button>
+                            </div>
+                    </el-row>
                 </el-tab-pane>
             </el-tabs>
           </el-main>
@@ -174,6 +187,9 @@ import { ref } from 'vue';
     data() {
     
         return {
+            ticket: '',
+            parking: '',
+            commodity: '',
             direction: direction,
             drawer: false,
             drawer2: false,
@@ -196,11 +212,11 @@ import { ref } from 'vue';
 
             newoptions:[
                 {
-                    value: 0,
+                    value: 1,
                     label:  "ACCESS",
                 },
                 {
-                    value: 1,
+                    value: 0,
                     label: "DENY",
                 },
             ],
@@ -238,6 +254,52 @@ import { ref } from 'vue';
         }
     },
     methods:{
+        checkMoney(){
+                    const admintoken = window.localStorage.getItem("admintoken");
+                    this.$http({
+                            method: "post" /* 指明请求方式，可以是 get 或 post */,
+                            url: "/staff/reportforms" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                            data: qs.stringify({
+                            /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                                token:admintoken,
+                            }),
+                        })
+                        .then((res) => {
+                            /* res 是 response 的缩写 */
+                            console.log(res.data);
+                            if(!res.data.success){
+                                this.$message.error(res.data.message);
+                            }
+                            else{
+                                this.$message.success(res.data.message);
+                                this.ticket = res.data.ticket;
+                                this.commodity = res.data.commodity;
+                                this.parking = res.data.parking;
+                            }
+                        });
+        },
+        returnHome(){
+                    const admintoken = window.localStorage.getItem("admintoken");
+                    this.$http({
+                            method: "post" /* 指明请求方式，可以是 get 或 post */,
+                            url: "/staff/logout" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                            data: qs.stringify({
+                            /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                                token:admintoken,
+                            }),
+                        })
+                        .then((res) => {
+                            /* res 是 response 的缩写 */
+                            console.log(res.data);
+                            if(!res.data.success){
+                                this.$message.error(res.data.message);
+                            }
+                            else{
+                                this.$message.success(res.data.message);
+                                this.$router.push("/");
+                            }
+                        });
+    },
         openRecordDiager(row){
             if(!row.recordid)
             {
@@ -477,4 +539,8 @@ import { ref } from 'vue';
   width: 200px;
   min-height: 1000px;
   }
+
+  .el-col {
+  text-align: center;
+}
   </style>

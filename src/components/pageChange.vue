@@ -17,7 +17,8 @@ export default {
             list1: [
                 { name: "首页", index: 1 },
                 { name: "机票", index: 2 },
-                { name: "登录/注册", index: 3 },
+                { name: "今日航班信息", index: 3 },
+                { name: "登录/注册", index: 4 },
             ],
         }
     },
@@ -33,6 +34,11 @@ export default {
             }
 
             if (item.index == 3) {
+                router.push('/checkflight');
+            }
+
+            if(item.index == 4)
+            {
                 router.push('/login');
             }
 

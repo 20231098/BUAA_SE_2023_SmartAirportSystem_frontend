@@ -46,7 +46,7 @@
                         <el-icon><HomeFilled /></el-icon>
                     <span>退出登录</span>
                     </template>
-                    <el-menu-item index="/">退出登录</el-menu-item>
+                    <el-menu-item @click="returnHome">退出登录</el-menu-item>
                 </el-sub-menu> 
               </el-menu>
           </el-aside>  
@@ -54,12 +54,14 @@
             <el-tabs tab-position="left" class="card">
                 <el-tab-pane label="查看已有订单" name="first">
                     <el-table :data="orderList" stripe style="width: 100%">
-                        <el-table-column prop="orderid" label="订单ID" width="120"/>
-                        <el-table-column prop="commodityid" label="商品ID" width="120" />
+                        <el-table-column prop="shopname" label="商店名称" width="120"/>
+                        <el-table-column prop="commodityname" label="商品名称" width="120" />
                         <el-table-column prop="counts" label="商品数量" width="120"/>
                         <el-table-column prop="departuregate" label="登机口" width="120"/>
                         <el-table-column prop="terminal" label="航站楼" width="120"/>
-                        <el-table-column prop="arrivaltime" label="预定到达时间" width="120"/>
+                        <el-table-column prop="arrivetime" label="预定到达时间" width="120"/>
+                        <el-table-column prop="price" label="订单价格" width="120"/>
+                        <el-table-column prop="touristemail" label="用户联系方式" width="120"/>
                     </el-table>
                     <div class="button">
                         <el-button @click="checkOrders" class="submit_btn" type="primary">查询商户订单</el-button>
@@ -92,6 +94,28 @@
         }
     },
     methods:{
+      returnHome(){
+                    const merchanttoken = window.localStorage.getItem("merchanttoken");
+                    this.$http({
+                            method: "post" /* 指明请求方式，可以是 get 或 post */,
+                            url: "/merchant/logout" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                            data: qs.stringify({
+                            /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                                token:merchanttoken,
+                            }),
+                        })
+                        .then((res) => {
+                            /* res 是 response 的缩写 */
+                            console.log(res.data);
+                            if(!res.data.success){
+                                this.$message.error(res.data.message);
+                            }
+                            else{
+                                this.$message.success(res.data.message);
+                                this.$router.push("/");
+                            }
+                        });
+    },
         checkOrders(){
             const merchanttoken = window.localStorage.getItem("merchanttoken");
             this.$http({

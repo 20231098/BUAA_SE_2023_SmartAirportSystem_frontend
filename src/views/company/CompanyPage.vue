@@ -58,6 +58,7 @@
 <script>
 //import companyChange from '@/components/companyChange.vue';
 //import { useStore } from 'vuex';
+import qs from 'qs';
 export default{
   //
     data() {
@@ -79,8 +80,27 @@ export default{
 
     methods:{
       returnHome(){
-        this.$router.push("/");
-      }
+                    const companytoken = window.localStorage.getItem("companytoken");
+                    this.$http({
+                            method: "post" /* 指明请求方式，可以是 get 或 post */,
+                            url: "/company/logout" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+                            data: qs.stringify({
+                            /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+                                token:companytoken,
+                            }),
+                        })
+                        .then((res) => {
+                            /* res 是 response 的缩写 */
+                            console.log(res.data);
+                            if(!res.data.success){
+                                this.$message.error(res.data.message);
+                            }
+                            else{
+                                this.$message.success(res.data.message);
+                                this.$router.push("/");
+                            }
+                        });
+    }
     }
 }
 
